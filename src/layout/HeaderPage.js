@@ -9,7 +9,7 @@ import { MdHome } from "react-icons/md";
 import {FaMoneyCheckAlt, FaUser} from "react-icons/fa";
 import {RiWallet3Fill} from "react-icons/ri";
 import {FaCirclePlus} from "react-icons/fa6";
-import './HeaderCss.css';
+import './header.css';
 import colors from "tailwindcss/colors";
 
 const HeaderPage = () => {
