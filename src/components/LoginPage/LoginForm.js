@@ -2,11 +2,18 @@ import React from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 'mdb-react-ui-kit';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
+import {toast} from "react-toastify";
+import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
 
 const LoginForm = () => {
+
+    let navigate = useNavigate();
+
+
     const initialValues = {
         email: '',
         password: '',
@@ -14,12 +21,20 @@ const LoginForm = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signin', values); // Gửi yêu cầu POST tới API
-            console.log(response.data); // Log phản hồi từ API
-            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+            const response = await axios.post('http://localhost:8080/api/auth/signin', values);
+            console.log(response.data);
+
+            // Hiển thị toast thông báo đăng nhập thành công
+            toast.success('Login successful!', {
+                position: toast.POSITION.TOP_CENTER
+            });
         } catch (error) {
             console.error('Error during login:', error);
-            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
+
+            // Hiển thị toast thông báo đăng nhập không thành công
+            toast.error('Login failed. Please check your credentials.', {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
         }
         setSubmitting(false);
     };
@@ -56,9 +71,18 @@ const LoginForm = () => {
                                         Sign in with Facebook
                                     </MDBBtn>
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='danger'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Gmail
+                                    <MDBBtn className='mb-4 w-100' size='lg' color='red'>
+                                        <GoogleLogin
+                                            onSuccess={credentialResponse => {
+                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
+                                                console.log(credentialResponseDecoded);
+                                                navigate("/");
+                                                window.location.reload();
+                                            }}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </MDBBtn>
                                     <MDBBtn className='mb-4 w-100' size='lg' color='dark'>
                                         <MDBIcon className='m-n3' />

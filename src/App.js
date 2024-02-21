@@ -5,21 +5,15 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import HeaderPage from "./layout/HeaderPage";
 
-import Menu from "./layout/Menu";
-import InformationUser from "./components/UserPage/InformationUser";
-import ManagerUserPage from "./components/UserPage/ManagerUserPage";
-
 function App() {
   return (
     <div className="App">
+
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<InformationUser />}></Route>
-                <Route path='/user/manager' element={<ManagerUserPage />}></Route>
-                {/*<Route path='/' element={<HeaderPage />}></Route>*/}
+                <Route path='/' element={<HeaderPage />}></Route>
                 <Route path='/login' element={<LoginPage />}></Route>
                 <Route path='/register' element={<RegisterPage />}></Route>
-                <Route path='/menu' element={<Menu />}></Route>
             </Routes>
         </BrowserRouter>
 
