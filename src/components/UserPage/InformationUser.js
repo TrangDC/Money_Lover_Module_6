@@ -44,8 +44,10 @@ const InformationUser = () => {
                 <ListGroup.Item variant="secondary">  <p></p> </ListGroup.Item>
 
                 <ListGroup.Item>
-                    <IoMdWallet className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}} />
-                     My Wallet
+                    <Link to= "/user/wallet" className="text-dark">
+                        <IoMdWallet className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}} />
+                        My Wallet
+                    </Link>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
