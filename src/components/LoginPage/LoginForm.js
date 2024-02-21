@@ -1,4 +1,5 @@
 import React from 'react';
+import './LoginCss.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import {
     MDBBtn,
@@ -8,27 +9,16 @@ import {
     MDBCardBody,
     MDBInput,
     MDBIcon,
-} from 'mdb-react-ui-kit';
+}
+from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
+import * as Yup from "yup";
+
 
 const LoginForm = () => {
     const initialValues = {
         email: '',
         password: '',
-    };
-
-    const validateForm = (values) => {
-        const errors = {};
-
-        if (!values.email) {
-            errors.email = 'Email address is required';
-        }
-
-        if (!values.password) {
-            errors.password = 'Password is required';
-        }
-
-        return errors;
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
@@ -38,7 +28,13 @@ const LoginForm = () => {
     };
 
     return (
-        <Formik initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValues}
+                validationSchema={Yup.object({
+                    email: Yup.string().email().required('Email is a required field.'),
+                    password: Yup.string()
+                        .required('No password provided.')
+                })}
+                onSubmit={handleSubmit}>
             {({ isSubmitting }) => (
                 <Form>
                     <MDBCard
@@ -84,7 +80,7 @@ const LoginForm = () => {
                                             name='email'
                                             as={Field}
                                         />
-                                        <ErrorMessage name='email' component='div' className='text-red-500' />
+                                        <ErrorMessage name='email' component='span' className='text-red-500' />
                                         <MDBInput
                                             wrapperClass='mb-4 w-100'
                                             label='Password'
@@ -94,7 +90,7 @@ const LoginForm = () => {
                                             name='password'
                                             as={Field}
                                         />
-                                        <ErrorMessage name='password' component='div' className='text-red-500' />
+                                        <ErrorMessage name='password' component='span' className='text-red-500' />
                                         <p className='small mb-3 pb-lg-2'>
                                             <a className='text-green-50' href='#!'>
                                                 Forgot password?
