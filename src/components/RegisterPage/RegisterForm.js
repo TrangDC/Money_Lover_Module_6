@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import './register.css';
 import {
     MDBBtn,
     MDBRow,
@@ -8,7 +9,7 @@ import {
     MDBInput,
     MDBIcon,
 }
-from 'mdb-react-ui-kit';
+    from 'mdb-react-ui-kit';
 import {Link} from "react-router-dom";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
@@ -37,19 +38,19 @@ const RegisterForm = () => {
         email: Yup.string().required('Email is a required field.').email(),
         password: Yup.string()
             .required('Password is a required field.')
-            .min(8,'password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special'
+            .min(8,'Password must contain 8 characters'
             )
-            .minLowercase(1, 'password must contain at least 1 lower case letter')
-            .minUppercase(1, 'password must contain at least 1 upper case letter')
-            .minNumbers(1, 'password must contain at least 1 number')
-            .minSymbols(1, 'password must contain at least 1 special character')
+            .minLowercase(1, 'Password must contain at least 1 lower case letter')
+            .minUppercase(1, 'Password must contain at least 1 upper case letter')
+            .minNumbers(1, 'Password must contain at least 1 number')
+            .minSymbols(1, 'Password must contain at least 1 special character')
     });
     return (
 
         <Formik initialValues={initialValues}
                 validationSchema={SignupSchema}
                 onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
+            {({ errors, touched, isSubmitting }) => (
                 <Form>
                     <MDBCard
                         className='shadow-5 text-center'
@@ -85,26 +86,27 @@ const RegisterForm = () => {
                                 <MDBCol col='6' md='6'>
                                     <p className='text-black-50 mb-3'>Create Money Lover account</p>
                                     <div>
-                                        <MDBInput
+                                        <Field
+                                            as={MDBInput}
                                             wrapperClass='mb-4 w-100'
                                             label='Email address'
                                             id='formControlLgs'
                                             type='email'
                                             size='lg'
                                             name='email'
-                                            as={Field}
                                         />
-                                        <ErrorMessage name='email' component='span' className='text-red-500' />
-                                        <MDBInput
+                                        <ErrorMessage name={"email"} component='span' className='text-red-500'/>
+                                        <Field
+                                            as={MDBInput}
                                             wrapperClass='mb-4 w-100'
                                             label='Password'
                                             id='formControlLg'
                                             type='password'
                                             size='lg'
                                             name='password'
-                                            as={Field}
+                                            // as={Field}
                                         />
-                                        <ErrorMessage name='password' component='span' className='text-red-500' />
+                                        <ErrorMessage name={"password"} component='span' className='text-red-500'/>
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type="submit" disabled={isSubmitting}>
                                         {isSubmitting ? 'Logging in...' : 'REGISTER'}
