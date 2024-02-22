@@ -1,6 +1,7 @@
 import React from 'react';
 import {FcBullish} from "react-icons/fc";
 import {DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
+import {Link} from "react-router-dom";
 
 const Sidebar = () => {
     return (
@@ -11,9 +12,7 @@ const Sidebar = () => {
             </div>
             <div className='flex-1'>
                 {DASHBOARD_SIDEBAR_LINKS.map((item) => (
-                    <div key={item.index}>
-                        {item.label}
-                    </div>
+                    <SidebarLink key={item.index} item={item}/>
                 ))}
             </div>
             <div>bottom part</div>
@@ -22,3 +21,16 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+function SidebarLink({item}) {
+    return (
+        <Link to={item.path}>
+            <span className="text-xl">
+                {item.icon}
+            </span>
+            {item.label}
+        </Link>
+    )
+}
+
+
