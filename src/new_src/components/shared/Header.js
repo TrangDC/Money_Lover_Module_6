@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {HiOutlineBell, HiOutlineChatAlt, HiOutlineSearch} from "react-icons/hi";
-import {Popover} from "@headlessui/react";
+import {Popover, Transition} from "@headlessui/react";
 
 const Header = () => {
     return (
@@ -27,10 +27,20 @@ const Header = () => {
                             >
                                 <HiOutlineChatAlt fontSize={24}/>
                             </Popover.Button>
+                            <Transition
+                                as={Fragment}
+                                enter="transition ease-out duration-200"
+                                enterFrom="opacity-0 translate-y-1"
+                                enterTo="opacity-100 translate-y-0"
+                                leave="transition ease-in duration-150"
+                                leaveFrom="opacity-100 translate-y-0"
+                                leaveTo="opacity-0 translate-y-1"
+                            >
+                                <Popover.Panel>this is the panel</Popover.Panel>
+                            </Transition>
                         </>
                     )}
                 </Popover>
-
                 <HiOutlineBell fontSize={24}/>
             </div>
         </div>
