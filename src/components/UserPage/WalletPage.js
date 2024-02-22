@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { Link } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import Image from 'react-bootstrap/Image';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -24,9 +24,43 @@ const WalletPage = () => {
     const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = (walletId) => {
+        setSelectedWalletId(walletId);
+        setShow(true);
+    };
     const [wallets, setWallets] = useState([]);
+    const [wallet, setWallet] = useState({
+        name: '',
+        balance: ''
+    });
+    const [selectedWalletId, setSelectedWalletId] = useState(null);
 
+    const { id } = useParams();
+    const navigate = useNavigate();
+//update wallet
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/api/wallets/${id}`)
+            .then((res) => {
+                setWallet(res.data);
+            })
+            .catch((err) => console.error(err));
+
+    }, [id]);
+    const handleUpdate = () => {
+        axios
+            .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, wallet)
+            .then((res) => {
+                console.log(res.data);
+                handleClose();
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    };
+
+//hien thi danh sach
     useEffect(() => {
         axios.get('http://localhost:8080/api/wallets')
             .then(res => {
@@ -60,15 +94,16 @@ const WalletPage = () => {
     return (
         <>
             <Navbar className="bg-body-tertiary justify-content-between">
+
                 <Link to="/user" className="text-dark" >
-                    <IoMdArrowRoundBack className="mx-2 mb-2 my-2" style={{ width: '30px', height: '30px' }} />
+                    <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
                 </Link>
-                <h4 style={{ margin: 'auto' }} className="mb-2">
+                <h4 className="my-2" style={{marginRight: 'auto'}}>
                     My Wallet
                 </h4>
-                <Button variant="success">Create New Wallet</Button>
+                <Button variant="success" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
 
-                <Form onSubmit={handleSearch} inline>
+                <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
                     <InputGroup className="mb-3">
                         <Form.Control
                             value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,8 +133,8 @@ const WalletPage = () => {
                 }}>
                     <Table
                         style={{
-                            marginTop: '100px',
-                            width: '500px'
+                            marginTop: '60px',
+                            width: '500px',
                         }}
                     >
                         <tbody>
@@ -109,20 +144,21 @@ const WalletPage = () => {
                                 fontSize: '14px',
                                 fontWeight: 'normal',
                             }}>
-                                <p>Excluded from Total</p>
+                                <p style={{marginBottom: 0}}>Excluded from Total</p>
                             </td>
                         </tr>
                         {wallets.map((wallet) => (
-                            <tr style={{ backgroundColor: 'white' }}>
-                                <Link className="text-dark" onClick={handleShow}>
+                            <tr style={{ backgroundColor: 'white',  border: '1px solid silver', }}>
+                                <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
                                     <td style={{ width: '5px' }}>
                                         <Image
                                             style={{
                                                 textAlign: 'center',
                                                 marginRight: '10px',
-                                                marginBottom: '5px',
-                                                width: '80px',
-                                                height: '80px'
+                                                marginBottom: '-5px',
+                                                marginTop: '5px',
+                                                width: '50px',
+                                                height: '50px'
                                             }}
                                             src="https://firebasestorage.googleapis.com/v0/b/fir-2c9ce.appspot.com/o/583985.png?alt=media&token=c15df242-a33a-4448-baa2-26488f28eff3"
                                             roundedCircle
@@ -131,7 +167,7 @@ const WalletPage = () => {
                                     <td>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             <p style={{ margin: 0 }}>{wallet.name}</p>
-                                            <p style={{ margin: 0 }}>{wallet.balance}</p>
+                                            <p style={{ margin: 0 }}>+ {wallet.balance} đ</p>
                                         </div>
                                     </td>
                                 </Link>
@@ -142,23 +178,31 @@ const WalletPage = () => {
                 </div>
 
                 <Offcanvas show={show} onHide={handleClose} backdrop="static">
-                    <Offcanvas.Header closeButton>
-                        <Offcanvas.Title>Wallet Details</Offcanvas.Title>
-                    </Offcanvas.Header>
-                    <Offcanvas.Body>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="formGroupName">
-                                <Form.Label>Name Wallet</Form.Label>
-                                <Form.Control type="text" placeholder="Name Wallet" />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formGroupBalance">
-                                <Form.Label>Total Money</Form.Label>
-                                <Form.Control type="number" placeholder="Money" />
-                            </Form.Group>
-                            <Button variant="dark">Edit</Button>
-                            <Button variant="danger">Delete</Button>
-                        </Form>
-                    </Offcanvas.Body>
+                        <Offcanvas.Header closeButton>
+                            <Offcanvas.Title>Wallet Details</Offcanvas.Title>
+                        </Offcanvas.Header>
+                        <Offcanvas.Body>
+                            <Form>
+                                <Form.Group className="mb-3" controlId="formGroupName">
+                                    <Form.Label>Name Wallet</Form.Label>
+                                    <Form.Control type="text"
+                                                  placeholder="Name Wallet"
+                                                  name="name"
+                                                  value={wallet.name}
+                                                  onChange={(e) => setWallet({ ...wallet, name: e.target.value })} />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formGroupBalance">
+                                    <Form.Label>Total Money</Form.Label>
+                                    <Form.Control type="number"
+                                                  name="balance"
+                                                  placeholder="Money"
+                                                  value={wallet.balance}
+                                                  onChange={(e) => setWallet({ ...wallet, balance: e.target.value })} />
+                                </Form.Group>
+                                <Button variant="dark" onClick={handleUpdate}>Edit</Button>
+                                <Button variant="danger">Delete</Button>
+                            </Form>
+                        </Offcanvas.Body>
                 </Offcanvas>
             </div>
         </>
