@@ -6,6 +6,7 @@ import Main from "./components/HomePage/Main/Main";
 import ManagerUserPage from "./components/UserPage/ManagerUserPage";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import LoginPage from "./components/LoginPage/LoginPage";
+import Dashboard from "./new_src/Dashboard";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Layout />}>
-                    <Route index element={<Main />}/>
+                    <Route index element={<Dashboard />}/>
                     <Route path="/products" element={<Main />}/>
                 </Route>
 
