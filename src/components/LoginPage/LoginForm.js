@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 'mdb-react-ui-kit';
@@ -8,8 +8,11 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
+import FacebookLogin from "@greatsumini/react-facebook-login";
+
 
 const LoginForm = () => {
+
 
     let navigate = useNavigate();
 
@@ -67,8 +70,20 @@ const LoginForm = () => {
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
                                     <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Facebook
+                                        <FacebookLogin
+                                            appId="1320486661979779"
+                                            onSuccess={(response) => {
+                                                console.log('Login Success!', response);
+                                                navigate("/");
+                                                window.location.reload();
+                                            }}
+                                            onFail={(error) => {
+                                                console.log('Login Failed!', error);
+                                            }}
+                                            onProfileSuccess={(response) => {
+                                                console.log('Get Profile Success!', response);
+                                            }}
+                                        />
                                     </MDBBtn>
 
                                     <MDBBtn className='mb-4 w-100' size='lg' color='red'>
