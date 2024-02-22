@@ -21,13 +21,9 @@ const Header = () => {
                     {({open}) => (
                         <>
                             <Popover.Button
-                                className={`
-                                            ${open ? 'text-white' : 'text-white/90'}
-                                            group inline-flex items-center rounded-md 
-                                            bg-orange-700 px-3 py-2 text-base font-medium 
-                                            hover:text-white focus:outline-none 
-                                            focus-visible:ring-2 focus-visible:ring-white/75`
-                                }
+                                className= 'p-1.5 rounded-sm inline-flex items-center
+                                            text-gray-700 hover:text-opacity-100
+                                            focus:outline-none active:bg-neutral-100'
                             >
                                 <HiOutlineChatAlt fontSize={24}/>
                             </Popover.Button>
