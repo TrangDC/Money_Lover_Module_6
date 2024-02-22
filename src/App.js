@@ -7,6 +7,7 @@ import HeaderPage from "./components/TransactionsPage/HeaderPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import ManagerUserPage from "./components/UserPage/ManagerUserPage";
 import WalletPage from "./components/UserPage/WalletPage";
+import CategoriesPage from "./components/UserPage/CategoriesPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Routes>
                 <Route path='/user' element={<InformationUser />}></Route>
                 <Route path='/user/manager' element={<ManagerUserPage />}></Route>
+                <Route path='/user/categories' element={<CategoriesPage />}></Route>
                 <Route path='/user/wallet' element={<WalletPage />}></Route>
                 <Route path='/trans' element={<HeaderPage />}></Route>
                 <Route path='/login' element={<LoginPage />}></Route>
