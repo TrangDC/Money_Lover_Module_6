@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Modal from "react-bootstrap/Modal";
 
 const WalletPage = () => {
     //save wallet : http://localhost:8080/api/wallets/saveWallet
@@ -45,6 +46,12 @@ const WalletPage = () => {
 
     const [selectedWalletId, setSelectedWalletId] = useState(null);
 
+    const [showCreate, setShowCreate] = useState(false);
+    const handleCloseCreate = () => setShow(false);
+    const handleShowCreate = () => setShow(true);
+
+
+
     const { id } = useParams();
     const navigate = useNavigate();
 //update wallet
@@ -68,6 +75,19 @@ const WalletPage = () => {
             .catch((err) => {
                 console.error(err);
             });
+    };
+
+    //xoa wallet
+    const handleDelete = (id) => {
+        const confirm = window.confirm('Are You Sure ?');
+        if (confirm) {
+            axios.delete(`http://localhost:8080/api/wallets/deleteWallet/${selectedWalletId}`)
+                .then(res => {
+                    alert("Success !");
+                    window.location.reload();
+                })
+                .catch(err => console.log(err))
+        }
     };
 
 //hien thi danh sach
@@ -111,7 +131,7 @@ const WalletPage = () => {
                 <h4 className="my-2" style={{marginRight: 'auto'}}>
                     My Wallet
                 </h4>
-                <Button variant="success" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
+                <Button onClick={handleShowCreate} variant="success" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
 
                 <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
                     <InputGroup className="mb-3">
@@ -210,10 +230,36 @@ const WalletPage = () => {
                                                   onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
                                 </Form.Group>
                                 <Button variant="dark" onClick={handleUpdate}>Edit</Button>
-                                <Button variant="danger">Delete</Button>
+                                <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
                             </Form>
                         </Offcanvas.Body>
                 </Offcanvas>
+
+                {/*<Offcanvas show={show} onHide={handleCloseCreate} backdrop="static">*/}
+                {/*    <Offcanvas.Header closeButton>*/}
+                {/*        <Offcanvas.Title>Create Wallet</Offcanvas.Title>*/}
+                {/*    </Offcanvas.Header>*/}
+                {/*    <Offcanvas.Body>*/}
+                {/*        <Form>*/}
+                {/*            <Form.Group className="mb-3" controlId="formGroupName">*/}
+                {/*                <Form.Label>Name Wallet</Form.Label>*/}
+                {/*                <Form.Control type="text"*/}
+                {/*                              placeholder="Name Wallet"*/}
+                {/*                              name="name"*/}
+                {/*                              onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />*/}
+                {/*            </Form.Group>*/}
+                {/*            <Form.Group className="mb-3" controlId="formGroupBalance">*/}
+                {/*                <Form.Label>Total Money</Form.Label>*/}
+                {/*                <Form.Control type="number"*/}
+                {/*                              name="balance"*/}
+                {/*                              placeholder="Money"*/}
+                {/*                              onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />*/}
+                {/*            </Form.Group>*/}
+                {/*            <Button variant="dark">Create</Button>*/}
+                {/*        </Form>*/}
+                {/*    </Offcanvas.Body>*/}
+                {/*</Offcanvas>*/}
+
             </div>
         </>
     );

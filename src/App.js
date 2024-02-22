@@ -4,7 +4,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import InformationUser from "./components/UserPage/InformationUser";
-import WalletPage from "./components/UserPage/WalletPage";
+import WalletPage from "./components/UserPage/wallet/WalletPage";
 
 
 function App() {
