@@ -96,7 +96,7 @@ const Header = () => {
                         </>
                     )}
                 </Popover>
-                <Menu as="div" className="relative inline-block text-left">
+                <Menu as="div" className="relative">
                     <div>
                         <Menu.Button className="ml-2 inline-flex rounded-full
                                                 focus:outline-none focus:ring-2
@@ -104,13 +104,14 @@ const Header = () => {
                         >
                             <span className="sr-only">Open user menu</span>
                             <div className='h-10 w-10 rounded-full bg-sky-500
-                                                        bg-cover bg-no-repeat bg-center'
+                                            bg-cover bg-no-repeat bg-center'
                                  style={{backgroundImage:`url("https://images.unsplash.com/photo-1509967419530-da38b4704bc6?q=80&w=1195&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`}}
                             >
                                             <span className='sr-only'>
                                                 Hugh Jackson
                                             </span>
                             </div>
+                        </Menu.Button>
                             <Transition
                                 as={Fragment}
                                 enter="transition ease-out duration-100"
@@ -146,7 +147,6 @@ const Header = () => {
                                         </Menu.Item>
                                 </Menu.Items>
                             </Transition>
-                        </Menu.Button>
                     </div>
                 </Menu>
             </div>
