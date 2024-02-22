@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./new_src/components/shared/Layout";
 import Main from "./components/HomePage/Main/Main";
 import ManagerUserPage from "./components/UserPage/ManagerUserPage";
-import {Login} from "@mui/icons-material";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import LoginPage from "./components/LoginPage/LoginPage";
 
