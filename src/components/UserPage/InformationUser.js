@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import { BsPersonFill } from "react-icons/bs";
 import { MDBTypography } from 'mdb-react-ui-kit';
-import { IoMdWallet } from "react-icons/io";
+import {IoMdArrowRoundBack, IoMdWallet} from "react-icons/io";
 import { FaLayerGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import {Link} from "react-router-dom";
@@ -22,7 +22,9 @@ const InformationUser = () => {
 
     return (
         <div>
-
+            <Link to="/" className="text-dark" >
+                <IoMdArrowRoundBack className="mx-2 mb-2 my-2" style={{ width: '30px', height: '30px' }} />
+            </Link>
             <Container>
                 <div>
                         <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />

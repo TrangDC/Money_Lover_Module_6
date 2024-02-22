@@ -1,0 +1,26 @@
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Chiều cao của grid-container bằng 100% chiều cao của màn hình */
+}
+
+.header,
+.footer {
+    height: 5vh; /* Chiếm 5% chiều cao của màn hình */
+    background-color: lightblue; /* Màu nền lightblue */
+}
+
+.content-container {
+    display: flex;
+    flex: 1; /* Chiếm phần còn lại của grid-container */
+}
+
+.sidebar {
+    width: 20%; /* Chiềm 20% chiều rộng của content-container */
+    background-color: lightgreen; /* Màu nền lightgreen */
+}
+
+.main {
+    flex: 1; /* Chiếm phần còn lại của content-container */
+    background-color: lightcoral; /* Màu nền lightcoral */
+}
