@@ -4,6 +4,9 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import HeaderPage from "./layout/HeaderPage";
+import InformationUser from "./components/UserPage/InformationUser";
+import ManagerUserPage from "./components/UserPage/ManagerUserPage";
+import WalletPage from "./components/UserPage/WalletPage";
 
 function App() {
   return (
@@ -11,7 +14,10 @@ function App() {
 
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<HeaderPage />}></Route>
+                <Route path='/user' element={<InformationUser />}></Route>
+                <Route path='/user/manager' element={<ManagerUserPage />}></Route>
+                <Route path='/user/wallet' element={<WalletPage />}></Route>
+                <Route path='/trans' element={<HeaderPage />}></Route>
                 <Route path='/login' element={<LoginPage />}></Route>
                 <Route path='/register' element={<RegisterPage />}></Route>
             </Routes>

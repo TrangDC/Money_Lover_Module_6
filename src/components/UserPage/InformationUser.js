@@ -25,9 +25,9 @@ const InformationUser = () => {
 
             <Container>
                 <div>
-                    <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
-                    <h5 style={{marginTop: '7px',marginLeft: '515px'}}>User Name</h5>
-                    <h7 style={{marginTop: '10px',marginLeft: '490px'}}>username@gmail.com</h7>
+                        <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
+                        <h5 style={{marginTop: '7px',marginLeft: '515px'}}>User Name</h5>
+                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>username@gmail.com</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>
@@ -44,8 +44,10 @@ const InformationUser = () => {
                 <ListGroup.Item variant="secondary">  <p></p> </ListGroup.Item>
 
                 <ListGroup.Item>
-                    <IoMdWallet className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}} />
-                    My Wallet
+                    <Link to= "/user/wallet" className="text-dark">
+                        <IoMdWallet className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}} />
+                        My Wallet
+                    </Link>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
