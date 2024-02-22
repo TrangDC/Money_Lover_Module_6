@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import {HiOutlineBell, HiOutlineChatAlt, HiOutlineSearch} from "react-icons/hi";
 import {Popover, Transition} from "@headlessui/react";
+import classNames from "classnames";
 
 const Header = () => {
     return (
@@ -21,11 +22,14 @@ const Header = () => {
                     {({open}) => (
                         <>
                             <Popover.Button
-                                className= 'p-1.5 rounded-sm inline-flex items-center
-                                            text-gray-700 hover:text-opacity-100
-                                            focus:outline-none active:bg-neutral-100'
+                                className={classNames(
+                                    open && 'bg-gray-100',
+                                    'group inline-flex items-center rounded-sm ' +
+                                    'p-1.5 text-gray-700 hover:text-opacity-100 ' +
+                                    'focus:outline-none active:bg-gray-100'
+                                )}
                             >
-                                <HiOutlineChatAlt fontSize={24}/>
+                                <HiOutlineChatAlt fontSize={24} />
                             </Popover.Button>
                             <Transition
                                 as={Fragment}
@@ -37,7 +41,15 @@ const Header = () => {
                                 leaveTo="opacity-0 translate-y-1"
                             >
                                 <Popover.Panel className='absolute right-0 z-10 mt-2.5 w-80'>
-                                    this is the panel
+                                    <div className='bg-white rounded-sm shadow-md
+                                                    ring-1 ring-black ring-opacity-5
+                                                    px-2 py-2.5'
+                                    >
+                                        <strong className='text-gray-700 font-medium'>Message</strong>
+                                        <div className='mt-2 py-1 text-sm'>
+                                            This is message panel
+                                        </div>
+                                    </div>
                                 </Popover.Panel>
                             </Transition>
                         </>
