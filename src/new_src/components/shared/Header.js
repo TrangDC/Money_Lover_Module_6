@@ -2,8 +2,12 @@ import React, {Fragment} from 'react';
 import {HiOutlineBell, HiOutlineChatAlt, HiOutlineSearch} from "react-icons/hi";
 import {Menu, Popover, Transition} from "@headlessui/react";
 import classNames from "classnames";
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className='bg-white h-16 px-4 flex justify-between items-center
                         border-b border-gray-200'>
@@ -120,30 +124,26 @@ const Header = () => {
                                                        right-0 mt-2 w-48 rounded-sm
                                                        shadow-md p-1 bg-white ring-1 ring-opacity-5
                                                        focus:outline-none">
-                                    <div className="px-1 py-1 ">
                                         <Menu.Item>
                                             {({ active }) => (
-                                                <button
-                                                    className={`${
-                                                        active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                                >
-                                                    {active ? (
-                                                        <EditActiveIcon
-                                                            className="mr-2 h-5 w-5"
-                                                            aria-hidden="true"
-                                                        />
-                                                    ) : (
-                                                        <EditInactiveIcon
-                                                            className="mr-2 h-5 w-5"
-                                                            aria-hidden="true"
-                                                        />
-                                                    )}
-                                                    Edit
+                                                <button className="text-gray-700 focus:bg-gray-200 block"
+                                                    onClick={() => (
+                                                    navigate("/profile")
+                                                )}>
+                                                    Your Profile
                                                 </button>
                                             )}
                                         </Menu.Item>
-                                    </div>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    onClick={() => (
+                                                    navigate("/settings")
+                                                )}>
+                                                    Settings
+                                                </button>
+                                            )}
+                                        </Menu.Item>
                                 </Menu.Items>
                             </Transition>
                         </Menu.Button>
