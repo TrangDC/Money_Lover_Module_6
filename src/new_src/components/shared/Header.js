@@ -94,7 +94,9 @@ const Header = () => {
                 </Popover>
                 <Menu as="div" className="relative inline-block text-left">
                     <div>
-                        <Menu.Button className=""
+                        <Menu.Button className="ml-2 inline-flex rounded-full
+                                                focus:outline-none focus:ring-2
+                                                focus:ring-neutral-400"
                         >
                             <span className="sr-only">Open user menu</span>
                             <div className='h-10 w-10 rounded-full bg-sky-500
