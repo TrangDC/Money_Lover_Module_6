@@ -1,5 +1,6 @@
 import React from 'react';
 import {FcBullish} from "react-icons/fc";
+import {DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
 
 const Sidebar = () => {
     return (
@@ -9,7 +10,11 @@ const Sidebar = () => {
                 <span className='text-neutral-100 text-lg'>Money Lover</span>
             </div>
             <div className='flex-1'>
-                top part
+                {DASHBOARD_SIDEBAR_LINKS.map((item) => (
+                    <div key={item.index}>
+                        {item.label}
+                    </div>
+                ))}
             </div>
             <div>bottom part</div>
         </div>
