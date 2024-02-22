@@ -1,5 +1,6 @@
 import React from 'react';
 import {HiOutlineBell, HiOutlineChatAlt, HiOutlineSearch} from "react-icons/hi";
+import {Popover} from "@headlessui/react";
 
 const Header = () => {
     return (
@@ -16,7 +17,24 @@ const Header = () => {
                 />
             </div>
             <div className='flex items-center gap-2 mr-2'>
-                <HiOutlineChatAlt fontSize={24}/>
+                <Popover className='relative'>
+                    {({open}) => (
+                        <>
+                            <Popover.Button
+                                className={`
+                                            ${open ? 'text-white' : 'text-white/90'}
+                                            group inline-flex items-center rounded-md 
+                                            bg-orange-700 px-3 py-2 text-base font-medium 
+                                            hover:text-white focus:outline-none 
+                                            focus-visible:ring-2 focus-visible:ring-white/75`
+                                }
+                            >
+                                <HiOutlineChatAlt fontSize={24}/>
+                            </Popover.Button>
+                        </>
+                    )}
+                </Popover>
+
                 <HiOutlineBell fontSize={24}/>
             </div>
         </div>
