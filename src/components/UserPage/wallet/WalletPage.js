@@ -141,7 +141,7 @@ const WalletPage = () => {
                 style={{
                     backgroundColor: '#DDDDDD',
                     width: '1400px',
-                    height: '1000px'
+                    height: '700px'
                 }}
             >
                 <div style={{

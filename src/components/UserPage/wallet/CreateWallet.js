@@ -9,50 +9,17 @@ import axios from "axios";
 import {Card} from "react-bootstrap";
 
 const CreateWallet = () => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [wallets, setWallets] = useState([]);
-    useEffect(() => {
-        axios.get('http://localhost:8080/api/wallets')
-            .then(res => {
-                console.log(res);
-                setWallets(res.data);
-            })
-            .catch(err => console.error(err))
-    }, []);
-    const handleSearch = (event) => {
-        event.preventDefault();
-
-        if (searchTerm) {
-            axios.get(`http://localhost:8080/api/wallets/searchWallet?nameWallet=${searchTerm}`)
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        } else {
-            // Nếu searchTerm không có giá trị, gọi API /users để lấy toàn bộ danh sách người dùng
-            axios.get('http://localhost:8080/api/wallets')
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        }
-    };
-
     //create wallet
-    const [values, setValues] = useState({
+    const [wallet, setWallet] = useState({
         name: '',
         balance: ''
     });
-
-    const [roles, setRoles] = useState([]);
 
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8080/api/wallets/saveWallet')
+        axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
             .then(res => {
                 console.log(res);
                 navigate('/user/wallet');
@@ -72,21 +39,6 @@ const CreateWallet = () => {
                 <h4 className="my-2" style={{marginRight: 'auto'}}>
                     My Wallet
                 </h4>
-                <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-
-                            placeholder="Search Wallet"
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                        />
-                        <Button type="submit" variant="secondary" id="button-addon2">
-                            Search
-                        </Button>
-                    </InputGroup>
-                </Form>
-
             </Navbar>
 
             <div  style={{
@@ -96,17 +48,16 @@ const CreateWallet = () => {
             }}>
 
                 <Card style={{maxWidth: '400px',margin: 'auto',backgroundColor: '#EEEEEE'}}>
-                    <form onSubmit={handleSubmit}>
                     <Card.Header style={{margin: 'auto',fontWeight: 'bold'}}><h3>Create Wallet </h3> </Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            <Form style={{textAlign: 'center'}}>
+                            <Form style={{textAlign: 'center'}} onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                     <Form.Label>Name Wallet</Form.Label>
                                     <Form.Control name='name'
                                                   className='form-control'
                                                   onChange={(event) =>
-                                                      setValues({ ...values, [event.target.name]: event.target.value })
+                                                      setWallet({ ...wallet, [event.target.name]: event.target.value })
                                                   }
                                                   type="text" placeholder="Enter name" />
                                 </Form.Group>
@@ -116,7 +67,7 @@ const CreateWallet = () => {
                                     <Form.Control  name='balance'
                                                    className='form-control'
                                                    onChange={(event) =>
-                                                       setValues({ ...values, [event.target.name]: event.target.value })
+                                                       setWallet({ ...wallet, [event.target.name]: event.target.value })
                                                    }
                                         type="number" placeholder="Enter balance" />
                                 </Form.Group>
@@ -126,7 +77,6 @@ const CreateWallet = () => {
                             </Form>
                         </Card.Text>
                     </Card.Body>
-                    </form>
                 </Card>
             </div>
         </div>
