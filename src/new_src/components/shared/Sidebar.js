@@ -1,7 +1,7 @@
 import React from 'react';
 import {FcBullish} from "react-icons/fc";
 import {DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import classNames from "classnames";
 import {text} from "@fortawesome/fontawesome-svg-core";
 
@@ -29,8 +29,15 @@ const Sidebar = () => {
 export default Sidebar;
 
 function SidebarLink({item}) {
+
+    const {pathname} = useLocation();
+
     return (
-        <Link to={item.path} className={classNames('text-white',linkClasses)}>
+        <Link to={item.path}
+              className={classNames(
+                  pathname === item.path ?
+                      'text-blue-400' :
+                      'text-white',linkClasses)}>
             <span className="text-xl">{item.icon}</span>
             {item.label}
         </Link>
