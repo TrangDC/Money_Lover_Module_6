@@ -1,6 +1,6 @@
 import React from 'react';
 import {FcBullish} from "react-icons/fc";
-import {DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
+import {DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
 import {Link, useLocation} from "react-router-dom";
 import classNames from "classnames";
 import {text} from "@fortawesome/fontawesome-svg-core";
@@ -21,7 +21,10 @@ const Sidebar = () => {
                     <SidebarLink key={item.index} item={item}/>
                 ))}
             </div>
-            <div>bottom part</div>
+            <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700'>
+                {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
+                <SidebarLink key={item.index} item={item}/>
+            ))}</div>
         </div>
     );
 };
