@@ -1,6 +1,7 @@
 import React from 'react';
 import DashboardStatsGrid from "./DashboardStatsGrid";
 import TransactionChart from "./TransactionChart";
+import BuyerProfileChart from "./BuyerProfileChart";
 
 const Dashboard = () => {
     return (
@@ -8,6 +9,7 @@ const Dashboard = () => {
             <DashboardStatsGrid/>
             <div className="flex flex-row gap-4 w-full">
                 <TransactionChart />
+                <BuyerProfileChart/>
             </div>
         </div>
     );
