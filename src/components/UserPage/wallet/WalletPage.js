@@ -7,11 +7,8 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import Image from 'react-bootstrap/Image';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Modal from "react-bootstrap/Modal";
 
 const WalletPage = () => {
     //save wallet : http://localhost:8080/api/wallets/saveWallet
@@ -21,14 +18,12 @@ const WalletPage = () => {
     //edit wallet : http://localhost:8080/api/wallets/{id}
     //search wallet : http://localhost:8080/api/wallets/searchWallet
 
-
     const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const handleClose = () => setShow(false);
     const handleShow = (walletId) => {
         setSelectedWalletId(walletId);
         setShow(true);
-
         // Lấy giá trị của wallet được chọn từ danh sách wallets
         const selectedWallet = wallets.find(wallet => wallet.id === walletId);
         // Gán giá trị name và balance của wallet vào state editWallet
@@ -43,15 +38,7 @@ const WalletPage = () => {
         name: '',
         balance: ''
     });
-
     const [selectedWalletId, setSelectedWalletId] = useState(null);
-
-    const [showCreate, setShowCreate] = useState(false);
-    const handleCloseCreate = () => setShow(false);
-    const handleShowCreate = () => setShow(true);
-
-
-
     const { id } = useParams();
     const navigate = useNavigate();
 //update wallet
@@ -76,7 +63,6 @@ const WalletPage = () => {
                 console.error(err);
             });
     };
-
     //xoa wallet
     const handleDelete = (id) => {
         const confirm = window.confirm('Are You Sure ?');
@@ -89,7 +75,6 @@ const WalletPage = () => {
                 .catch(err => console.log(err))
         }
     };
-
 //hien thi danh sach
     useEffect(() => {
         axios.get('http://localhost:8080/api/wallets')
@@ -125,14 +110,16 @@ const WalletPage = () => {
         <>
             <Navbar className="bg-body-tertiary justify-content-between">
 
-                <Link to="/user" className="text-dark" >
+                <Link to="/" className="text-dark" >
                     <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
                 </Link>
                 <h4 className="my-2" style={{marginRight: 'auto'}}>
-                    My Wallet
+                    Create Wallet
                 </h4>
-                <Button onClick={handleShowCreate} variant="success" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
+                <Link to='/user/createWallet'>
+                    <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
 
+                </Link>
                 <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
                     <InputGroup className="mb-3">
                         <Form.Control
@@ -142,7 +129,7 @@ const WalletPage = () => {
                             aria-label="Recipient's username"
                             aria-describedby="basic-addon2"
                         />
-                        <Button type="submit" variant="outline-secondary" id="button-addon2">
+                        <Button type="submit" variant="secondary" id="button-addon2">
                             Search
                         </Button>
                     </InputGroup>
@@ -234,31 +221,6 @@ const WalletPage = () => {
                             </Form>
                         </Offcanvas.Body>
                 </Offcanvas>
-
-                {/*<Offcanvas show={show} onHide={handleCloseCreate} backdrop="static">*/}
-                {/*    <Offcanvas.Header closeButton>*/}
-                {/*        <Offcanvas.Title>Create Wallet</Offcanvas.Title>*/}
-                {/*    </Offcanvas.Header>*/}
-                {/*    <Offcanvas.Body>*/}
-                {/*        <Form>*/}
-                {/*            <Form.Group className="mb-3" controlId="formGroupName">*/}
-                {/*                <Form.Label>Name Wallet</Form.Label>*/}
-                {/*                <Form.Control type="text"*/}
-                {/*                              placeholder="Name Wallet"*/}
-                {/*                              name="name"*/}
-                {/*                              onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />*/}
-                {/*            </Form.Group>*/}
-                {/*            <Form.Group className="mb-3" controlId="formGroupBalance">*/}
-                {/*                <Form.Label>Total Money</Form.Label>*/}
-                {/*                <Form.Control type="number"*/}
-                {/*                              name="balance"*/}
-                {/*                              placeholder="Money"*/}
-                {/*                              onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />*/}
-                {/*            </Form.Group>*/}
-                {/*            <Button variant="dark">Create</Button>*/}
-                {/*        </Form>*/}
-                {/*    </Offcanvas.Body>*/}
-                {/*</Offcanvas>*/}
 
             </div>
         </>
