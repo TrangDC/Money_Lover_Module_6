@@ -1,5 +1,5 @@
 import React from 'react';
-import {HiOutlineSearch} from "react-icons/hi";
+import {HiOutlineBell, HiOutlineChatAlt, HiOutlineSearch} from "react-icons/hi";
 
 const Header = () => {
     return (
@@ -15,7 +15,10 @@ const Header = () => {
                                   h-10 w-[24rem] border border-gray-400 rounded-sm pr-4 pl-11'
                 />
             </div>
-            <div>side button</div>
+            <div className='flex items-center gap-2 mr-2'>
+                <HiOutlineChatAlt fontSize={24}/>
+                <HiOutlineBell fontSize={24}/>
+            </div>
         </div>
     );
 };
