@@ -27,12 +27,22 @@ const WalletPage = () => {
     const handleShow = (walletId) => {
         setSelectedWalletId(walletId);
         setShow(true);
+
+        // Lấy giá trị của wallet được chọn từ danh sách wallets
+        const selectedWallet = wallets.find(wallet => wallet.id === walletId);
+        // Gán giá trị name và balance của wallet vào state editWallet
+        setEditWallet(selectedWallet);
     };
     const [wallets, setWallets] = useState([]);
     const [wallet, setWallet] = useState({
         name: '',
         balance: ''
     });
+    const [editWallet, setEditWallet] = useState({
+        name: '',
+        balance: ''
+    });
+
     const [selectedWalletId, setSelectedWalletId] = useState(null);
 
     const { id } = useParams();
@@ -49,10 +59,10 @@ const WalletPage = () => {
     }, [id]);
     const handleUpdate = () => {
         axios
-            .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, wallet)
+            .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, editWallet)
             .then((res) => {
                 console.log(res.data);
-                handleClose();
+                handleClose(); // Đóng modal sau khi cập nhật thành công
                 window.location.reload();
             })
             .catch((err) => {
@@ -188,16 +198,16 @@ const WalletPage = () => {
                                     <Form.Control type="text"
                                                   placeholder="Name Wallet"
                                                   name="name"
-                                                  value={wallet.name}
-                                                  onChange={(e) => setWallet({ ...wallet, name: e.target.value })} />
+                                                  value={editWallet.name}
+                                                  onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formGroupBalance">
                                     <Form.Label>Total Money</Form.Label>
                                     <Form.Control type="number"
                                                   name="balance"
                                                   placeholder="Money"
-                                                  value={wallet.balance}
-                                                  onChange={(e) => setWallet({ ...wallet, balance: e.target.value })} />
+                                                  value={editWallet.balance}
+                                                  onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
                                 </Form.Group>
                                 <Button variant="dark" onClick={handleUpdate}>Edit</Button>
                                 <Button variant="danger">Delete</Button>
