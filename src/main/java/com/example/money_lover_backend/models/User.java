@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -29,6 +30,7 @@ public class User {
 
     private String username;
 
+    @Getter
     private String image;
 
     @NotBlank
@@ -64,5 +66,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.image = avatar;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

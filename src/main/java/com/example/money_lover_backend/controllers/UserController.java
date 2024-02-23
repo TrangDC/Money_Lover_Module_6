@@ -1,5 +1,6 @@
 package com.example.money_lover_backend.controllers;
 
+import com.example.money_lover_backend.dto.UserImage;
 import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
 import com.example.money_lover_backend.models.User;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/api/users/")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -58,6 +59,7 @@ public class UserController {
         }
         user.setId(userOptional.get().getId());
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setImage(userOptional.get().getImage());
 
         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -67,4 +69,15 @@ public class UserController {
         return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/uploadImage")
+    public ResponseEntity<User> uploadImage(@PathVariable Long id, @RequestBody UserImage userImage) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        System.out.println(userImage.getImage());
+        userOptional.get().setImage(userImage.getImage());
+
+        return new ResponseEntity<>(userService.save(userOptional.get()), HttpStatus.OK);
+    }
 }
