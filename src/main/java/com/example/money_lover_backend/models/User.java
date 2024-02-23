@@ -29,7 +29,7 @@ public class User {
 
     private String username;
 
-    private String avatar;
+    private String image;
 
     @NotBlank
     @Size(max = 50)
@@ -63,6 +63,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.avatar = avatar;
+        this.image = avatar;
     }
 }
