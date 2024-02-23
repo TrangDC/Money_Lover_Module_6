@@ -14,7 +14,9 @@ const RegisterPage = () => {
                          style={{width: '350px'}}
                          alt="" fluid/>
                 </div>
+                <div style={{marginTop: '-125px'}}>
                 <RegisterForm />
+                </div>
             </MDBContainer>
         </div>
     );

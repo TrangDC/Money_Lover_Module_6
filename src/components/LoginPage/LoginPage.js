@@ -15,8 +15,9 @@ const LoginPage = () => {
                          style={{width: '350px'}}
                          alt="" fluid/>
                 </div>
-
+                <div style={{marginTop: '-125px'}}>
                     <LoginForm />
+                </div>
 
             </MDBContainer>
         </div>

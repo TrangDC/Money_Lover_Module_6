@@ -38,7 +38,7 @@ const LoginForm = () => {
                         className='shadow-5 text-center'
                         style={{
                             marginTop: '-130px',
-                            marginLeft: '615px',
+                            margin: 'auto',
                             backdropFilter: 'blur(30px)',
                             borderRadius: '1rem',
                             maxWidth: '650px',

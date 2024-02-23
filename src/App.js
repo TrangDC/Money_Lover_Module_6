@@ -3,6 +3,7 @@ import './App.css';
 import LoginPage from "./components/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
+import HeaderPage from "./layout/HeaderPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import WalletPage from "./components/UserPage/wallet/WalletPage";
 import CreateWallet from "./components/UserPage/wallet/CreateWallet";
