@@ -8,13 +8,15 @@ import axios from "axios";
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
-import Button from 'react-bootstrap/Button';
+import { useToast } from '@chakra-ui/react'
 
 const LoginForm = () => {
     const initialValues = {
         email: '',
         password: '',
     };
+
+    const toast = useToast()
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
@@ -70,6 +72,7 @@ const LoginForm = () => {
                                         <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>
                                         <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
+
                                 </MDBCol>
                                 <MDBCol col='6' md='6'>
                                     <p className='text-black-50 mb-3'>Using Money Lover account</p>
