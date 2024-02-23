@@ -13,6 +13,7 @@ import {Box, useToast} from '@chakra-ui/react';
 import { jwtDecode } from "jwt-decode";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import {ModalBody} from "react-bootstrap";
 
 
 const LoginForm = () => {
@@ -91,15 +92,19 @@ const LoginForm = () => {
                             <Modal.Header closeButton>
                                 <Modal.Title>Modal heading</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={handleClose}>
-                                    Close
-                                </Button>
-                                <Button variant="primary" onClick={handleClose}>
-                                    Save Changes
-                                </Button>
-                            </Modal.Footer>
+                            <Modal.Body>
+                            <MDBInput
+                                label="Email"
+                                type="email"
+                            />
+                            <MDBInput
+                                label="Password"
+                                type="password"
+                            />
+                            </Modal.Body>
+                            <Button variant="light" type="submit">
+                                Reset Password
+                            </Button>
                         </Modal>
                         <MDBCardBody className='p-5 text-center'>
                             <h2 className='fw-bold text-black mb-5 text-center' style={{ marginTop: '-30px' }}>
