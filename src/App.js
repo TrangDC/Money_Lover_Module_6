@@ -7,6 +7,7 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import Dashboard from "./components/HomePage/Dashboard";
 import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
+import UploadImage from "./components/FireBase/App";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 </Route>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
+                <Route path='/upload' element={<UploadImage/>}/>
             </Routes>
         </BrowserRouter>
 

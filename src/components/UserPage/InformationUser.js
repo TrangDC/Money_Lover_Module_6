@@ -34,7 +34,7 @@ const InformationUser = () => {
             </Link>
             <Container>
                 <div>
-                        <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
+                        <Image src={user.image} roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
                         <h5 style={{marginTop: '7px',marginLeft: '515px'}}>{user.username}</h5>
                         <h7 style={{marginTop: '10px',marginLeft: '490px'}}>username@gmail.com</h7>
                 </div>
