@@ -14,10 +14,11 @@ const Dashboard = () => {
                 <BuyerProfileChart/>
             </div>
             <div className="flex flex-row gap-4 w-full">
-                <RecentOrders />
-                <PopularProducts />
+                <RecentOrders/>
+                <PopularProducts/>
             </div>
         </div>
+
     );
 };
 
