@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon, MDBCheckbox} from 'mdb-react-ui-kit';
+import {MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBInputGroup,
+    MDBCheckbox} from 'mdb-react-ui-kit';
 import {Link, useNavigate} from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
@@ -12,6 +13,8 @@ import { FaApple } from "react-icons/fa";
 import { useToast } from '@chakra-ui/react';
 
 import {jwtDecode} from "jwt-decode";
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 
 const LoginForm = () => {
@@ -145,32 +148,25 @@ const LoginForm = () => {
                                             size='lg'
                                             name='email'
                                         />
-                                        <ErrorMessage name='email' component='span' className='text-red-500' />
-                                        <Field
-                                            as={MDBInput}
-                                            wrapperClass='mb-4 w-100'
-                                            label='Password'
-                                            id='formControlLg'
-                                            type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password'
-                                            size='lg'
-                                            name='password'
-                                        />
-                                        <ErrorMessage name='password' component='span' className='text-red-500' />
+                                        <ErrorMessage name='email' component='span' className='text-red' />
+
+                                        <MDBInputGroup className='mb-3' textTag='div' textAfter={<MDBCheckbox style={{height: '20px'}} checked={showPassword} onChange={togglePasswordVisibility}/>}>
+                                            <Field
+                                                as={MDBInput}
+                                                wrapperClass='mb-4 w-100'
+                                                label='Password'
+                                                id='formControlLg'
+                                                type={showPassword ? 'text' : 'password'}
+                                                size='lg'
+                                                name='password'
+
+                                            />
+
+                                        </MDBInputGroup>
+
+                                        <ErrorMessage name='password' component='span' className='text-red' />
                                         <div className="m-3" style={{ marginRight: 'auto' }}>
                                             <Link style={{ color: 'green' }}>Forgot password?</Link>
-                                        </div>
-
-                                        <div className="form-check mb-3">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="showPasswordCheckbox"
-                                                checked={showPassword}
-                                                onChange={togglePasswordVisibility}
-                                            />
-                                            <label className="form-check-label" htmlFor="showPasswordCheckbox">
-                                                Show Password
-                                            </label>
                                         </div>
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type='submit' disabled={isSubmitting}>
