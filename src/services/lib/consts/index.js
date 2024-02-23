@@ -11,27 +11,27 @@ import {
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
-        key: 'dashboard',
-        label: 'Dashboard',
-        path: '/',
+        key: 'home',
+        label: 'Home',
+        path: '/home',
         icon: <HiOutlineViewGrid />
     },
     {
-        key: 'products',
-        label: 'Products',
-        path: '/products',
+        key: 'wallets',
+        label: 'Wallets',
+        path: '/wallets',
         icon: <HiOutlineCube />
     },
     {
-        key: 'orders',
-        label: 'Orders',
-        path: '/orders',
+        key: 'categories',
+        label: 'Categories',
+        path: '/categories',
         icon: <HiOutlineShoppingCart />
     },
     {
-        key: 'customers',
-        label: 'Customers',
-        path: '/customers',
+        key: 'budgets',
+        label: 'Budgets',
+        path: '/budgets',
         icon: <HiOutlineUsers />
     },
     {

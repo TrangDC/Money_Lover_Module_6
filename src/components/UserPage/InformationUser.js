@@ -53,8 +53,10 @@ const InformationUser = () => {
                 </ListGroup.Item>
 
                 <ListGroup.Item>
+                    <Link to= "/user/categories" className="text-dark">
                     <FaLayerGroup  className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}}/>
                     Group
+                    </Link>
                 </ListGroup.Item>
 
                 <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>

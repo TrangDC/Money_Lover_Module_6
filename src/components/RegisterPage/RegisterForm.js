@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import YupPassword from 'yup-password';
+import axios from "axios";
 YupPassword(Yup);
 
 
@@ -28,9 +29,16 @@ const RegisterForm = () => {
         password: '',
     })
 
-    const handleSubmit = (values, { setSubmitting }) => {
+    const handleSubmit = async (values, {setSubmitting}) => {
         // Xử lý logic khi submit form
-        console.log(values);
+        try {
+            const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
+            console.log(response.data); // Log phản hồi từ API
+            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+        } catch (error) {
+            console.error('Error during login:', error);
+            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
+        }
         setSubmitting(false);
     };
 
@@ -56,7 +64,7 @@ const RegisterForm = () => {
                         className='shadow-5 text-center'
                         style={{
                             marginTop: '-130px',
-                            marginLeft: '615px',
+                            margin: 'auto',
                             backdropFilter: 'blur(30px)',
                             borderRadius: '1rem',
                             maxWidth: '650px',

@@ -56,7 +56,7 @@ const LoginForm = () => {
                         className='shadow-5 text-center'
                         style={{
                             marginTop: '-130px',
-                            marginLeft: '615px',
+                            margin: 'auto',
                             backdropFilter: 'blur(30px)',
                             borderRadius: '1rem',
                             maxWidth: '650px',
@@ -91,7 +91,7 @@ const LoginForm = () => {
                                             onSuccess={credentialResponse => {
                                                 const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
                                                 console.log(credentialResponseDecoded);
-                                                navigate("/");
+                                                navigate("/home");
                                                 window.location.reload();
                                             }}
                                             onError={() => {
