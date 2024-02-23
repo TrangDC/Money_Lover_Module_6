@@ -25,19 +25,13 @@ const LoginForm = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
-            console.log(response.data);
-
-            // Hiển thị toast thông báo đăng nhập thành công
-            toast.success('Login successful!', {
-                position: toast.POSITION.TOP_CENTER
-            });
+            console.log(response.data); // Log phản hồi từ API
+            localStorage.setItem("user", JSON.stringify(response.data));
+            // navigate('/home')
+            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
         } catch (error) {
             console.error('Error during login:', error);
-
-            // Hiển thị toast thông báo đăng nhập không thành công
-            toast.error('Login failed. Please check your credentials.', {
-                position: toast.POSITION.BOTTOM_CENTER
-            });
+            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
         }
         setSubmitting(false);
     };

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {getOrderStatus} from "./lib/utils/get-order-status";
 import {format} from "date-fns";
+import {getOrderStatus} from "../../services/lib/utils/get-order-status";
 
 const recentOrderData = [
     {

@@ -1,11 +1,10 @@
 
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Layout from "./new_src/components/shared/Layout";
-import Main from "./components/HomePage/Main/Main";
+import Layout from "./layout/Layout";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import LoginPage from "./components/LoginPage/LoginPage";
-import Dashboard from "./new_src/Dashboard";
+import Dashboard from "./components/HomePage/Dashboard";
 import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
 
@@ -13,7 +12,6 @@ import InformationUser from "./components/UserPage/InformationUser";
 function App() {
   return (
     <div className="App">
-
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Layout />}>

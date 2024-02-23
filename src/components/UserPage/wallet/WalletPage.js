@@ -110,7 +110,7 @@ const WalletPage = () => {
         <>
             <Navbar className="bg-body-tertiary justify-content-between">
 
-                <Link to="/" className="text-dark" >
+                <Link to="/home" className="text-dark" >
                     <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
                 </Link>
                 <h4 className="my-2" style={{marginRight: 'auto'}}>
