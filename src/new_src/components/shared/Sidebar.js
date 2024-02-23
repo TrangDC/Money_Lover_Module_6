@@ -3,7 +3,6 @@ import {FcBullish} from "react-icons/fc";
 import {DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS} from "../../lib/consts";
 import {Link, useLocation} from "react-router-dom";
 import classNames from "classnames";
-import {text} from "@fortawesome/fontawesome-svg-core";
 import {HiOutlineLogout} from "react-icons/hi";
 
 const linkClasses =
@@ -12,10 +11,10 @@ const linkClasses =
 
 const Sidebar = () => {
     return (
-        <div className="flex flex-col bg-neutral-900 w-60 p-3">
+        <div className="flex flex-col bg-green-200 w-60 p-3">
             <div className='flex items-center gap-2 px-1 py-3'>
                 <FcBullish fontSize={24}/>
-                <span className='text-neutral-100 text-lg'>Money Lover</span>
+                <span className='text-neutral-900 text-lg'>Money Lover</span>
             </div>
             <div className='flex-1'>
                 {DASHBOARD_SIDEBAR_LINKS.map((item) => (
@@ -47,8 +46,8 @@ function SidebarLink({item}) {
         <Link to={item.path}
               className={classNames(
                   pathname === item.path ?
-                      'text-blue-400' :
-                      'text-white',linkClasses)}>
+                      'text-blue-900' :
+                      'text-black',linkClasses)}>
             <span className="text-xl">{item.icon}</span>
             {item.label}
         </Link>
