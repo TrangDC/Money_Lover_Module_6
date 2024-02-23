@@ -18,8 +18,6 @@ function App() {
                     <Route index element={<Dashboard />}/>
                     <Route path="/products" element={<Main />}/>
                 </Route>
-
-
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
             </Routes>
