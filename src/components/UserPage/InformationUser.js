@@ -36,7 +36,7 @@ const InformationUser = () => {
                 <div>
                         <Image src={user.image} roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
                         <h5 style={{marginTop: '7px',marginLeft: '515px'}}>{user.username}</h5>
-                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>username@gmail.com</h7>
+                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>{user.email}</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>

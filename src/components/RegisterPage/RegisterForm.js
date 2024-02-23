@@ -10,7 +10,7 @@ import {
     MDBIcon,
 }
     from 'mdb-react-ui-kit';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import YupPassword from 'yup-password';
@@ -23,6 +23,7 @@ const RegisterForm = () => {
     //     email: '',
     //     password: '',
     // };
+    const navigate = useNavigate();
 
     const [initialValues, setInitialValues] = useState({
         email: '',
@@ -34,6 +35,7 @@ const RegisterForm = () => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
             console.log(response.data); // Log phản hồi từ API
+            navigate("/login")
             // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
         } catch (error) {
             console.error('Error during login:', error);
@@ -48,10 +50,10 @@ const RegisterForm = () => {
             .required('Password is a required field.')
             .min(8,'Password must contain 8 characters'
             )
-            .minLowercase(1, 'Password must contain at least 1 lower case letter')
-            .minUppercase(1, 'Password must contain at least 1 upper case letter')
-            .minNumbers(1, 'Password must contain at least 1 number')
-            .minSymbols(1, 'Password must contain at least 1 special character')
+            // .minLowercase(1, 'Password must contain at least 1 lower case letter')
+            // .minUppercase(1, 'Password must contain at least 1 upper case letter')
+            // .minNumbers(1, 'Password must contain at least 1 number')
+            // .minSymbols(1, 'Password must contain at least 1 special character')
     });
     return (
 
