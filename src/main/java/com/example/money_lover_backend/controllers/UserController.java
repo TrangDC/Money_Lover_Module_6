@@ -32,7 +32,7 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<User>> findAllCustomer() {
+    public ResponseEntity<Iterable<User>> findAll() {
         List<User> users = (List<User>) userService.findAll();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findCustomerById(@PathVariable Long id) {
+    public ResponseEntity<User> findUserById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
