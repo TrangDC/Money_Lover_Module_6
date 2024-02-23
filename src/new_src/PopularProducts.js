@@ -58,12 +58,21 @@ const PopularProducts = () => {
                 <strong>Popular Products</strong>
                 <div className='mt-4 flex flex-col gap-3'>
                     {popularProducts.map((product) =>(
-                        <Link to={`/product/${product.id}`}>
-                            <div className='w-10 h-10 min-w-10 bg-gray-200 rounded-sm'>
-                                <img className='w-full h-full object-cover' src={product.product_thumbnail} alt={product.product_name}/>
+                        <Link to={`/product/${product.id}`}
+                              key={product.id}
+                              className='flex hover:no-underline'
+                        >
+                            <div className='w-10 h-10 min-w-10 bg-gray-200 rounded-sm overflow-hidden'>
+                                <img className='w-full h-full object-cover'
+                                     src={product.product_thumbnail}
+                                     alt={product.product_name}
+                                />
                             </div>
-                            <div></div>
-                            <div></div>
+                            <div className='ml-4 flex-1'>
+                                <p className='text-sm text-gray-800'>{product.product_name}</p>
+                                <span className={`text-sm font-medium`}>{product.product_stock === 0 ? 'Out of stock' : product.product_stock}</span>
+                            </div>
+                            <div className='text-xs text-gray-400 pl-2'>{product.product_price}</div>
                         </Link>
                     ))}
                 </div>
