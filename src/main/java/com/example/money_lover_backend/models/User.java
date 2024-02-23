@@ -29,6 +29,8 @@ public class User {
 
     private String username;
 
+    private String avatar;
+
     @NotBlank
     @Size(max = 50)
     @Email
@@ -56,10 +58,11 @@ public class User {
         this.password = password;
     }
 
-    public User(String name, String username, String email, String password) {
+    public User(String name, String username, String email, String password, String avatar) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.avatar = avatar;
     }
 }

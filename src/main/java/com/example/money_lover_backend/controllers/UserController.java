@@ -5,6 +5,7 @@ import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class UserController {
     private IUserService userService;
 
     @PutMapping("/{id}")
-
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
@@ -32,4 +33,5 @@ public class UserController {
         user.setPassword(encoder.encode(user.getPassword()));
         return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
     }
+
 }
