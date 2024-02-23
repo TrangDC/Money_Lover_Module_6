@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 'mdb-react-ui-kit';
+import {MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon, MDBCheckbox} from 'mdb-react-ui-kit';
 import {Link, useNavigate} from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
@@ -11,10 +11,8 @@ import { FaGoogle } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { useToast } from '@chakra-ui/react';
 
-import {toast} from "react-toastify";
-import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
-import FacebookLogin from "@greatsumini/react-facebook-login";
+
 
 const LoginForm = () => {
 
@@ -47,6 +45,11 @@ const LoginForm = () => {
             });
         }
         setSubmitting(false);
+    };
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -148,16 +151,27 @@ const LoginForm = () => {
                                             wrapperClass='mb-4 w-100'
                                             label='Password'
                                             id='formControlLg'
-                                            type='password'
+                                            type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password'
                                             size='lg'
                                             name='password'
                                         />
                                         <ErrorMessage name='password' component='span' className='text-red-500' />
-                                        <p className='small mb-3 pb-lg-2'>
-                                            <a className='text-green-50' href='#!'>
-                                                Forgot password?
-                                            </a>
-                                        </p>
+                                        <div className="m-3" style={{ marginRight: 'auto' }}>
+                                            <Link style={{ color: 'green' }}>Forgot password?</Link>
+                                        </div>
+
+                                        <div className="form-check mb-3">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id="showPasswordCheckbox"
+                                                checked={showPassword}
+                                                onChange={togglePasswordVisibility}
+                                            />
+                                            <label className="form-check-label" htmlFor="showPasswordCheckbox">
+                                                Show Password
+                                            </label>
+                                        </div>
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type='submit' disabled={isSubmitting}>
                                         {isSubmitting ? 'Logging in...' : 'LOGIN'}
