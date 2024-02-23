@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users",
@@ -16,6 +18,7 @@ import lombok.Data;
                 @UniqueConstraint(columnNames = "email")
         })
 @Data
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +45,6 @@ public class User {
 
     public User() {
     }
-
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

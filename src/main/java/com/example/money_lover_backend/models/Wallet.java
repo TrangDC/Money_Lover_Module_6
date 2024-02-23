@@ -13,4 +13,5 @@ public class Wallet {
 
     private String name;
     private Long balance;
+
 }
