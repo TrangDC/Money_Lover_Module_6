@@ -150,7 +150,7 @@ const LoginForm = () => {
                                         />
                                         <ErrorMessage name='email' component='span' className='text-red' />
 
-                                        <MDBInputGroup className='mb-3' textTag='div' textAfter={<MDBCheckbox style={{height: '20px'}} checked={showPassword} onChange={togglePasswordVisibility}/>}>
+                                        <div>
                                             <Field
                                                 as={MDBInput}
                                                 wrapperClass='mb-4 w-100'
@@ -159,10 +159,22 @@ const LoginForm = () => {
                                                 type={showPassword ? 'text' : 'password'}
                                                 size='lg'
                                                 name='password'
-
                                             />
 
-                                        </MDBInputGroup>
+                                            <div style={{marginTop: '-10px',marginLeft: '95px'}}>
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id="showPasswordCheckbox"
+                                                    checked={showPassword}
+                                                    onChange={togglePasswordVisibility}
+                                                />
+                                                <label className="form-check-label" htmlFor="showPasswordCheckbox">
+                                                    Show Password
+                                                </label>
+                                            </div>
+
+                                        </div>
 
                                         <ErrorMessage name='password' component='span' className='text-red' />
                                         <div className="m-3" style={{ marginRight: 'auto' }}>
