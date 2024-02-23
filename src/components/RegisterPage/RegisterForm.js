@@ -10,7 +10,7 @@ import {
     MDBIcon,
 }
     from 'mdb-react-ui-kit';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import YupPassword from 'yup-password';
@@ -20,25 +20,20 @@ YupPassword(Yup);
 
 
 const RegisterForm = () => {
-    // const initialValues = {
-    //     email: '',
-    //     password: '',
-    // };
 
     const [initialValues, setInitialValues] = useState({
         email: '',
         password: '',
     })
+    const navigate = useNavigate();
 
     const handleSubmit = async (values, {setSubmitting}) => {
-        // Xử lý logic khi submit form
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
-            console.log(response.data); // Log phản hồi từ API
-            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+            console.log(response.data);
+            navigate('/login');
         } catch (error) {
             console.error('Error during login:', error);
-            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
         }
         setSubmitting(false);
     };
@@ -54,6 +49,14 @@ const RegisterForm = () => {
             .minNumbers(1, 'Password must contain at least 1 number')
             .minSymbols(1, 'Password must contain at least 1 special character')
     });
+
+    const [showPassword, setShowPassword] = useState({ value: false });
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prevState) => ({
+            value: !prevState.value
+        }));
+    };
     return (
 
         <Formik initialValues={initialValues}
@@ -105,18 +108,36 @@ const RegisterForm = () => {
                                             size='lg'
                                             name='email'
                                         />
-                                        <ErrorMessage name={"email"} component='span' className='text-red-500'/>
-                                        <Field
-                                            as={MDBInput}
-                                            wrapperClass='mb-4 w-100'
-                                            label='Password'
-                                            id='formControlLg'
-                                            type='password'
-                                            size='lg'
-                                            name='password'
-                                            // as={Field}
-                                        />
-                                        <ErrorMessage name={"password"} component='span' className='text-red-500'/>
+                                        <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                            <ErrorMessage name='email' component='span' />
+                                        </div>
+                                        <div>
+                                            <Field
+                                                as={MDBInput}
+                                                wrapperClass='mb-4 w-100'
+                                                label='Password'
+                                                id='formControlLg'
+                                                type={showPassword.value ? 'text' : 'password'}
+                                                size='lg'
+                                                name='password'
+                                            />
+                                            <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                                <ErrorMessage name='password' component='span' />
+                                            </div>
+                                            <div style={{marginTop: 0,marginLeft: '95px'}}>
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id="showPasswordCheckbox"
+                                                    checked={showPassword.value}
+                                                    onChange={togglePasswordVisibility}
+                                                />
+                                                <label className="form-check-label" htmlFor="showPasswordCheckbox">
+                                                    Show Password
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type="submit" disabled={isSubmitting}>
                                         {isSubmitting ? 'Logging in...' : 'REGISTER'}
