@@ -6,7 +6,11 @@ import {
 }
     from 'mdb-react-ui-kit';
 
+
 const LoginPage = () => {
+
+
+
     return (
         <div>
             <MDBContainer fluid>
@@ -18,7 +22,6 @@ const LoginPage = () => {
                 <div style={{marginTop: '-125px'}}>
                     <LoginForm />
                 </div>
-
             </MDBContainer>
         </div>
     );

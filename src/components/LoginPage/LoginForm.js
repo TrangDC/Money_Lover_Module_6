@@ -2,15 +2,26 @@ import React from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 'mdb-react-ui-kit';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
+
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
-import { useToast } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react';
+
+import {toast} from "react-toastify";
+import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
+import FacebookLogin from "@greatsumini/react-facebook-login";
 
 const LoginForm = () => {
+
+
+    let navigate = useNavigate();
+
+
     const initialValues = {
         email: '',
         password: '',
@@ -20,12 +31,20 @@ const LoginForm = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signin', values); // Gửi yêu cầu POST tới API
-            console.log(response.data); // Log phản hồi từ API
-            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+            const response = await axios.post('http://localhost:8080/api/auth/signin', values);
+            console.log(response.data);
+
+            // Hiển thị toast thông báo đăng nhập thành công
+            toast.success('Login successful!', {
+                position: toast.POSITION.TOP_CENTER
+            });
         } catch (error) {
             console.error('Error during login:', error);
-            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
+
+            // Hiển thị toast thông báo đăng nhập không thành công
+            toast.error('Login failed. Please check your credentials.', {
+                position: toast.POSITION.BOTTOM_CENTER
+            });
         }
         setSubmitting(false);
     };
@@ -58,14 +77,46 @@ const LoginForm = () => {
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
 
-                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
-                                        <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }} />
-                                        <span className="social-text">Sign in with Gmail</span>
+
+                                    {/*<MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>*/}
+                                    {/*    <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }} />*/}
+                                    {/*    <span className="social-text">Sign in with Gmail</span>*/}
+                                    {/*</MDBBtn>*/}
+
+                                    {/*<MDBBtn outline rounded className='mb-3 w-100' size='lg'>*/}
+                                    {/*    <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}/>*/}
+                                    {/*    <span className="social-text">Sign in with Facebook</span>*/}
+
+                                    <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
+                                        <FacebookLogin
+                                            appId="1320486661979779"
+                                            onSuccess={(response) => {
+                                                console.log('Login Success!', response);
+                                                navigate("/");
+                                                window.location.reload();
+                                            }}
+                                            onFail={(error) => {
+                                                console.log('Login Failed!', error);
+                                            }}
+                                            onProfileSuccess={(response) => {
+                                                console.log('Get Profile Success!', response);
+                                            }}
+                                        />
                                     </MDBBtn>
 
-                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
-                                        <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}/>
-                                        <span className="social-text">Sign in with Facebook</span>
+                                    <MDBBtn className='mb-4 w-100' size='lg' color='red'>
+                                        <GoogleLogin
+                                            onSuccess={credentialResponse => {
+                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
+                                                console.log(credentialResponseDecoded);
+                                                navigate("/home");
+                                                window.location.reload();
+                                            }}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
+
                                     </MDBBtn>
 
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='dark'>

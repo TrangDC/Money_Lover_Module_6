@@ -1,28 +1,32 @@
-
 import './App.css';
-import LoginPage from "./components/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
+
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import InformationUser from "./components/UserPage/InformationUser";
+
+import LoginPage from "./components/LoginPage/LoginPage";
 import WalletPage from "./components/UserPage/wallet/WalletPage";
-import CreateWallet from "./components/UserPage/wallet/CreateWallet";
+import InformationUser from "./components/UserPage/InformationUser";
+import Dashboard from "./components/HomePage/Dashboard"
+import Layout from "./layout/Layout";
 
 
 function App() {
   return (
     <div className="App">
+
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<InformationUser />}></Route>
-                <Route path='/user/wallet' element={<WalletPage />}></Route>
-                <Route path='/user/createWallet' element={<CreateWallet />}></Route>
-                <Route path='/login' element={<LoginPage />}></Route>
-                <Route path='/register' element={<RegisterPage />}></Route>
+                <Route path='/' element={<Layout />}>
+                    <Route path="/home" element={<Dashboard />}/>
+                    <Route path="/wallets" element={<WalletPage />}/>
+                    <Route path="/profile" element={<InformationUser />}/>
+                </Route>
+                <Route path='/login' element={<LoginPage/>}/>
+                <Route path='/register' element={<RegisterPage/>}/>
             </Routes>
         </BrowserRouter>
-
 
     </div>
   );
