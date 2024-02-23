@@ -87,8 +87,26 @@ const LoginForm = () => {
                                     {/*    <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}/>*/}
                                     {/*    <span className="social-text">Sign in with Facebook</span>*/}
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
-                                        <FacebookLogin
+
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
+                                        <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }}
+                                            onSuccess={credentialResponse => {
+                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
+                                                console.log(credentialResponseDecoded);
+                                                navigate("/home");
+                                                window.location.reload();
+                                            }}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
+                                        <span className="social-text">Sign in with Gmail</span>
+
+                                    </MDBBtn>
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
+                                        <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}
                                             appId="1320486661979779"
                                             onSuccess={(response) => {
                                                 console.log('Login Success!', response);
@@ -102,22 +120,9 @@ const LoginForm = () => {
                                                 console.log('Get Profile Success!', response);
                                             }}
                                         />
+                                        <span className="social-text">Sign in with Facebook</span>
                                     </MDBBtn>
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='red'>
-                                        <GoogleLogin
-                                            onSuccess={credentialResponse => {
-                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
-                                                console.log(credentialResponseDecoded);
-                                                navigate("/home");
-                                                window.location.reload();
-                                            }}
-                                            onError={() => {
-                                                console.log('Login Failed');
-                                            }}
-                                        />
-
-                                    </MDBBtn>
 
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='dark'>
                                         <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>

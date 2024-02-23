@@ -121,11 +121,8 @@ const WalletPage = () => {
             <div className="flex flex-col gap-4">
                 <Navbar className="bg-body-tertiary justify-content-between">
 
-                    <Link to="/home" className="text-dark" >
-                        <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
-                    </Link>
-                    <h4 className="my-2" style={{marginRight: 'auto'}}>
-                        Create Wallet
+                    <h4 className="my-2" style={{marginLeft: '30px'}}>
+                        My Wallet
                     </h4>
                         <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2" onClick={handleShowC}>Create New Wallet</Button>
 
