@@ -5,6 +5,10 @@ import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 
 import { Link } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
+import { FaFacebook } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import Button from 'react-bootstrap/Button';
 
 const LoginForm = () => {
     const initialValues = {
@@ -51,18 +55,20 @@ const LoginForm = () => {
                             <MDBRow>
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
-                                    <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Facebook
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
+                                        <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }} />
+                                        <span className="social-text">Sign in with Gmail</span>
                                     </MDBBtn>
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='danger'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Gmail
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
+                                        <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}/>
+                                        <span className="social-text">Sign in with Facebook</span>
                                     </MDBBtn>
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='dark'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Apple
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='dark'>
+                                        <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>
+                                        <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
                                 </MDBCol>
                                 <MDBCol col='6' md='6'>
