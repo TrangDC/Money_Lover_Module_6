@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {getOrderStatus} from "./lib/utils/get-order-status";
 
 const recentOrderData = [
     {
@@ -73,7 +74,7 @@ const RecentOrders = () => {
                             border-gray-200 flex-1'
             >
                 <strong className="text-gray-700 font-medium">Recent Orders</strong>
-                <table className="w-full text-gray-700">
+                <table>
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -100,7 +101,7 @@ const RecentOrders = () => {
                         <td>{order.order_date}</td>
                         <td>{order.order_total}</td>
                         <td>{order.shipment_address}</td>
-                        <td>{order.current_order_status}</td>
+                        <td>{getOrderStatus(order.current_order_status)}</td>
                     </tr>
                 ))}
             </div>
