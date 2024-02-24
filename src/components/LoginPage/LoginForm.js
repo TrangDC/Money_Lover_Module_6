@@ -35,7 +35,7 @@ const LoginForm = () => {
                 title: 'Login Successful',
                 description: 'You have successfully logged in.',
                 status: 'success',
-                duration: 3000,
+                duration: 1500,
                 isClosable: true,
             });
             setTimeout(() => {

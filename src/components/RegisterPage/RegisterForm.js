@@ -7,7 +7,6 @@ import {
     MDBCard,
     MDBCardBody,
     MDBInput,
-    MDBIcon,
 }
     from 'mdb-react-ui-kit';
 import {Link, useNavigate} from "react-router-dom";
@@ -16,8 +15,8 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import YupPassword from 'yup-password';
 import axios from "axios";
 import {FaApple, FaFacebook, FaGoogle} from "react-icons/fa";
+import {useToast} from "@chakra-ui/react";
 YupPassword(Yup);
-
 
 const RegisterForm = () => {
 
@@ -26,14 +25,30 @@ const RegisterForm = () => {
         password: '',
     })
     const navigate = useNavigate();
-
+    const toast = useToast()
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
             console.log(response.data);
-            navigate('/login');
+            toast({
+                title: 'Register Successful',
+                description: 'Registered successfully, Log In now !',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            setTimeout(() => {
+                navigate('/login');
+            }, 1500);
         } catch (error) {
             console.error('Error during login:', error);
+            toast({
+                title: 'Register Failed',
+                description: 'Registration failed, register again !',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
         setSubmitting(false);
     };
