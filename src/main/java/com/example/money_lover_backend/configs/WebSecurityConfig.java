@@ -21,10 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
-// (securedEnabled = true,
-// jsr250Enabled = true,
-// prePostEnabled = true) // by default
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
