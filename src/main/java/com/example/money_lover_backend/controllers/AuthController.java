@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.example.money_lover_backend.models.TokenExpire;
+import com.example.money_lover_backend.repositories.TokenExpireRepository;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,9 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    TokenExpireRepository tokenExpireRepository;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -83,11 +88,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-//        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body(new MessageResponse("Error: Username is already taken!"));
-//        }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
@@ -95,12 +95,12 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        //Tự động tạo username từ phần trước sau của @ trong email
+
         String email = signUpRequest.getEmail();
         String[] emailParts = email.split("@");
         String username = emailParts[0].replace(".", "") + "_" + emailParts[1];
 
-        // Kiểm tra tính duy nhất của username và tạo mới nếu cần
+
         int count = 1;
         String baseUsername = username;
         while (userRepository.existsByUsername(username)) {
@@ -108,7 +108,7 @@ public class AuthController {
             count++;
         }
 
-        // Create new user's account
+
         User user = new User(
                 username,
                 signUpRequest.getEmail(),
@@ -129,14 +129,7 @@ public class AuthController {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
-
                         break;
-//                    case "mod":
-//                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
-//
-//                        break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -149,5 +142,20 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logOut(@RequestBody TokenExpire tokenExpire) {
+        Optional<TokenExpire> tokenExpireOptional = tokenExpireRepository.findByToken(tokenExpire.getToken());
+
+        if (tokenExpireOptional.isPresent()) {
+            tokenExpireOptional.get().setUser(tokenExpire.getUser());
+        } else {
+            TokenExpire newTokenExpire = new TokenExpire();
+            newTokenExpire.setToken(tokenExpire.getToken());
+            newTokenExpire.setUser(tokenExpire.getUser());
+            tokenExpireRepository.save(tokenExpire);
+        }
+        return ResponseEntity.ok("Token expired saved successfully");
     }
 }

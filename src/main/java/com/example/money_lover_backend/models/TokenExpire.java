@@ -1,10 +1,14 @@
 package com.example.money_lover_backend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TokenExpire {
 
     @Id
@@ -16,6 +20,4 @@ public class TokenExpire {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    // getters and setters
 }
