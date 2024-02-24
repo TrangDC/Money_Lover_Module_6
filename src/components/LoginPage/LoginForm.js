@@ -27,7 +27,7 @@ const LoginForm = () => {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             console.log(response.data); // Log phản hồi từ API
             localStorage.setItem("user", JSON.stringify(response.data));
-            // navigate('/home')
+            navigate('/auth/home')
             // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
         } catch (error) {
             console.error('Error during login:', error);
