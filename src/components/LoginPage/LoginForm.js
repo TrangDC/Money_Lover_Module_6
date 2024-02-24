@@ -8,10 +8,25 @@ import axios from "axios";
 import { FaFacebook } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaApple } from "react-icons/fa";
-import {useToast} from '@chakra-ui/react';
+import {useDisclosure, useToast} from '@chakra-ui/react';
 import { jwtDecode } from "jwt-decode";
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from '@chakra-ui/react'
+import {
+    FormControl,
+    FormLabel,
+    Input,
+    FormErrorMessage,
+    FormHelperText,
+} from '@chakra-ui/react'
 
 
 const LoginForm = () => {
@@ -20,14 +35,8 @@ const LoginForm = () => {
         email: '',
         password: '',
     };
-    const [showToast, setShowToast] = useState(false);
     const toast = useToast()
-
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const handleSubmit = async (values, { setSubmitting }) => {
-
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             console.log(response.data);
@@ -54,12 +63,13 @@ const LoginForm = () => {
         }
         setSubmitting(false);
     };
-    const [showPassword, setShowPassword] = useState(false);
 
+    const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
+    const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <Formik initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -81,23 +91,28 @@ const LoginForm = () => {
                         }}
                     >
 
-                        <Modal show={show} onHide={handleClose}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Modal heading</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                            <MDBInput
-                                label="Email"
-                                type="email"
-                            />
-                            <MDBInput
-                                label="Password"
-                                type="password"
-                            />
-                            </Modal.Body>
-                            <Button variant="light" type="submit">
-                                Reset Password
-                            </Button>
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>GET PASSWORD</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    <FormControl isRequired>
+                                        <FormLabel>Email</FormLabel>
+                                        <Input placeholder='Enter Email' />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel>Verification</FormLabel>
+                                        <Input placeholder='Confirmation code has been sent to email' />
+                                    </FormControl>
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <Button colorScheme='blue' mr={3}>
+                                        Submit
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
                         </Modal>
 
                         <MDBCardBody className='p-5 text-center'>
@@ -189,7 +204,7 @@ const LoginForm = () => {
                                             </div>
                                         </div>
                                         <div className="m-3" style={{ marginRight: 'auto' }}>
-                                            <Link onClick={handleShow} style={{ color: 'green' }}>Forgot password?</Link>
+                                            <Link onClick={onOpen} style={{ color: 'green' }}>Forgot password?</Link>
                                         </div>
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type='submit' disabled={isSubmitting}>
