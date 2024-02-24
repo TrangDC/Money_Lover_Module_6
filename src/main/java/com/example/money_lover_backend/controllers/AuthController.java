@@ -148,12 +148,7 @@ public class AuthController {
     public ResponseEntity<?> logOut(@RequestBody TokenExpire tokenExpire) {
         Optional<TokenExpire> tokenExpireOptional = tokenExpireRepository.findByToken(tokenExpire.getToken());
 
-        if (tokenExpireOptional.isPresent()) {
-            tokenExpireOptional.get().setUser(tokenExpire.getUser());
-        } else {
-            TokenExpire newTokenExpire = new TokenExpire();
-            newTokenExpire.setToken(tokenExpire.getToken());
-            newTokenExpire.setUser(tokenExpire.getUser());
+        if (!tokenExpireOptional.isPresent()) {
             tokenExpireRepository.save(tokenExpire);
         }
         return ResponseEntity.ok("Token expired saved successfully");

@@ -48,10 +48,6 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<TokenExpire> tokens;
-
-
     public User() {
     }
     public User(String username, String email, String password) {

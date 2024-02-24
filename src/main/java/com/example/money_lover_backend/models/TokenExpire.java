@@ -16,8 +16,4 @@ public class TokenExpire {
     private Long id;
 
     private String token;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }
