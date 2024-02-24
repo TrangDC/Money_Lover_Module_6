@@ -68,4 +68,12 @@ public class JwtResponse {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 }
