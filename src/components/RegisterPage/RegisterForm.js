@@ -19,7 +19,6 @@ import {useToast} from "@chakra-ui/react";
 YupPassword(Yup);
 
 const RegisterForm = () => {
-
     const [initialValues, setInitialValues] = useState({
         email: '',
         password: '',
@@ -28,7 +27,7 @@ const RegisterForm = () => {
     const toast = useToast()
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
+            const response = await axios.post('http://localhost:8080/api/auth/signup', values);
             console.log(response.data);
             toast({
                 title: 'Register Successful',
@@ -59,10 +58,6 @@ const RegisterForm = () => {
             .required('Password is a required field.')
             .min(8,'Password must contain 8 characters'
             )
-            .minLowercase(1, 'Password must contain at least 1 lower case letter')
-            .minUppercase(1, 'Password must contain at least 1 upper case letter')
-            .minNumbers(1, 'Password must contain at least 1 number')
-            .minSymbols(1, 'Password must contain at least 1 special character')
     });
 
     const [showPassword, setShowPassword] = useState({ value: false });

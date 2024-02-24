@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
@@ -15,21 +15,28 @@ import ManagerUserPage from "./ManagerUserPage";
 const InformationUser = () => {
     const [show, setShow] = useState(false);
 
+    const [user, setUser] = useState({})
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
+    useEffect(() => {
+        const userdata = localStorage.getItem("user");
+        console.log(JSON.parse(userdata));
+        setUser(JSON.parse(userdata))
+    }, []);
 
     return (
         <div>
-            <Link to="/" className="text-dark" >
+            <Link to="/home" className="text-dark" >
                 <IoMdArrowRoundBack className="mx-2 mb-2 my-2" style={{ width: '30px', height: '30px' }} />
             </Link>
             <Container>
                 <div>
-                        <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
-                        <h5 style={{marginTop: '7px',marginLeft: '515px'}}>User Name</h5>
-                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>username@gmail.com</h7>
+                        <Image src={user.image} roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
+                        <h5 style={{marginTop: '7px',marginLeft: '515px'}}>{user.username}</h5>
+                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>{user.email}</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>
@@ -81,7 +88,7 @@ const InformationUser = () => {
                     <Container>
                         <div>
                             <Image src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginLeft: '195px',width: '60px', height: '60px'}} />
-                            <h5 style={{marginLeft: '175px'}}>User Name</h5>
+                            <h5 style={{marginLeft: '175px'}}>{user.username}</h5>
                             <h7 style={{marginLeft: '150px'}}>username@gmail.com</h7>
                         </div>
                     </Container>

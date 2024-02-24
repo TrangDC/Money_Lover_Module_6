@@ -57,8 +57,7 @@ const WalletPage = () => {
         axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
             .then(res => {
                 console.log(res);
-                // window.location.reload();
-                navigate("/wallets")
+                navigate("/auth/wallets")
             })
             .catch(err => console.log(err));
     };
@@ -78,7 +77,7 @@ const WalletPage = () => {
             .then((res) => {
                 console.log(res.data);
                 handleClose();
-                navigate("/wallets")
+                window.location.reload();
             })
             .catch((err) => {
                 console.error(err);
@@ -135,7 +134,7 @@ const WalletPage = () => {
                     <h4 className="my-2" style={{marginLeft: '30px'}}>
                         My Wallet
                     </h4>
-                        <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2" onClick={onOpen}>Create New Wallet</Button>
+                    <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2" onClick={onOpen}>Create New Wallet</Button>
 
                     <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
                         <InputGroup className="mb-3">
@@ -154,45 +153,45 @@ const WalletPage = () => {
 
                 </Navbar>
                 <div className="flex flex-row w-full"
-                    style={{
-                        backgroundColor: '#DDDDDD',
-                        height: 'auto'
-                    }}
+                     style={{
+                         backgroundColor: '#DDDDDD',
+                         height: 'auto'
+                     }}
                 >
-                        <Table
-                            style={{
-                                marginTop: '60px',
-                                margin: 'auto',
-                                width: '400px',
-                            }}
-                        >
-                            <tbody>
-                            <tr>
-                                <td colSpan={2} style={{
-                                    backgroundColor: '#EEEEEE',
-                                    fontSize: '14px',
-                                    fontWeight: 'normal',
-                                }}>
-                                    <p style={{marginBottom: 0}}>Excluded from Total</p>
-                                </td>
-                            </tr>
-                            {wallets.map((wallet) => (
-                                <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
-                                    <tr style={{ backgroundColor: 'white', border: '1px solid silver', height: '40px' }}>
-                                        <td style={{ verticalAlign: 'top' }}>
-                                            <CiWallet style={{ width: '40px', height: '40px', marginTop: '10px' }} />
-                                        </td>
-                                        <td style={{ width: '395px', marginTop: '-30px', verticalAlign: 'top' }}>
-                                            <div>
-                                                <p>{wallet.name}</p>
-                                                <p>+ {wallet.balance} đ</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </Link>
-                            ))}
-                            </tbody>
-                        </Table>
+                    <Table
+                        style={{
+                            marginTop: '60px',
+                            margin: 'auto',
+                            width: '400px',
+                        }}
+                    >
+                        <tbody>
+                        <tr>
+                            <td colSpan={2} style={{
+                                backgroundColor: '#EEEEEE',
+                                fontSize: '14px',
+                                fontWeight: 'normal',
+                            }}>
+                                <p style={{marginBottom: 0}}>Excluded from Total</p>
+                            </td>
+                        </tr>
+                        {wallets.map((wallet) => (
+                            <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
+                                <tr style={{ backgroundColor: 'white', border: '1px solid silver', height: '40px' }}>
+                                    <td style={{ verticalAlign: 'top' }}>
+                                        <CiWallet style={{ width: '40px', height: '40px', marginTop: '10px' }} />
+                                    </td>
+                                    <td style={{ width: '395px', marginTop: '-30px', verticalAlign: 'top' }}>
+                                        <div>
+                                            <p>{wallet.name}</p>
+                                            <p>+ {wallet.balance} đ</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </Link>
+                        ))}
+                        </tbody>
+                    </Table>
 
                     <div>
                         <Offcanvas show={show} onHide={handleClose} backdrop="static">
@@ -231,34 +230,34 @@ const WalletPage = () => {
                         <ModalOverlay />
                         <ModalContent>
                             <form onSubmit={handleSubmitC}>
-                            <ModalHeader>CREATE WALLET</ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>
-                                <FormControl isRequired>
-                                    <FormLabel>Name Wallet</FormLabel>
-                                    <Input name='name'
-                                           className='form-control'
-                                           onChange={(e) =>
-                                               setWallet({ ...wallet, [e.target.name]: e.target.value })
-                                           }
-                                           type="text" placeholder="Enter name" />
-                                </FormControl>
-                                <FormControl isRequired>
-                                    <FormLabel>Blance</FormLabel>
-                                    <Input name='balance'
-                                           className='form-control'
-                                           onChange={(e) =>
-                                               setWallet({ ...wallet, [e.target.name]: e.target.value })
-                                           }
-                                           type="number" placeholder="Enter balance" />
-                                </FormControl>
-                            </ModalBody>
+                                <ModalHeader>CREATE WALLET</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    <FormControl isRequired>
+                                        <FormLabel>Name Wallet</FormLabel>
+                                        <Input name='name'
+                                               className='form-control'
+                                               onChange={(e) =>
+                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
+                                               }
+                                               type="text" placeholder="Enter name" />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel>Blance</FormLabel>
+                                        <Input name='balance'
+                                               className='form-control'
+                                               onChange={(e) =>
+                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
+                                               }
+                                               type="number" placeholder="Enter balance" />
+                                    </FormControl>
+                                </ModalBody>
 
-                            <ModalFooter>
-                                <Button colorScheme='blue' mr={3} type="submit">
-                                    Create
-                                </Button>
-                            </ModalFooter>
+                                <ModalFooter>
+                                    <Button colorScheme='blue' mr={3} type="submit">
+                                        Create
+                                    </Button>
+                                </ModalFooter>
                             </form>
                         </ModalContent>
                     </Modal>

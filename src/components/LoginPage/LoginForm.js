@@ -24,8 +24,6 @@ import {
     FormControl,
     FormLabel,
     Input,
-    FormErrorMessage,
-    FormHelperText,
 } from '@chakra-ui/react'
 
 
@@ -39,6 +37,7 @@ const LoginForm = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
+            localStorage.setItem("user", JSON.stringify(response.data));
             console.log(response.data);
             toast({
                 title: 'Login Successful',
@@ -48,7 +47,7 @@ const LoginForm = () => {
                 isClosable: true,
             });
             setTimeout(() => {
-                navigate('/home');
+                navigate('/auth/home');
             }, 2000);
         } catch (error) {
             console.error('Error during login:', error);
@@ -59,7 +58,6 @@ const LoginForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
-
         }
         setSubmitting(false);
     };

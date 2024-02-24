@@ -11,7 +11,7 @@ const linkClasses =
 
 const Sidebar = () => {
     return (
-        <div className="flex flex-col bg-green-200 w-60 p-3">
+        <div className="flex flex-col bg-green-400 w-60 p-3">
             <div className='flex items-center gap-2 px-1 py-3'>
                 <FcBullish fontSize={24}/>
                 <span className='text-neutral-900 text-lg'>Money Lover</span>
