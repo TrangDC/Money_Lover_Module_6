@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-
+import {ChakraProvider} from "@chakra-ui/react";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <GoogleOAuthProvider clientId="109682473772-tedmm82vo7hso2siv6vj7rrjd16lkfpj.apps.googleusercontent.com">
       <React.StrictMode>
-        <App />
+          <ChakraProvider>
+              <App />
+          </ChakraProvider>
       </React.StrictMode>
     </GoogleOAuthProvider>
 );

@@ -1,53 +1,44 @@
 import React, { useState } from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBInputGroup,
-    MDBCheckbox } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } from 'mdb-react-ui-kit';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
 import { FaFacebook } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaApple } from "react-icons/fa";
-import {Box, useToast} from '@chakra-ui/react';
+import {useToast} from '@chakra-ui/react';
 import { jwtDecode } from "jwt-decode";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import {ModalBody} from "react-bootstrap";
 
 
 const LoginForm = () => {
-
-
     let navigate = useNavigate();
-
-
     const initialValues = {
         email: '',
         password: '',
     };
-
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-
+    const [showToast, setShowToast] = useState(false);
     const toast = useToast()
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const handleSubmit = async (values, { setSubmitting }) => {
+
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             console.log(response.data);
-
+            toast({
+                title: 'Login Successful',
+                description: 'You have successfully logged in.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
             setTimeout(() => {
-                toast({
-                    title: 'Login Successful',
-                    description: 'You have successfully logged in.',
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: true,
-                });
                 navigate('/home');
             }, 2000);
         } catch (error) {
@@ -59,6 +50,7 @@ const LoginForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
+
         }
         setSubmitting(false);
     };
@@ -88,6 +80,7 @@ const LoginForm = () => {
                             maxWidth: '650px',
                         }}
                     >
+
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
                                 <Modal.Title>Modal heading</Modal.Title>
@@ -106,6 +99,7 @@ const LoginForm = () => {
                                 Reset Password
                             </Button>
                         </Modal>
+
                         <MDBCardBody className='p-5 text-center'>
                             <h2 className='fw-bold text-black mb-5 text-center' style={{ marginTop: '-30px' }}>
                                 Log In
@@ -150,7 +144,6 @@ const LoginForm = () => {
                                         <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>
                                         <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
-
                                 </MDBCol>
                                 <MDBCol col='6' md='6'>
                                     <p className='text-black-50 mb-3'>Using Money Lover account</p>
@@ -205,6 +198,7 @@ const LoginForm = () => {
                                     <p style={{ color: 'black' }}>
                                         Don't have an account? <Link to='/register' style={{ color: 'green' }}>Register here</Link>
                                     </p>
+
                                 </MDBCol>
                             </MDBRow>
                         </MDBCardBody>
