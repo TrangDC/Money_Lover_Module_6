@@ -7,7 +7,6 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
-import {Card} from "react-bootstrap";
 import { CiWallet } from "react-icons/ci";
 import {
     Modal,
@@ -21,8 +20,6 @@ import {
 import {
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
 } from '@chakra-ui/react'
 
 const WalletPage = () => {
@@ -77,7 +74,7 @@ const WalletPage = () => {
             .then((res) => {
                 console.log(res.data);
                 handleClose();
-                window.location.reload();
+                navigate("/auth/wallets")
             })
             .catch((err) => {
                 console.error(err);
@@ -90,7 +87,7 @@ const WalletPage = () => {
             axios.delete(`http://localhost:8080/api/wallets/deleteWallet/${selectedWalletId}`)
                 .then(res => {
                     alert("Success !");
-                    window.location.reload();
+                    navigate("/auth/wallets")
                 })
                 .catch(err => console.log(err))
         }
