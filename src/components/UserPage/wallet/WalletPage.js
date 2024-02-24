@@ -57,7 +57,8 @@ const WalletPage = () => {
         axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
             .then(res => {
                 console.log(res);
-                window.location.reload();
+                // window.location.reload();
+                navigate("/wallets")
             })
             .catch(err => console.log(err));
     };
@@ -77,7 +78,7 @@ const WalletPage = () => {
             .then((res) => {
                 console.log(res.data);
                 handleClose();
-                window.location.reload();
+                navigate("/wallets")
             })
             .catch((err) => {
                 console.error(err);
