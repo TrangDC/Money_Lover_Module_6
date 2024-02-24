@@ -15,7 +15,7 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Input, useDisclosure,
+    ModalCloseButton, Input, useDisclosure, useToast,
 } from '@chakra-ui/react'
 import {
     FormControl,
@@ -43,7 +43,7 @@ const WalletPage = () => {
     });
     const [selectedWalletId, setSelectedWalletId] = useState(null);
     const { id } = useParams();
-
+    const toast = useToast()
     //create wallet
     const navigate = useNavigate();
 
@@ -55,8 +55,23 @@ const WalletPage = () => {
             .then(res => {
                 console.log(res);
                 navigate("/auth/wallets")
+                onClose();
+                fetchWallets();
+                toast({
+                    title: 'Create success!',
+                    description: 'You successfully created a wallet!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
             })
-            .catch(err => console.log(err));
+            .catch(err => toast({
+                title: 'Create Failed',
+                description: 'You successfully created a wallet!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            }));
     };
 //update wallet
     useEffect(() => {
@@ -75,9 +90,24 @@ const WalletPage = () => {
                 console.log(res.data);
                 handleClose();
                 navigate("/auth/wallets")
+                fetchWallets();
+                toast({
+                    title: 'Update Successful',
+                    description: 'You successfully repaired your wallet!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
             })
             .catch((err) => {
                 console.error(err);
+                toast({
+                    title: 'Update Failed',
+                    description: 'You failed to repair your wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             });
     };
     //xoa wallet
@@ -86,20 +116,29 @@ const WalletPage = () => {
         if (confirm) {
             axios.delete(`http://localhost:8080/api/wallets/deleteWallet/${selectedWalletId}`)
                 .then(res => {
-                    alert("Success !");
                     navigate("/auth/wallets")
+                    handleClose();
+                    fetchWallets();
+                    toast({
+                        title: 'Delete Successful',
+                        description: 'You successfully deleted your wallet!',
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: true,
+                    });
                 })
-                .catch(err => console.log(err))
+                .catch(err => toast({
+                    title: 'Delete Failed',
+                    description: 'You failed to delete your wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                }));
         }
     };
 //hien thi danh sach
     useEffect(() => {
-        axios.get('http://localhost:8080/api/wallets')
-            .then(res => {
-                console.log(res);
-                setWallets(res.data);
-            })
-            .catch(err => console.error(err))
+        fetchWallets();
     }, []);
 
     const handleSearch = (event) => {
@@ -121,7 +160,14 @@ const WalletPage = () => {
                 .catch(err => console.error(err));
         }
     };
-
+    const fetchWallets = () => {
+        axios.get('http://localhost:8080/api/wallets')
+            .then(res => {
+                console.log(res);
+                setWallets(res.data);
+            })
+            .catch(err => console.error(err))
+    };
 
     return (
         <>
