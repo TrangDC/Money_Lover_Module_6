@@ -75,6 +75,8 @@ const RegisterForm = () => {
 
             console.log('Signup response:', response.data);
 
+            await axios.get(`http://localhost:8080/api/auth/active_account/${email}`);
+
             setTimeout(async () => {
                 await new Promise((resolve, reject) => {
                     localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
