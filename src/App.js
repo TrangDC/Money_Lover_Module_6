@@ -10,18 +10,24 @@ import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
+import {useState} from "react";
 
 
 function App() {
-    const user = JSON.parse(window.localStorage.getItem('google_user'));
+    const [isAuth, setIsAuth] = useState(false); // Tạo state isAuth
+
+    const handleLoginSuccess = () => {
+        setIsAuth(true); // Cập nhật isAuth khi đăng nhập thành công
+    };
 
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<Error />} />
-                    <Route path='/auth/*' element={user ? <AuthenticatedRoutes /> : <Error />} />
-                    <Route path='/login' element={<LoginPage />} />
+                    <Route path='/auth/*' element={isAuth ? <AuthenticatedRoutes /> : <Error />} />
+                    {/* Truyền handleLoginSuccess và isAuth xuống LoginPage */}
+                    <Route path='/login' element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth} />} />
                     <Route path='/register' element={<RegisterPage />} />
                     <Route path='/upload' element={<UploadImage />} />
                 </Routes>

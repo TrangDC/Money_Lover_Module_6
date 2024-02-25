@@ -7,7 +7,7 @@ import {
     from 'mdb-react-ui-kit';
 
 
-const LoginPage = () => {
+const LoginPage = ({ handleLoginSuccess }) => {
     return (
         <div>
             <MDBContainer fluid>
@@ -17,7 +17,7 @@ const LoginPage = () => {
                          alt="" fluid/>
                 </div>
                 <div style={{marginTop: '-125px'}}>
-                    <LoginForm />
+                    <LoginForm handleLoginSuccess={handleLoginSuccess} />
                 </div>
             </MDBContainer>
         </div>

@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react'
 
 
-const LoginForm = () => {
+const LoginForm = ({ handleLoginSuccess }) => {
     let navigate = useNavigate();
     const initialValues = {
         email: '',
@@ -38,6 +38,7 @@ const LoginForm = () => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             localStorage.setItem("user", JSON.stringify(response.data));
+            handleLoginSuccess();
             console.log(response.data);
             toast({
                 title: 'Login Successful',
@@ -72,10 +73,15 @@ const LoginForm = () => {
                 setTimeout(() => {
                     localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
                     resolve();
-                }, 3000);
+                }, 2000);
             });
 
-            setTimeout(() => navigate("/auth/home"), 3000)
+            handleLoginSuccess();
+
+            // Sau khi lưu vào localStorage và đợi 3 giây, làm mới trang và thực hiện navigate
+            setTimeout(() => {
+                navigate("/auth/home");
+            }, 2000);
             // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
 
         } catch (error) {
