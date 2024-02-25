@@ -52,10 +52,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "reset_password_token")
+    @Column(name = "active_token")
     @Getter
     @Setter
-    private String resetPasswordToken;
+    private String activeToken;
 
 
     public User() {

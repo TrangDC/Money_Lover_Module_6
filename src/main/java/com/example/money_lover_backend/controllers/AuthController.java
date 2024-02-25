@@ -168,13 +168,11 @@ public class AuthController {
 //        String newPassword = UUID.randomUUID().toString();
 //        user.setPassword(encoder.encode(newPassword));
 //        userRepository.save(user);
-        String emailContent = "Your current password: " + user.getDecode_password();
+        String emailContent = "Your current password: " +
+                user.getDecode_password() + ". " +
+                "Use this to login again.";
         emailService.sendEmail(email, "Get forgotten password", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
-
-    }
-
-    public void sendEmail(){
 
     }
 
