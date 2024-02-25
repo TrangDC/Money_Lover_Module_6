@@ -66,25 +66,28 @@ public class AuthController {
         if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail());
         }
-        User user = userOptional.get();
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
+            User user = userOptional.get();
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                userDetails.getImage(),
-                roles));
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getImage(),
+                    roles));
+        }
+        return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/signup")
@@ -194,28 +197,19 @@ public class AuthController {
 
         SecureRandom secureRandom = new SecureRandom();
 
-        // Xác định độ dài của token (ví dụ: 32 ký tự)
         int tokenLength = 32;
 
-        // Tạo một mảng ký tự chứa tất cả các ký tự có thể có trong token
         char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
 
-        // Tạo một StringBuilder để xây dựng token
         StringBuilder tokenBuilder = new StringBuilder(tokenLength);
 
-        // Lặp để tạo token
         for (int i = 0; i < tokenLength; i++) {
-            // Chọn một ký tự ngẫu nhiên từ mảng chars
             char randomChar = chars[secureRandom.nextInt(chars.length)];
-
-            // Thêm ký tự ngẫu nhiên vào token
             tokenBuilder.append(randomChar);
         }
 
-        // Lấy token cuối cùng
         String token = tokenBuilder.toString();
 
-        // Sét token cho user
         user.setActiveToken(token);
         userRepository.save(user);
         String emailContent = "Your active code: " +
