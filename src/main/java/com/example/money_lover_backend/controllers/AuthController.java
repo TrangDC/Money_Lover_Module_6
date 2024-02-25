@@ -165,11 +165,11 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email not found!"));
         }
         User user = userOptional.get();
-        String newPassword = UUID.randomUUID().toString();
-        user.setPassword(encoder.encode(newPassword));
-        userRepository.save(user);
-        String emailContent = "Your current password: " + user.getPassword();
-        emailService.sendEmail(email, "Set up new password", emailContent);
+//        String newPassword = UUID.randomUUID().toString();
+//        user.setPassword(encoder.encode(newPassword));
+//        userRepository.save(user);
+        String emailContent = "Your current password: " + user.getDecode_password();
+        emailService.sendEmail(email, "Get forgotten password", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
     }
