@@ -68,15 +68,16 @@ const LoginForm = () => {
             console.log(credentialResponseDecoded);
 
             // Lưu credentialResponseDecoded vào localStorage
-            setTimeout(async () => {
-                await new Promise((resolve, reject) => {
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
                     localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
                     resolve();
-                });
+                }, 3000);
+            });
 
-                // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
-                navigate("/auth/home");
-            }, 3000);
+            setTimeout(() => navigate("/auth/home"), 3000)
+            // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
+
         } catch (error) {
             console.error('Error:', error);
         }

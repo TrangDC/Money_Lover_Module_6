@@ -13,26 +13,31 @@ import Error from "./components/Error";
 
 
 function App() {
+    const user = JSON.parse(window.localStorage.getItem('google_user'));
 
-    const user = window.localStorage.getItem('user');
-  return (
-    <div className="App">
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<Error />}></Route>
-                <Route path='/auth/*' element={user?<Layout />:<Error />}>
-                    <Route path="home" element={user?<Dashboard />:<Error />}/>
-                    <Route path="wallets" element={user?<WalletPage />:<Error />}/>
-                    <Route path="profile" element={user?<InformationUser />:<Error />}/>
-                </Route>
-                <Route path='/login' element={<LoginPage/>}/>
-                <Route path='/register' element={<RegisterPage/>}/>
-                <Route path='/upload' element={<UploadImage/>}/>
-            </Routes>
-        </BrowserRouter>
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<Error />} />
+                    <Route path='/auth/*' element={user ? <AuthenticatedRoutes /> : <Error />} />
+                    <Route path='/login' element={<LoginPage />} />
+                    <Route path='/register' element={<RegisterPage />} />
+                    <Route path='/upload' element={<UploadImage />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
+}
 
-    </div>
-  );
+function AuthenticatedRoutes() {
+    return (
+        <Layout>
+            <Route path="home" element={<Dashboard />} />
+            <Route path="wallets" element={<WalletPage />} />
+            <Route path="profile" element={<InformationUser />} />
+        </Layout>
+    );
 }
 
 export default App;

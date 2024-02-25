@@ -134,7 +134,7 @@ const Header = () => {
                                                                 'focus:bg-gray-200'
                                                                 )}
                                                     onClick={() => (
-                                                    navigate("/auth/profile")
+                                                    navigate("profile")
                                                 )}>
                                                     Your Profile
                                                 </div>
