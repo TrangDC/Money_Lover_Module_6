@@ -9,6 +9,7 @@ import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
+import ChangePassword from "./components/UserPage/ChangePassword";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/upload' element={<UploadImage/>}/>
+                <Route path='/changepass' element={<ChangePassword/>}/>
             </Routes>
         </BrowserRouter>
 
