@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users",
@@ -46,6 +47,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "reset_password_token")
+    @Getter
+    @Setter
+    private String resetPasswordToken;
 
 
     public User() {
