@@ -73,7 +73,7 @@ const LoginForm = ({ handleLoginSuccess }) => {
                 setTimeout(() => {
                     localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
                     resolve();
-                }, 2000);
+                }, 1000);
             });
 
             handleLoginSuccess();
@@ -81,7 +81,7 @@ const LoginForm = ({ handleLoginSuccess }) => {
             // Sau khi lưu vào localStorage và đợi 3 giây, làm mới trang và thực hiện navigate
             setTimeout(() => {
                 navigate("/auth/home");
-            }, 2000);
+            }, 1000);
             // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
 
         } catch (error) {

@@ -80,7 +80,7 @@ const RegisterForm = () => {
 
                 // Sau khi lưu vào localStorage và đợi 2 giây, thực hiện navigate
                 navigate("/login");
-            }, 2000);
+            }, 1000);
         } catch (error) {
             console.error('Error:', error);
         }
