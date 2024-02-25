@@ -1,28 +1,24 @@
 package com.example.money_lover_backend.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.money_lover_backend.models.TokenExpire;
 import com.example.money_lover_backend.repositories.TokenExpireRepository;
+import com.example.money_lover_backend.services.impl.EmailService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
@@ -40,6 +36,10 @@ import com.example.money_lover_backend.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    EmailService emailService;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -150,9 +150,36 @@ public class AuthController {
             newTokenExpire.setToken(tokenExpire.getToken());
             tokenExpireRepository.save(tokenExpire);
         }
+        // Xóa thông tin đăng nhập khi đăng xuất
+        SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Token expired saved successfully");
     }
 
+    @GetMapping("/forgot_password/{email}")
+    public ResponseEntity<?> processForgotPassword(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email not found!"));
+        }
+        User user = userOptional.get();
+        String newPassword = UUID.randomUUID().toString();
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+        String emailContent = "Your current password: " + user.getPassword().;
+        emailService.sendEmail(email, "Set up new password", emailContent);
+        return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
+    }
+
+    public void sendEmail(){
+
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> processResetPassword() {
+        return null;
+    }
 
 }
