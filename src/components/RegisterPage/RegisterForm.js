@@ -65,6 +65,8 @@ const RegisterForm = () => {
 
             const password = generatePasswordFromEmail(email);
 
+
+
             const response = await axios.post('http://localhost:8080/api/auth/signup', {
                 email: email,
                 password: password
@@ -85,8 +87,8 @@ const RegisterForm = () => {
     };
 
     const generatePasswordFromEmail = (email) => {
-        const username = email.substring(0, email.indexOf('@'));
-        return username + '123##$$ML';
+        const password = email.substring(0, email.indexOf('@'));
+        return password + '123456';
     };
 
     const SignupSchema = Yup.object().shape({
