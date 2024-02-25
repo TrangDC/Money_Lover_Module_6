@@ -27,7 +27,7 @@ const RegisterForm = () => {
     const toast = useToast()
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signup', values);
+            const response = await axios.post('http://localhost:8080/api/auth/signup', values)
             console.log(response.data);
             toast({
                 title: 'Register Successful',
