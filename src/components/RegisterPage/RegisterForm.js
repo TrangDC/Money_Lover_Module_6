@@ -7,7 +7,6 @@ import {
     MDBCard,
     MDBCardBody,
     MDBInput,
-    MDBIcon,
 }
     from 'mdb-react-ui-kit';
 import {Link, useNavigate} from "react-router-dom";
@@ -15,33 +14,81 @@ import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import YupPassword from 'yup-password';
 import axios from "axios";
+import {FaApple, FaFacebook, FaGoogle} from "react-icons/fa";
+import {useToast} from "@chakra-ui/react";
+import {jwtDecode} from "jwt-decode";
+import {GoogleLogin} from "@react-oauth/google";
 YupPassword(Yup);
 
-
 const RegisterForm = () => {
-    // const initialValues = {
-    //     email: '',
-    //     password: '',
-    // };
-    const navigate = useNavigate();
-
     const [initialValues, setInitialValues] = useState({
         email: '',
         password: '',
     })
+    const navigate = useNavigate();
+    const toast = useToast()
 
     const handleSubmit = async (values, {setSubmitting}) => {
-        // Xử lý logic khi submit form
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signup', values); // Gửi yêu cầu POST tới API
-            console.log(response.data); // Log phản hồi từ API
-            navigate("/login")
-            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+            const response = await axios.post('http://localhost:8080/api/auth/signup', values)
+            console.log(response.data);
+            toast({
+                title: 'Register Successful',
+                description: 'Registered successfully, Log In now !',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
         } catch (error) {
             console.error('Error during login:', error);
-            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
+            toast({
+                title: 'Register Failed',
+                description: 'Registration failed, register again !',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
         setSubmitting(false);
+    };
+
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            // Lấy email từ credentialResponseDecoded và lưu vào state email
+            const email = credentialResponseDecoded.email;
+
+            // Tạo một password dựa trên email và lưu vào state password
+            const password = generatePasswordFromEmail(email);
+
+            // Console log
+            console.log('Email:', email);
+            console.log('Password:', password);
+
+            // Lưu vào localStorage
+            setTimeout(async () => {
+                await new Promise((resolve, reject) => {
+                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
+                    resolve();
+                });
+
+                // Sau khi lưu vào localStorage và đợi 2 giây, thực hiện navigate
+                navigate("/login");
+            }, 1000);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const generatePasswordFromEmail = (email) => {
+        const username = email.substring(0, email.indexOf('@')); // Lấy phần username của email
+        return username + '123'; // Thêm một chuỗi đơn giản vào username
     };
 
     const SignupSchema = Yup.object().shape({
@@ -50,11 +97,15 @@ const RegisterForm = () => {
             .required('Password is a required field.')
             .min(8,'Password must contain 8 characters'
             )
-            // .minLowercase(1, 'Password must contain at least 1 lower case letter')
-            // .minUppercase(1, 'Password must contain at least 1 upper case letter')
-            // .minNumbers(1, 'Password must contain at least 1 number')
-            // .minSymbols(1, 'Password must contain at least 1 special character')
     });
+
+    const [showPassword, setShowPassword] = useState({ value: false });
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prevState) => ({
+            value: !prevState.value
+        }));
+    };
     return (
 
         <Formik initialValues={initialValues}
@@ -79,18 +130,23 @@ const RegisterForm = () => {
                             <MDBRow>
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
-                                    <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Facebook
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleSuccess}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </MDBBtn>
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='danger'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Gmail
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
+                                        <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}/>
+                                        <span className="social-text">Sign in with Facebook</span>
                                     </MDBBtn>
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='dark'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Apple
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='dark'>
+                                        <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>
+                                        <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
                                 </MDBCol>
                                 <MDBCol col='6' md='6'>
@@ -105,18 +161,36 @@ const RegisterForm = () => {
                                             size='lg'
                                             name='email'
                                         />
-                                        <ErrorMessage name={"email"} component='span' className='text-red-500'/>
-                                        <Field
-                                            as={MDBInput}
-                                            wrapperClass='mb-4 w-100'
-                                            label='Password'
-                                            id='formControlLg'
-                                            type='password'
-                                            size='lg'
-                                            name='password'
-                                            // as={Field}
-                                        />
-                                        <ErrorMessage name={"password"} component='span' className='text-red-500'/>
+                                        <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                            <ErrorMessage name='email' component='span' />
+                                        </div>
+                                        <div>
+                                            <Field
+                                                as={MDBInput}
+                                                wrapperClass='mb-4 w-100'
+                                                label='Password'
+                                                id='formControlLg'
+                                                type={showPassword.value ? 'text' : 'password'}
+                                                size='lg'
+                                                name='password'
+                                            />
+                                            <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                                <ErrorMessage name='password' component='span' />
+                                            </div>
+                                            <div style={{marginTop: 0,marginLeft: '95px'}}>
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id="showPasswordCheckbox"
+                                                    checked={showPassword.value}
+                                                    onChange={togglePasswordVisibility}
+                                                />
+                                                <label className="form-check-label" htmlFor="showPasswordCheckbox">
+                                                    Show Password
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type="submit" disabled={isSubmitting}>
                                         {isSubmitting ? 'Logging in...' : 'REGISTER'}

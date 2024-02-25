@@ -1,41 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './login.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBIcon } from 'mdb-react-ui-kit';
-import {Link, useNavigate} from 'react-router-dom';
+import { MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput } from 'mdb-react-ui-kit';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
-import {toast} from "react-toastify";
-import {GoogleLogin} from "@react-oauth/google";
-import {jwtDecode} from "jwt-decode";
-import FacebookLogin from "@greatsumini/react-facebook-login";
+import { FaFacebook } from "react-icons/fa";
+import { GoogleLogin } from "@react-oauth/google";
+import { FaApple } from "react-icons/fa";
+import {useDisclosure, useToast} from '@chakra-ui/react';
+import { jwtDecode } from "jwt-decode";
+import Button from 'react-bootstrap/Button';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from '@chakra-ui/react'
+import {
+    FormControl,
+    FormLabel,
+    Input,
+} from '@chakra-ui/react'
 
 
-const LoginForm = () => {
-
-
+const LoginForm = ({ handleLoginSuccess }) => {
     let navigate = useNavigate();
-
-
     const initialValues = {
         email: '',
         password: '',
     };
-
+    const toast = useToast()
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
-            console.log(response.data); // Log phản hồi từ API
             localStorage.setItem("user", JSON.stringify(response.data));
-            navigate('/auth/home')
-            // Xử lý phản hồi ở đây, ví dụ: chuyển hướng, hiển thị thông báo, lưu trữ thông tin người dùng đã đăng nhập, vv.
+            handleLoginSuccess();
+            console.log(response.data);
+            toast({
+                title: 'Login Successful',
+                description: 'You have successfully logged in.',
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+            });
+            setTimeout(() => {
+                navigate('/auth/home');
+            }, 2000);
         } catch (error) {
             console.error('Error during login:', error);
-            // Xử lý lỗi ở đây, ví dụ: hiển thị thông báo lỗi
+            toast({
+                title: 'Login Failed',
+                description: 'Please check your credentials and try again.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
         setSubmitting(false);
     };
 
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            // Lưu credentialResponseDecoded vào localStorage
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
+                    resolve();
+                }, 1000);
+            });
+
+            handleLoginSuccess();
+
+            // Sau khi lưu vào localStorage và đợi 3 giây, làm mới trang và thực hiện navigate
+            setTimeout(() => {
+                navigate("/auth/home");
+            }, 1000);
+            // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <Formik initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -56,6 +117,31 @@ const LoginForm = () => {
                             maxWidth: '650px',
                         }}
                     >
+
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>GET PASSWORD</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    <FormControl isRequired>
+                                        <FormLabel>Email</FormLabel>
+                                        <Input placeholder='Enter Email' />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel>Verification</FormLabel>
+                                        <Input placeholder='Confirmation code has been sent to email' />
+                                    </FormControl>
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <Button colorScheme='blue' mr={3}>
+                                        Submit
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+
                         <MDBCardBody className='p-5 text-center'>
                             <h2 className='fw-bold text-black mb-5 text-center' style={{ marginTop: '-30px' }}>
                                 Log In
@@ -63,39 +149,37 @@ const LoginForm = () => {
                             <MDBRow>
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
-                                    <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#3b5998' }}>
-                                        <FacebookLogin
-                                            appId="1320486661979779"
-                                            onSuccess={(response) => {
-                                                console.log('Login Success!', response);
-                                                navigate("/");
-                                                window.location.reload();
-                                            }}
-                                            onFail={(error) => {
-                                                console.log('Login Failed!', error);
-                                            }}
-                                            onProfileSuccess={(response) => {
-                                                console.log('Get Profile Success!', response);
-                                            }}
-                                        />
-                                    </MDBBtn>
 
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='red'>
+                                    <MDBBtn outline rounded className='mb-3 w-100' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={credentialResponse => {
-                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
-                                                console.log(credentialResponseDecoded);
-                                                navigate("/home");
-                                                window.location.reload();
-                                            }}
+                                            onSuccess={handleGoogleSuccess}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}
                                         />
                                     </MDBBtn>
-                                    <MDBBtn className='mb-4 w-100' size='lg' color='dark'>
-                                        <MDBIcon className='m-n3' />
-                                        Sign in with Apple
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
+                                        <FaFacebook className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-40px' }}
+                                                    appId="1320486661979779"
+                                                    onSuccess={(response) => {
+                                                        console.log('Login Success!', response);
+                                                        navigate("/");
+                                                        window.location.reload();
+                                                    }}
+                                                    onFail={(error) => {
+                                                        console.log('Login Failed!', error);
+                                                    }}
+                                                    onProfileSuccess={(response) => {
+                                                        console.log('Get Profile Success!', response);
+                                                    }}
+                                        />
+                                        <span className="social-text">Sign in with Facebook</span>
+                                    </MDBBtn>
+
+                                    <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='dark'>
+                                        <FaApple className="mb-1" style={{ width: '25px', height: '25px', marginLeft: '-65px' }}/>
+                                        <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
                                 </MDBCol>
                                 <MDBCol col='6' md='6'>
@@ -110,22 +194,40 @@ const LoginForm = () => {
                                             size='lg'
                                             name='email'
                                         />
-                                        <ErrorMessage name='email' component='span' className='text-red-500' />
-                                        <Field
-                                            as={MDBInput}
-                                            wrapperClass='mb-4 w-100'
-                                            label='Password'
-                                            id='formControlLg'
-                                            type='password'
-                                            size='lg'
-                                            name='password'
-                                        />
-                                        <ErrorMessage name='password' component='span' className='text-red-500' />
-                                        <p className='small mb-3 pb-lg-2'>
-                                            <a className='text-green-50' href='#!'>
-                                                Forgot password?
-                                            </a>
-                                        </p>
+                                        <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                            <ErrorMessage name='email' component='span' />
+                                        </div>
+
+                                        <div>
+                                            <Field
+                                                as={MDBInput}
+                                                wrapperClass='mb-4 w-100'
+                                                label='Password'
+                                                id='formControlLg'
+                                                type={showPassword ? 'text' : 'password'}
+                                                size='lg'
+                                                name='password'
+                                            />
+                                            <div className=" small" style={{color: 'red',marginTop: '-20px'}}>
+                                                <ErrorMessage name='password' component='span' />
+                                            </div>
+                                            <div style={{marginTop: 0,marginLeft: '95px'}}>
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id="showPasswordCheckbox"
+                                                    checked={showPassword}
+                                                    onChange={togglePasswordVisibility}
+                                                />
+
+                                                <label className="form-check-label" htmlFor="showPasswordCheckbox">
+                                                    Show Password
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div className="m-3" style={{ marginRight: 'auto' }}>
+                                            <Link onClick={onOpen} style={{ color: 'green' }}>Forgot password?</Link>
+                                        </div>
                                     </div>
                                     <MDBBtn className='w-100 mb-4' size='md' color='success' type='submit' disabled={isSubmitting}>
                                         {isSubmitting ? 'Logging in...' : 'LOGIN'}
@@ -133,6 +235,7 @@ const LoginForm = () => {
                                     <p style={{ color: 'black' }}>
                                         Don't have an account? <Link to='/register' style={{ color: 'green' }}>Register here</Link>
                                     </p>
+
                                 </MDBCol>
                             </MDBRow>
                         </MDBCardBody>

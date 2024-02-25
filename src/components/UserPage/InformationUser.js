@@ -34,49 +34,46 @@ const InformationUser = () => {
 
     return (
         <div>
-            <Link to="/home" className="text-dark" >
-                <IoMdArrowRoundBack className="mx-2 mb-2 my-2" style={{ width: '30px', height: '30px' }} />
-            </Link>
             <Container>
-                <div>
-                        <Image src={user.image} roundedCircle style={{marginTop: '50px',marginLeft: '530px',width: '70px', height: '70px'}} />
-                        <h5 style={{marginTop: '7px',marginLeft: '515px'}}>{user.username}</h5>
-                        <h7 style={{marginTop: '10px',marginLeft: '490px'}}>{user.email}</h7>
+                <div style={{textAlign: 'center'}}>
+                        <Image src={user.image} className= "mb-3" roundedCircle style={{width: '70px', height: '70px',margin: 'auto'}} />
+                        <h5>{user.username}</h5>
+                        <h7>{user.email}</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>
-                <ListGroup.Item>
-                    <Link onClick={handleShow} className="text-dark">
-                        <MDBTypography>
-                            <BsPersonFill className = "mx-2 mb-2" style={{width: '30px' ,height: '30px'}}/>
-                            <MDBTypography tag='strong'>Account Management</MDBTypography>
+                <ListGroup.Item className="d-flex align-items-center">
+                    <Link onClick={handleShow} className="text-dark d-flex align-items-center">
+                        <MDBTypography className="d-flex align-items-center">
+                            <BsPersonFill className="mr-2" style={{ width: '30px', height: '30px' }} />
+                            <span style={{ fontWeight: 'bold' }} title='strong'>Account Management</span>
                         </MDBTypography>
                     </Link>
-
                 </ListGroup.Item>
 
                 <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
 
-                <ListGroup.Item>
-                    <Link to= "/user/wallet" className="text-dark">
-                        <IoMdWallet className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}} />
-                        My Wallet
+                <ListGroup.Item className="d-flex align-items-center">
+                    <Link to="/auth/wallets" className="text-dark d-flex align-items-center">
+                        <IoMdWallet className="mr-2" style={{ width: '25px', height: '25px' }} />
+                        <span>My Wallet</span>
                     </Link>
                 </ListGroup.Item>
 
-                <ListGroup.Item>
-                    <Link to= "/user/categories" className="text-dark">
-                    <FaLayerGroup  className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}}/>
-                    Group
+                <ListGroup.Item className="d-flex align-items-center">
+                    <Link to= "/auth/categories" className="text-dark d-flex align-items-center">
+                    <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
+                    <span> Group </span>
                     </Link>
                 </ListGroup.Item>
 
                 <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>
-                <ListGroup.Item>
-                    <LuLogOut  className = "mx-2 mb-1" style={{width: '25px' ,height: '25px'}}/>
-                    Logout
+                    <ListGroup.Item className="d-flex align-items-center">
+                        <Link className="text-dark d-flex align-items-center">
+                        <LuLogOut className="mr-2" style={{width: '25px' ,height: '25px'}}/>
+                        <span>Logout</span>
+                        </Link>
                 </ListGroup.Item>
-
 
             </ListGroup>
 

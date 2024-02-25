@@ -2,31 +2,34 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
-import { IoMdArrowRoundBack } from "react-icons/io";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import Image from 'react-bootstrap/Image';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { CiWallet } from "react-icons/ci";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton, Input, useDisclosure, useToast,
+} from '@chakra-ui/react'
+import {
+    FormControl,
+    FormLabel,
+} from '@chakra-ui/react'
 
 const WalletPage = () => {
-    //save wallet : http://localhost:8080/api/wallets/saveWallet
-    //show all wallet : http://localhost:8080/api/wallets
-    //get wallet : http://localhost:8080/api/wallets/{id}
-    //delete wallet : http://localhost:8080/api/wallets/deleteWallet/{id}
-    //edit wallet : http://localhost:8080/api/wallets/{id}
-    //search wallet : http://localhost:8080/api/wallets/searchWallet
-
     const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const handleClose = () => setShow(false);
     const handleShow = (walletId) => {
         setSelectedWalletId(walletId);
         setShow(true);
-        // Lấy giá trị của wallet được chọn từ danh sách wallets
         const selectedWallet = wallets.find(wallet => wallet.id === walletId);
-        // Gán giá trị name và balance của wallet vào state editWallet
         setEditWallet(selectedWallet);
     };
     const [wallets, setWallets] = useState([]);
@@ -40,7 +43,36 @@ const WalletPage = () => {
     });
     const [selectedWalletId, setSelectedWalletId] = useState(null);
     const { id } = useParams();
+    const toast = useToast()
+    //create wallet
     const navigate = useNavigate();
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const handleSubmitC = (event) => {
+        event.preventDefault();
+        axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
+            .then(res => {
+                console.log(res);
+                navigate("/auth/wallets")
+                onClose();
+                fetchWallets();
+                toast({
+                    title: 'Create success!',
+                    description: 'You successfully created a wallet!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+            })
+            .catch(err => toast({
+                title: 'Create Failed',
+                description: 'You successfully created a wallet!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            }));
+    };
 //update wallet
     useEffect(() => {
         axios
@@ -56,11 +88,26 @@ const WalletPage = () => {
             .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, editWallet)
             .then((res) => {
                 console.log(res.data);
-                handleClose(); // Đóng modal sau khi cập nhật thành công
-                window.location.reload();
+                handleClose();
+                navigate("/auth/wallets")
+                fetchWallets();
+                toast({
+                    title: 'Update Successful',
+                    description: 'You successfully repaired your wallet!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
             })
             .catch((err) => {
                 console.error(err);
+                toast({
+                    title: 'Update Failed',
+                    description: 'You failed to repair your wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             });
     };
     //xoa wallet
@@ -69,20 +116,29 @@ const WalletPage = () => {
         if (confirm) {
             axios.delete(`http://localhost:8080/api/wallets/deleteWallet/${selectedWalletId}`)
                 .then(res => {
-                    alert("Success !");
-                    window.location.reload();
+                    navigate("/auth/wallets")
+                    handleClose();
+                    fetchWallets();
+                    toast({
+                        title: 'Delete Successful',
+                        description: 'You successfully deleted your wallet!',
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: true,
+                    });
                 })
-                .catch(err => console.log(err))
+                .catch(err => toast({
+                    title: 'Delete Failed',
+                    description: 'You failed to delete your wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                }));
         }
     };
 //hien thi danh sach
     useEffect(() => {
-        axios.get('http://localhost:8080/api/wallets')
-            .then(res => {
-                console.log(res);
-                setWallets(res.data);
-            })
-            .catch(err => console.error(err))
+        fetchWallets();
     }, []);
 
     const handleSearch = (event) => {
@@ -96,7 +152,6 @@ const WalletPage = () => {
                 })
                 .catch(err => console.error(err));
         } else {
-            // Nếu searchTerm không có giá trị, gọi API /users để lấy toàn bộ danh sách người dùng
             axios.get('http://localhost:8080/api/wallets')
                 .then(res => {
                     console.log(res);
@@ -105,53 +160,52 @@ const WalletPage = () => {
                 .catch(err => console.error(err));
         }
     };
+    const fetchWallets = () => {
+        axios.get('http://localhost:8080/api/wallets')
+            .then(res => {
+                console.log(res);
+                setWallets(res.data);
+            })
+            .catch(err => console.error(err))
+    };
 
     return (
         <>
-            <Navbar className="bg-body-tertiary justify-content-between">
+            <div className="flex flex-col gap-4">
+                <Navbar className="bg-body-tertiary justify-content-between">
 
-                <Link to="/home" className="text-dark" >
-                    <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
-                </Link>
-                <h4 className="my-2" style={{marginRight: 'auto'}}>
-                    Create Wallet
-                </h4>
-                <Link to='/user/createWallet'>
-                    <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2">Create New Wallet</Button>
+                    <h4 className="my-2" style={{marginLeft: '30px'}}>
+                        My Wallet
+                    </h4>
+                    <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2" onClick={onOpen}>Create New Wallet</Button>
 
-                </Link>
-                <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                    <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
+                        <InputGroup className="mb-3">
+                            <Form.Control
+                                value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
 
-                            placeholder="Search Wallet"
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                        />
-                        <Button type="submit" variant="secondary" id="button-addon2">
-                            Search
-                        </Button>
-                    </InputGroup>
-                </Form>
+                                placeholder="Search Wallet"
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                            />
+                            <Button type="submit" variant="secondary" id="button-addon2">
+                                Search
+                            </Button>
+                        </InputGroup>
+                    </Form>
 
-            </Navbar>
-
-            <div
-                style={{
-                    backgroundColor: '#DDDDDD',
-                    width: '1400px',
-                    height: '700px'
-                }}
-            >
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}>
+                </Navbar>
+                <div className="flex flex-row w-full"
+                     style={{
+                         backgroundColor: '#DDDDDD',
+                         height: 'auto'
+                     }}
+                >
                     <Table
                         style={{
                             marginTop: '60px',
-                            width: '500px',
+                            margin: 'auto',
+                            width: '400px',
                         }}
                     >
                         <tbody>
@@ -165,62 +219,93 @@ const WalletPage = () => {
                             </td>
                         </tr>
                         {wallets.map((wallet) => (
-                            <tr style={{ backgroundColor: 'white',  border: '1px solid silver', }}>
-                                <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
-                                    <td style={{ width: '5px' }}>
-                                        <Image
-                                            style={{
-                                                textAlign: 'center',
-                                                marginRight: '10px',
-                                                marginBottom: '-5px',
-                                                marginTop: '5px',
-                                                width: '50px',
-                                                height: '50px'
-                                            }}
-                                            src="https://firebasestorage.googleapis.com/v0/b/fir-2c9ce.appspot.com/o/583985.png?alt=media&token=c15df242-a33a-4448-baa2-26488f28eff3"
-                                            roundedCircle
-                                        />
+                            <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
+                                <tr style={{ backgroundColor: 'white', border: '1px solid silver', height: '40px' }}>
+                                    <td style={{ verticalAlign: 'top' }}>
+                                        <CiWallet style={{ width: '40px', height: '40px', marginTop: '10px' }} />
                                     </td>
-                                    <td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <p style={{ margin: 0 }}>{wallet.name}</p>
-                                            <p style={{ margin: 0 }}>+ {wallet.balance} đ</p>
+                                    <td style={{ width: '395px', marginTop: '-30px', verticalAlign: 'top' }}>
+                                        <div>
+                                            <p>{wallet.name}</p>
+                                            <p>+ {wallet.balance} đ</p>
                                         </div>
                                     </td>
-                                </Link>
-                            </tr>
+                                </tr>
+                            </Link>
                         ))}
                         </tbody>
                     </Table>
-                </div>
 
-                <Offcanvas show={show} onHide={handleClose} backdrop="static">
-                        <Offcanvas.Header closeButton>
-                            <Offcanvas.Title>Wallet Details</Offcanvas.Title>
-                        </Offcanvas.Header>
-                        <Offcanvas.Body>
-                            <Form>
-                                <Form.Group className="mb-3" controlId="formGroupName">
-                                    <Form.Label>Name Wallet</Form.Label>
-                                    <Form.Control type="text"
-                                                  placeholder="Name Wallet"
-                                                  name="name"
-                                                  value={editWallet.name}
-                                                  onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="formGroupBalance">
-                                    <Form.Label>Total Money</Form.Label>
-                                    <Form.Control type="number"
-                                                  name="balance"
-                                                  placeholder="Money"
-                                                  value={editWallet.balance}
-                                                  onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
-                                </Form.Group>
-                                <Button variant="dark" onClick={handleUpdate}>Edit</Button>
-                                <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
-                            </Form>
-                        </Offcanvas.Body>
-                </Offcanvas>
+                    <div>
+                        <Offcanvas show={show} onHide={handleClose} backdrop="static">
+                            <Offcanvas.Header closeButton>
+                                <Offcanvas.Title>Wallet Details</Offcanvas.Title>
+                            </Offcanvas.Header>
+                            <Offcanvas.Body>
+                                <Form>
+                                    <Form.Group className="mb-3" controlId="formGroupName">
+                                        <Form.Label>Name Wallet</Form.Label>
+                                        <Form.Control type="text"
+                                                      placeholder="Name Wallet"
+                                                      name="name"
+                                                      value={editWallet.name}
+                                                      onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formGroupBalance">
+                                        <Form.Label>Total Money</Form.Label>
+                                        <Form.Control type="number"
+                                                      name="balance"
+                                                      placeholder="Money"
+                                                      value={editWallet.balance}
+                                                      onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
+                                    </Form.Group>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                                        <Button variant="dark" onClick={handleUpdate}>Edit</Button>
+                                        <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
+                                    </div>
+                                </Form>
+                            </Offcanvas.Body>
+
+                        </Offcanvas>
+                    </div>
+
+                    <Modal isOpen={isOpen} onClose={onClose} >
+                        <ModalOverlay />
+                        <ModalContent>
+                            <form onSubmit={handleSubmitC}>
+                                <ModalHeader>CREATE WALLET</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    <FormControl isRequired>
+                                        <FormLabel>Name Wallet</FormLabel>
+                                        <Input name='name'
+                                               className='form-control'
+                                               onChange={(e) =>
+                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
+                                               }
+                                               type="text" placeholder="Enter name" />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel>Blance</FormLabel>
+                                        <Input name='balance'
+                                               className='form-control'
+                                               onChange={(e) =>
+                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
+                                               }
+                                               type="number" placeholder="Enter balance" />
+                                    </FormControl>
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <Button colorScheme='blue' mr={3} type="submit">
+                                        Create
+                                    </Button>
+                                </ModalFooter>
+                            </form>
+                        </ModalContent>
+                    </Modal>
+
+                </div>
 
             </div>
         </>
