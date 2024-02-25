@@ -57,7 +57,7 @@ public class User {
     @Setter
     private String activeToken;
 
-   
+
     private boolean isActive;
 
     public boolean isActive() {
@@ -76,6 +76,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.decode_password = decode_password;
+        this.isActive = false;
     }
 
 

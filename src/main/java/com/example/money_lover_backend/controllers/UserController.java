@@ -91,6 +91,7 @@ public class UserController {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setActive(true);
+            userService.save(user);
             return new ResponseEntity<>("Active successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
