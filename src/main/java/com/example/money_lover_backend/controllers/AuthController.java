@@ -95,11 +95,9 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-
         String email = signUpRequest.getEmail();
         String[] emailParts = email.split("@");
         String username = emailParts[0].replace(".", "") + "_" + emailParts[1];
-
 
         int count = 1;
         String baseUsername = username;
@@ -107,7 +105,6 @@ public class AuthController {
             username = baseUsername + count;
             count++;
         }
-
 
         User user = new User(
                 username,
@@ -148,7 +145,9 @@ public class AuthController {
     public ResponseEntity<?> logOut(@RequestBody TokenExpire tokenExpire) {
         Optional<TokenExpire> tokenExpireOptional = tokenExpireRepository.findByToken(tokenExpire.getToken());
 
-        if (!tokenExpireOptional.isPresent()) {
+        if (tokenExpireOptional.isEmpty()) {
+            TokenExpire newTokenExpire = new TokenExpire();
+            newTokenExpire.setToken(tokenExpire.getToken());
             tokenExpireRepository.save(tokenExpire);
         }
         return ResponseEntity.ok("Token expired saved successfully");

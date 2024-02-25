@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TokenExpireRepository extends JpaRepository<TokenExpire, Long> {
     Optional<TokenExpire> findByToken(String token);
+
+    boolean existsByToken(String token);
 }

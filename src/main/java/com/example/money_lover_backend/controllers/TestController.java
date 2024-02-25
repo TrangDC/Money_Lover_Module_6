@@ -24,6 +24,11 @@ public class TestController {
     @Autowired
     private TokenExpireRepository tokenExpireRepository;
 
+    public boolean checkToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        return tokenExpireRepository.existsByToken(token);
+    }
+
     @GetMapping("/all")
     public String allAccess() {
         return "Public Content.";
@@ -32,12 +37,10 @@ public class TestController {
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> userAccess(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Optional<TokenExpire> tokenExpire = tokenExpireRepository.findByToken(token);
-        if (tokenExpire.isPresent()) {
+        if (checkToken(request)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized to access this page"));
         }
-        return new ResponseEntity<>("User Content." + token, HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>("User Content.", HttpStatusCode.valueOf(200));
     }
 
 
