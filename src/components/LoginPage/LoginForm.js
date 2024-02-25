@@ -62,6 +62,28 @@ const LoginForm = () => {
         setSubmitting(false);
     };
 
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            // Lưu credentialResponseDecoded vào localStorage
+            setTimeout(async () => {
+                await new Promise((resolve, reject) => {
+                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
+                    resolve();
+                });
+
+                // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
+                navigate("/auth/home");
+            }, 3000);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -123,12 +145,7 @@ const LoginForm = () => {
 
                                     <MDBBtn outline rounded className='mb-3 w-100' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={credentialResponse => {
-                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
-                                                console.log(credentialResponseDecoded);
-                                                navigate("/home");
-                                                window.location.reload();
-                                            }}
+                                            onSuccess={handleGoogleSuccess}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}

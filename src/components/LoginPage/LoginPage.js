@@ -8,9 +8,6 @@ import {
 
 
 const LoginPage = () => {
-
-
-
     return (
         <div>
             <MDBContainer fluid>

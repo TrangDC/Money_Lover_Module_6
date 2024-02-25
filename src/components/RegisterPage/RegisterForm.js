@@ -16,6 +16,8 @@ import YupPassword from 'yup-password';
 import axios from "axios";
 import {FaApple, FaFacebook, FaGoogle} from "react-icons/fa";
 import {useToast} from "@chakra-ui/react";
+import {jwtDecode} from "jwt-decode";
+import {GoogleLogin} from "@react-oauth/google";
 YupPassword(Yup);
 
 const RegisterForm = () => {
@@ -25,6 +27,7 @@ const RegisterForm = () => {
     })
     const navigate = useNavigate();
     const toast = useToast()
+
     const handleSubmit = async (values, {setSubmitting}) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signup', values)
@@ -38,7 +41,7 @@ const RegisterForm = () => {
             });
             setTimeout(() => {
                 navigate('/login');
-            }, 1500);
+            }, 3000);
         } catch (error) {
             console.error('Error during login:', error);
             toast({
@@ -50,6 +53,42 @@ const RegisterForm = () => {
             });
         }
         setSubmitting(false);
+    };
+
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            // Lấy email từ credentialResponseDecoded và lưu vào state email
+            const email = credentialResponseDecoded.email;
+
+            // Tạo một password dựa trên email và lưu vào state password
+            const password = generatePasswordFromEmail(email);
+
+            // Console log
+            console.log('Email:', email);
+            console.log('Password:', password);
+
+            // Lưu vào localStorage
+            setTimeout(async () => {
+                await new Promise((resolve, reject) => {
+                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
+                    resolve();
+                });
+
+                // Sau khi lưu vào localStorage và đợi 2 giây, thực hiện navigate
+                navigate("/login");
+            }, 2000);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const generatePasswordFromEmail = (email) => {
+        const username = email.substring(0, email.indexOf('@')); // Lấy phần username của email
+        return username + '123'; // Thêm một chuỗi đơn giản vào username
     };
 
     const SignupSchema = Yup.object().shape({
@@ -92,8 +131,12 @@ const RegisterForm = () => {
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
-                                        <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }} />
-                                        <span className="social-text">Sign in with Gmail</span>
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleSuccess}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </MDBBtn>
 
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg'>
