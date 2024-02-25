@@ -63,33 +63,68 @@ const LoginForm = ({ handleLoginSuccess }) => {
         setSubmitting(false);
     };
 
-    const handleGoogleSuccess = async (credentialResponse) => {
+    const handleGoogleLogin = async (credentialResponse) => {
         try {
             const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
             console.log(credentialResponseDecoded);
 
-            // Lưu credentialResponseDecoded vào localStorage
-            await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
-                    resolve();
-                }, 1000);
+            const email = credentialResponseDecoded.email;
+            const password = generatePasswordFromEmail(email);
+
+            const response = await axios.post('http://localhost:8080/api/auth/signin', {
+                email: email,
+                password: password
             });
 
-            handleLoginSuccess();
+            console.log(response.data);
 
-            // Sau khi lưu vào localStorage và đợi 3 giây, làm mới trang và thực hiện navigate
-            setTimeout(() => {
-                navigate("/auth/home");
-            }, 1000);
-            // Sau khi lưu vào localStorage và đợi 3 giây, thực hiện navigate
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.email === email || response) {
 
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
+                        resolve();
+                    }, 1000);
+                });
+                handleLoginSuccess();
+                toast({
+                    title: 'Login Successful',
+                    description: 'You have successfully logged in.',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+
+                setTimeout(() => {
+                    navigate("/auth/home");
+                }, 1000);
+            } else {
+                toast({
+                    title: 'Login Failed',
+                    description: 'Please check your credentials and try again.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                console.log('Email does not match or user does not exist.');
+            }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error during login:', error);
+            toast({
+                title: 'Login Failed',
+                description: 'Please check your credentials and try again.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
     };
 
-
+    const generatePasswordFromEmail = (email) => {
+        const username = email.substring(0, email.indexOf('@'));
+        return username + '123##$$ML';
+    };
 
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
@@ -152,7 +187,7 @@ const LoginForm = ({ handleLoginSuccess }) => {
 
                                     <MDBBtn outline rounded className='mb-3 w-100' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={handleGoogleSuccess}
+                                            onSuccess={handleGoogleLogin}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}

@@ -56,39 +56,37 @@ const RegisterForm = () => {
     };
 
 
-    const handleGoogleSuccess = async (credentialResponse) => {
+    const handleGoogleRegister = async (credentialResponse) => {
         try {
             const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
             console.log(credentialResponseDecoded);
 
-            // Lấy email từ credentialResponseDecoded và lưu vào state email
             const email = credentialResponseDecoded.email;
 
-            // Tạo một password dựa trên email và lưu vào state password
             const password = generatePasswordFromEmail(email);
 
-            // Console log
-            console.log('Email:', email);
-            console.log('Password:', password);
+            const response = await axios.post('http://localhost:8080/api/auth/signup', {
+                email: email,
+                password: password
+            });
 
-            // Lưu vào localStorage
+            console.log('Signup response:', response.data);
+
             setTimeout(async () => {
                 await new Promise((resolve, reject) => {
-                    localStorage.setItem('google_user', JSON.stringify(credentialResponseDecoded));
+                    localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
                     resolve();
                 });
-
-                // Sau khi lưu vào localStorage và đợi 2 giây, thực hiện navigate
                 navigate("/login");
-            }, 1000);
+            }, 3000);
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     const generatePasswordFromEmail = (email) => {
-        const username = email.substring(0, email.indexOf('@')); // Lấy phần username của email
-        return username + '123'; // Thêm một chuỗi đơn giản vào username
+        const username = email.substring(0, email.indexOf('@'));
+        return username + '123##$$ML';
     };
 
     const SignupSchema = Yup.object().shape({
@@ -132,7 +130,7 @@ const RegisterForm = () => {
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={handleGoogleSuccess}
+                                            onSuccess={handleGoogleRegister}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}
