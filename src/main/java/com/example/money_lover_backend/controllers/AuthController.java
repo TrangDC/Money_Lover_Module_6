@@ -1,5 +1,6 @@
 package com.example.money_lover_backend.controllers;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -179,6 +180,50 @@ public class AuthController {
     @PostMapping("/reset_password")
     public ResponseEntity<?> processResetPassword() {
         return null;
+    }
+
+    @GetMapping("/active_account/{email}")
+    public ResponseEntity<?> processActiveAccount(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email not found!"));
+        }
+        User user = userOptional.get();
+
+        SecureRandom secureRandom = new SecureRandom();
+
+        // Xác định độ dài của token (ví dụ: 32 ký tự)
+        int tokenLength = 32;
+
+        // Tạo một mảng ký tự chứa tất cả các ký tự có thể có trong token
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+
+        // Tạo một StringBuilder để xây dựng token
+        StringBuilder tokenBuilder = new StringBuilder(tokenLength);
+
+        // Lặp để tạo token
+        for (int i = 0; i < tokenLength; i++) {
+            // Chọn một ký tự ngẫu nhiên từ mảng chars
+            char randomChar = chars[secureRandom.nextInt(chars.length)];
+
+            // Thêm ký tự ngẫu nhiên vào token
+            tokenBuilder.append(randomChar);
+        }
+
+        // Lấy token cuối cùng
+        String token = tokenBuilder.toString();
+
+        // Sét token cho user
+        user.setActiveToken(token);
+        userRepository.save(user);
+        String emailContent = "Your active code: " +
+                user.getActiveToken() + ". " +
+                "Use this to active your account.";
+        emailService.sendEmail(email, "Get auth code", emailContent);
+        return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
+
     }
 
 }

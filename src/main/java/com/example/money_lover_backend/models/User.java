@@ -57,8 +57,19 @@ public class User {
     @Setter
     private String activeToken;
 
+   
+    private boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public User() {
+
     }
     public User(String username, String email, String password, String decode_password) {
         this.username = username;
@@ -66,6 +77,7 @@ public class User {
         this.password = password;
         this.decode_password = decode_password;
     }
+
 
     public User(String email, String password) {
         this.username = username;
