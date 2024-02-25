@@ -39,8 +39,11 @@ const RegisterForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
+
+            await axios.get(`http://localhost:8080/api/auth/active_account/${values.email}`);
+
             setTimeout(() => {
-                navigate('/login');
+                navigate('/active');
             }, 3000);
         } catch (error) {
             console.error('Error during login:', error);
@@ -65,8 +68,6 @@ const RegisterForm = () => {
 
             const password = generatePasswordFromEmail(email);
 
-
-
             const response = await axios.post('http://localhost:8080/api/auth/signup', {
                 email: email,
                 password: password
@@ -79,7 +80,7 @@ const RegisterForm = () => {
                     localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
                     resolve();
                 });
-                navigate("/login");
+                navigate("/active");
             }, 3000);
         } catch (error) {
             console.error('Error:', error);

@@ -12,6 +12,7 @@ import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
 import {useState} from "react";
 import ChangePassword from "./components/UserPage/ChangePassword";
+import ActiveAccount from "./components/UserPage/ActiveAccount";
 
 
 function App() {
@@ -36,7 +37,7 @@ function App() {
                     <Route path='/login' element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
-                    <Route path='/changepass' element={<ChangePassword/>}/>
+                    <Route path='/active' element={<ActiveAccount/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
