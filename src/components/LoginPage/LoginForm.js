@@ -28,6 +28,8 @@ import {
 
 
 const LoginForm = ({ handleLoginSuccess }) => {
+
+
     let navigate = useNavigate();
     const initialValues = {
         email: '',
@@ -130,6 +132,29 @@ const LoginForm = ({ handleLoginSuccess }) => {
     };
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    //Method get password
+    const [recoverEmail, setRecoverEmail] = useState("");
+    const [isEmailSent, setIsEmailSent] = useState(false);
+    const handleChangeEmail = (event) => {
+        setRecoverEmail(event.target.value);
+    };
+
+    const resetForm = () => {
+        setRecoverEmail('');
+        setIsEmailSent(false);
+    };
+
+    const handleSend = () => {
+        axios.get(`http://localhost:8080/api/auth/forgot_password/${recoverEmail}`).then(r => {
+            console.log(r.data);
+            setIsEmailSent(true);
+        }).catch((e) => {
+            console.log(e)
+        })
+    };
+
     return (
         <Formik initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -157,20 +182,29 @@ const LoginForm = ({ handleLoginSuccess }) => {
                                 <ModalHeader>GET PASSWORD</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
-                                    <FormControl isRequired>
-                                        <FormLabel>Email</FormLabel>
-                                        <Input placeholder='Enter Email' />
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel>Verification</FormLabel>
-                                        <Input placeholder='Confirmation code has been sent to email' />
-                                    </FormControl>
-                                </ModalBody>
+                                    { isEmailSent ? (
+                                        <>
+                                            <p>Email has been sent!</p>
+                                        </>
+                                        ) : (
+                                            <>
+                                                <FormControl isRequired>
+                                                    <FormLabel>Email</FormLabel>
+                                                    <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
+                                                </FormControl>
+                                            </>
+                                        )
+                                    }
 
+                                </ModalBody>
                                 <ModalFooter>
-                                    <Button colorScheme='blue' mr={3}>
-                                        Submit
-                                    </Button>
+                                    {!isEmailSent ? (
+                                        <Button colorScheme='blue' mr={3} onClick={handleSend}>
+                                            Submit
+                                        </Button>
+                                    ) : (
+                                        <ModalCloseButton />
+                                    )}
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
