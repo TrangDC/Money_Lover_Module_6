@@ -13,13 +13,13 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'home',
         label: 'Home',
-        path: '/home',
+        path: '/auth/home',
         icon: <HiOutlineViewGrid />
     },
     {
         key: 'wallets',
         label: 'Wallets',
-        path: '/wallets',
+        path: '/auth/wallets',
         icon: <HiOutlineCube />
     },
     {
