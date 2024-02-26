@@ -10,11 +10,7 @@ import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
-
-import CreateWallet from "./components/UserPage/wallet/CreateWallet";
-
 import {useState} from "react";
-import ChangePassword from "./components/UserPage/ChangePassword";
 import ActiveAccount from "./components/UserPage/ActiveAccount";
 import LoginForm from "./components/LoginPage/LoginForm";
 

@@ -4,7 +4,7 @@ import TransactionChart from "./TransactionChart";
 import BuyerProfileChart from "./BuyerProfileChart";
 import RecentOrders from "./RecentOrders";
 import PopularProducts from "./PopularProducts";
-import {ThemeContext, ThemeProvider} from '../../layout/ThemeDark-Light/ThemeContext';
+import {ThemeProvider} from '../../layout/ThemeDark-Light/ThemeContext';
 
 const Dashboard = () => {
     return (
