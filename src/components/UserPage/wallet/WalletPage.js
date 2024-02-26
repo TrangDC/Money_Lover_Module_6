@@ -46,6 +46,7 @@ const WalletPage = () => {
     const toast = useToast()
     //create wallet
     const navigate = useNavigate();
+    const [user, setUser] = useState({})
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -138,6 +139,9 @@ const WalletPage = () => {
     };
 //hien thi danh sach
     useEffect(() => {
+        const userdata = localStorage.getItem("user");
+        console.log(JSON.parse(userdata));
+        setUser(JSON.parse(userdata))
         fetchWallets();
     }, []);
 
@@ -161,12 +165,13 @@ const WalletPage = () => {
         }
     };
     const fetchWallets = () => {
-        axios.get('http://localhost:8080/api/wallets')
-            .then(res => {
+        axios
+            .get(`http://localhost:8080/api/wallets`)
+            .then((res) => {
                 console.log(res);
                 setWallets(res.data);
             })
-            .catch(err => console.error(err))
+            .catch((err) => console.error(err));
     };
 
     return (
