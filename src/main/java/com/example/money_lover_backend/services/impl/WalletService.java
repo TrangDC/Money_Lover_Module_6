@@ -4,6 +4,7 @@ import com.example.money_lover_backend.models.Wallet;
 import com.example.money_lover_backend.repositories.WalletRepository;
 import com.example.money_lover_backend.services.IWaletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,13 @@ public class WalletService implements IWaletService {
 
     @Override
     public Iterable<Wallet> getAllWallet() {
-        return walletRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return walletRepository.findAll(sort);
+    }
+
+    @Override
+    public List<Wallet> getAllWalletByUserId(Long userId) {
+        return walletRepository.findAllByUserId(userId);
     }
 
     @Override

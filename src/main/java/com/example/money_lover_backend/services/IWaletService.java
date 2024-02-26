@@ -1,5 +1,6 @@
 package com.example.money_lover_backend.services;
 
+import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.Wallet;
 
 import java.util.List;
@@ -9,6 +10,8 @@ public interface IWaletService{
     public Wallet saveWallet(Wallet wallet);
 
     public Iterable<Wallet> getAllWallet();
+    List<Wallet> getAllWalletByUserId(Long userId);
+
     Iterable<Wallet> searchWalletByName(String walletName);
 
     Optional<Wallet> getWalletById(Long id);
