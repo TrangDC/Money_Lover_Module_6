@@ -1,5 +1,6 @@
 package com.example.money_lover_backend.controllers;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,25 +66,28 @@ public class AuthController {
         if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail());
         }
-        User user = userOptional.get();
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
+            User user = userOptional.get();
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                userDetails.getImage(),
-                roles));
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getImage(),
+                    roles));
+        }
+        return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/signup")
@@ -109,7 +113,8 @@ public class AuthController {
         User user = new User(
                 username,
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword())
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getPassword()
         );
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -164,22 +169,55 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email not found!"));
         }
         User user = userOptional.get();
-        String newPassword = UUID.randomUUID().toString();
-        user.setPassword(encoder.encode(newPassword));
-        userRepository.save(user);
-        String emailContent = "Your new password: " + newPassword;
-        emailService.sendEmail(email, "Set up new password", emailContent);
+//        String newPassword = UUID.randomUUID().toString();
+//        user.setPassword(encoder.encode(newPassword));
+//        userRepository.save(user);
+        String emailContent = "Your current password: " +
+                user.getDecode_password() + ". " +
+                "Use this to login again.";
+        emailService.sendEmail(email, "Get forgotten password", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
-
-    }
-
-    public void sendEmail(){
 
     }
 
     @PostMapping("/reset_password")
     public ResponseEntity<?> processResetPassword() {
         return null;
+    }
+
+    @GetMapping("/active_account/{email}")
+    public ResponseEntity<?> processActiveAccount(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email not found!"));
+        }
+        User user = userOptional.get();
+
+        SecureRandom secureRandom = new SecureRandom();
+
+        int tokenLength = 32;
+
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+
+        StringBuilder tokenBuilder = new StringBuilder(tokenLength);
+
+        for (int i = 0; i < tokenLength; i++) {
+            char randomChar = chars[secureRandom.nextInt(chars.length)];
+            tokenBuilder.append(randomChar);
+        }
+
+        String token = tokenBuilder.toString();
+
+        user.setActiveToken(token);
+        userRepository.save(user);
+        String emailContent = "Your active code: " +
+                user.getActiveToken() + ". " +
+                "Use this to active your account.";
+        emailService.sendEmail(email, "Get auth code", emailContent);
+        return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
+
     }
 
 }

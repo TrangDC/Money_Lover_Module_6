@@ -5,6 +5,7 @@ import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
 import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.repositories.RoleRepository;
+import com.example.money_lover_backend.repositories.UserRepository;
 import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class UserController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<Iterable<User>> findAll() {
@@ -60,6 +64,7 @@ public class UserController {
         user.setId(userOptional.get().getId());
         user.setPassword(encoder.encode(user.getPassword()));
         user.setImage(userOptional.get().getImage());
+        user.setActive(true);
 
         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -79,5 +84,16 @@ public class UserController {
         userOptional.get().setImage(userImage.getImage());
 
         return new ResponseEntity<>(userService.save(userOptional.get()), HttpStatus.OK);
+    }
+    @GetMapping("/process_active/{token}")
+    public ResponseEntity<?> findByToken(@PathVariable String token) {
+        Optional<User> userOptional = userRepository.findByActiveToken(token);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setActive(true);
+            userService.save(user);
+            return new ResponseEntity<>("Active successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
 }
