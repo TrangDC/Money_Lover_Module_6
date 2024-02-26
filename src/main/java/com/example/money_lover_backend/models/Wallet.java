@@ -14,4 +14,8 @@ public class Wallet {
     private String name;
     private Long balance;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

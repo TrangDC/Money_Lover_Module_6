@@ -1,5 +1,6 @@
 package com.example.money_lover_backend.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +53,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wallet> wallets = new ArrayList<>();
+
     @Column(name = "active_token")
     @Getter
     @Setter
@@ -96,5 +100,14 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public User(Long id, String name, String username, String email, String password, List<Wallet> wallets) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.wallets = wallets;
     }
 }
