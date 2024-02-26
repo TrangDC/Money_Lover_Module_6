@@ -12,6 +12,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
 import ManagerUserPage from "./ManagerUserPage";
 import Upimage from "../FireBase/Upimage";
+import axios from "axios";
 
 const InformationUser = () => {
     const [show, setShow] = useState(false);
@@ -32,13 +33,26 @@ const InformationUser = () => {
         setUser(JSON.parse(userdata))
     }, []);
 
+    const [images, setImage] = useState("")
+
+    const users = JSON.parse(localStorage.getItem('user'));
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/users/' + users.id)
+            .then(res => {
+                console.log(res.data);
+                setImage(res.data.image);
+            })
+            .catch(err => console.error(err))
+    }, )
+
     return (
         <div>
             <Container>
                 <div style={{textAlign: 'center'}}>
-                        <Image src={user.image} className= "mb-3" roundedCircle style={{width: '70px', height: '70px',margin: 'auto'}} />
-                        <h5>{user.username}</h5>
-                        <h7>{user.email}</h7>
+                    <Image src={images} className= "mb-3" roundedCircle style={{width: '70px', height: '70px',margin: 'auto'}} />
+                    <h5>{user.username}</h5>
+                    <h7>{user.email}</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>
@@ -62,17 +76,17 @@ const InformationUser = () => {
 
                 <ListGroup.Item className="d-flex align-items-center">
                     <Link to= "/auth/categories" className="text-dark d-flex align-items-center">
-                    <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
-                    <span> Group </span>
+                        <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
+                        <span> Group </span>
                     </Link>
                 </ListGroup.Item>
 
                 <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>
-                    <ListGroup.Item className="d-flex align-items-center">
-                        <Link className="text-dark d-flex align-items-center">
+                <ListGroup.Item className="d-flex align-items-center">
+                    <Link className="text-dark d-flex align-items-center">
                         <LuLogOut className="mr-2" style={{width: '25px' ,height: '25px'}}/>
                         <span>Logout</span>
-                        </Link>
+                    </Link>
                 </ListGroup.Item>
 
             </ListGroup>
@@ -89,12 +103,12 @@ const InformationUser = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <div>
+                        <div style={{textAlign: 'center'}}>
                             <Link onClick={handleShowImg}>
-                                <Image src={user.image} roundedCircle style={{marginLeft: '195px',width: '60px', height: '60px'}} />
+                                <Image src={images} roundedCircle style={{margin: 'auto',width: '60px', height: '60px'}} />
                             </Link>
-                            <h5 style={{marginLeft: '175px'}}>{user.username}</h5>
-                            <h7 style={{marginLeft: '150px'}}>username@gmail.com</h7>
+                            <h5 >{user.username}</h5>
+                            <h7 >{user.email}</h7>
                         </div>
                     </Container>
                     <ManagerUserPage/>
