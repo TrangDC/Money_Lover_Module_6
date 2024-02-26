@@ -24,12 +24,6 @@ public class WalletService implements IWaletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         return walletRepository.findAll(sort);
     }
-
-    @Override
-    public List<Wallet> getAllWalletByUserId(Long userId) {
-        return walletRepository.findAllByUserId(userId);
-    }
-
     @Override
     public List<Wallet> searchWalletByName(String walletName) {
         return walletRepository.findByNameContainingIgnoreCase(walletName);

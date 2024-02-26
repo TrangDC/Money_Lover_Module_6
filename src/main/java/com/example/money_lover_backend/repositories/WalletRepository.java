@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet,Long> {
     List<Wallet> findByNameContainingIgnoreCase(String walletName);
-    List<Wallet> findAllByUserId(Long userId);
 }

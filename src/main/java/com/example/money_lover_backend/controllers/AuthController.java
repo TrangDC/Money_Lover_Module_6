@@ -155,7 +155,7 @@ public class AuthController {
             newTokenExpire.setToken(tokenExpire.getToken());
             tokenExpireRepository.save(tokenExpire);
         }
-        // Xóa thông tin đăng nhập khi đăng xuất
+
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Token expired saved successfully");
     }
@@ -180,10 +180,6 @@ public class AuthController {
 
     }
 
-    @PostMapping("/reset_password")
-    public ResponseEntity<?> processResetPassword() {
-        return null;
-    }
 
     @GetMapping("/active_account/{email}")
     public ResponseEntity<?> processActiveAccount(@PathVariable String email) {

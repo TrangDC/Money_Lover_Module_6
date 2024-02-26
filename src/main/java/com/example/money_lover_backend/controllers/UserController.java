@@ -4,8 +4,10 @@ import com.example.money_lover_backend.dto.UserImage;
 import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
 import com.example.money_lover_backend.models.User;
+import com.example.money_lover_backend.models.Wallet;
 import com.example.money_lover_backend.repositories.RoleRepository;
 import com.example.money_lover_backend.repositories.UserRepository;
+import com.example.money_lover_backend.repositories.WalletRepository;
 import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,6 +34,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private WalletRepository walletRepository;
 
     @GetMapping
     public ResponseEntity<Iterable<User>> findAll() {
@@ -96,4 +98,5 @@ public class UserController {
         }
         return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
+
 }

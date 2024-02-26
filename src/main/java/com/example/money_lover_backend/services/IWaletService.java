@@ -10,7 +10,6 @@ public interface IWaletService{
     public Wallet saveWallet(Wallet wallet);
 
     public Iterable<Wallet> getAllWallet();
-    List<Wallet> getAllWalletByUserId(Long userId);
 
     Iterable<Wallet> searchWalletByName(String walletName);
 
