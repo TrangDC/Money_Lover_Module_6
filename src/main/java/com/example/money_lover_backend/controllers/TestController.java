@@ -1,15 +1,34 @@
 package com.example.money_lover_backend.controllers;
 
+import com.example.money_lover_backend.models.TokenExpire;
+import com.example.money_lover_backend.payload.response.MessageResponse;
+import com.example.money_lover_backend.repositories.TokenExpireRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+
+    @Autowired
+    private TokenExpireRepository tokenExpireRepository;
+
+    public boolean checkToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        return tokenExpireRepository.existsByToken(token);
+    }
+
     @GetMapping("/all")
     public String allAccess() {
         return "Public Content.";
@@ -17,8 +36,11 @@ public class TestController {
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public String userAccess() {
-        return "User Content.";
+    public ResponseEntity<?> userAccess(HttpServletRequest request) {
+        if (checkToken(request)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized to access this page"));
+        }
+        return new ResponseEntity<>("User Content.", HttpStatusCode.valueOf(200));
     }
 
 

@@ -1,26 +1,25 @@
 package com.example.money_lover_backend.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.example.money_lover_backend.models.TokenExpire;
+import com.example.money_lover_backend.repositories.TokenExpireRepository;
+import com.example.money_lover_backend.services.impl.EmailService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
@@ -38,6 +37,10 @@ import com.example.money_lover_backend.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    EmailService emailService;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -53,6 +56,9 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    TokenExpireRepository tokenExpireRepository;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -60,33 +66,32 @@ public class AuthController {
         if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail());
         }
-        User user = userOptional.get();
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
+            User user = userOptional.get();
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getImage(),
+                    roles));
+        }
+        return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-//        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body(new MessageResponse("Error: Username is already taken!"));
-//        }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
@@ -94,12 +99,10 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        //Tự động tạo username từ phần trước sau của @ trong email
         String email = signUpRequest.getEmail();
         String[] emailParts = email.split("@");
         String username = emailParts[0].replace(".", "") + "_" + emailParts[1];
 
-        // Kiểm tra tính duy nhất của username và tạo mới nếu cần
         int count = 1;
         String baseUsername = username;
         while (userRepository.existsByUsername(username)) {
@@ -107,11 +110,11 @@ public class AuthController {
             count++;
         }
 
-        // Create new user's account
         User user = new User(
                 username,
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword())
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getPassword()
         );
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -128,14 +131,7 @@ public class AuthController {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
-
                         break;
-//                    case "mod":
-//                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
-//
-//                        break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -149,4 +145,79 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logOut(@RequestBody TokenExpire tokenExpire) {
+        Optional<TokenExpire> tokenExpireOptional = tokenExpireRepository.findByToken(tokenExpire.getToken());
+
+        if (tokenExpireOptional.isEmpty()) {
+            TokenExpire newTokenExpire = new TokenExpire();
+            newTokenExpire.setToken(tokenExpire.getToken());
+            tokenExpireRepository.save(tokenExpire);
+        }
+        // Xóa thông tin đăng nhập khi đăng xuất
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok("Token expired saved successfully");
+    }
+
+    @GetMapping("/forgot_password/{email}")
+    public ResponseEntity<?> processForgotPassword(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email not found!"));
+        }
+        User user = userOptional.get();
+//        String newPassword = UUID.randomUUID().toString();
+//        user.setPassword(encoder.encode(newPassword));
+//        userRepository.save(user);
+        String emailContent = "Your current password: " +
+                user.getDecode_password() + ". " +
+                "Use this to login again.";
+        emailService.sendEmail(email, "Get forgotten password", emailContent);
+        return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
+
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> processResetPassword() {
+        return null;
+    }
+
+    @GetMapping("/active_account/{email}")
+    public ResponseEntity<?> processActiveAccount(@PathVariable String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email not found!"));
+        }
+        User user = userOptional.get();
+
+        SecureRandom secureRandom = new SecureRandom();
+
+        int tokenLength = 32;
+
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+
+        StringBuilder tokenBuilder = new StringBuilder(tokenLength);
+
+        for (int i = 0; i < tokenLength; i++) {
+            char randomChar = chars[secureRandom.nextInt(chars.length)];
+            tokenBuilder.append(randomChar);
+        }
+
+        String token = tokenBuilder.toString();
+
+        user.setActiveToken(token);
+        userRepository.save(user);
+        String emailContent = "Your active code: " +
+                user.getActiveToken() + ". " +
+                "Use this to active your account.";
+        emailService.sendEmail(email, "Get auth code", emailContent);
+        return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
+
+    }
+
 }
