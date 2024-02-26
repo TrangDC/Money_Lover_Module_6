@@ -57,6 +57,7 @@ const RegisterForm = ({setIsLoading }) => {
                 duration: 3000,
                 isClosable: true,
             });
+            setIsLoading(false)
         }
         setSubmitting(false);
     };

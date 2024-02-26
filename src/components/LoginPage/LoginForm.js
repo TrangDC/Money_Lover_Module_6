@@ -42,7 +42,6 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             localStorage.setItem("user", JSON.stringify(response.data));
-
             handleLoginSuccess();
             console.log(response.data);
             toast({
@@ -52,14 +51,14 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
                 duration: 1500,
                 isClosable: true,
             });
-
             setTimeout(() => {
-                setIsLoading(true);
+                setIsLoading(false);
                 navigate('/auth/home');
             }, 2000);
 
         } catch (error) {
             console.error('Error during login:', error);
+
                 toast({
                     title: 'Login Failed',
                     description: 'Please check your credentials and try again.',
@@ -67,6 +66,7 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
                     duration: 3000,
                     isClosable: true,
                 });
+            setIsLoading(false);
         }
 
         setSubmitting(false);

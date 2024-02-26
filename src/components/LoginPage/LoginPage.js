@@ -17,7 +17,6 @@ const LoginPage = ({ handleLoginSuccess }) => {
                 spinner
                 text="Đang tải..."
                 className="overlay"
-                timeout={3000}
             >
             <MDBContainer fluid>
                 <div className="p-5 bg-image" style={{background:"green", height: '350px'}}>
