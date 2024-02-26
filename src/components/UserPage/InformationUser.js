@@ -13,6 +13,7 @@ import Button from "react-bootstrap/Button";
 import ManagerUserPage from "./ManagerUserPage";
 import Upimage from "../FireBase/Upimage";
 import axios from "axios";
+import Profile from "./profile/Profile";
 
 const InformationUser = () => {
     const [show, setShow] = useState(false);
@@ -97,30 +98,33 @@ const InformationUser = () => {
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
+                size="lg"
+
             >
-                <Modal.Header closeButton >
-                    <Modal.Title style={{marginLeft: '165px'}} >Edit Account</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Container>
-                        <div style={{textAlign: 'center'}}>
-                            <Link onClick={handleShowImg}>
-                                <Image src={images} roundedCircle style={{margin: 'auto',width: '60px', height: '60px'}} />
-                            </Link>
-                            <h5 >{user.username}</h5>
-                            <h7 >{user.email}</h7>
-                        </div>
-                    </Container>
-                    <ManagerUserPage/>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Modal.Footer>
+                <Profile></Profile>
+                {/*<Modal.Header closeButton >*/}
+                {/*    <Modal.Title style={{marginLeft: '165px'}} >Edit Account</Modal.Title>*/}
+                {/*</Modal.Header>*/}
+                {/*<Modal.Body>*/}
+                {/*    <Container>*/}
+                {/*        <div style={{textAlign: 'center'}}>*/}
+                {/*            <Link onClick={handleShowImg}>*/}
+                {/*                <Image src={images} roundedCircle style={{margin: 'auto',width: '60px', height: '60px'}} />*/}
+                {/*            </Link>*/}
+                {/*            <h5 >{user.username}</h5>*/}
+                {/*            <h7 >{user.email}</h7>*/}
+                {/*        </div>*/}
+                {/*    </Container>*/}
+                {/*    <ManagerUserPage/>*/}
+                {/*</Modal.Body>*/}
+                {/*<Modal.Footer>*/}
+                {/*    <Button variant="secondary" onClick={handleClose}>*/}
+                {/*        Close*/}
+                {/*    </Button>*/}
+                {/*    <Button variant="primary" type="submit">*/}
+                {/*        Submit*/}
+                {/*    </Button>*/}
+                {/*</Modal.Footer>*/}
             </Modal>
             <Modal
                 show={showImg}
