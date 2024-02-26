@@ -1,14 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {IoBagHandle, IoCart, IoPeople, IoPieChart} from "react-icons/io5";
-
+import {ThemeContext} from "../../layout/ThemeDark-Light/ThemeContext";
+import "./ToggleDarkLight.css"
 const DashboardStatsGrid = () => {
+    const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+
     return (
-        <div className='flex gap-4 w-full'>
-            <BoxWrapper>
-                <div className="rounded-full h-12 w-12 flex items-center justify-center bg-sky-500">
+        <div className='flex gap-4 w-full flex-column' style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff',textAlign: 'center'}}>
+            <div className="toggle-switch-container" style={{ justifyContent: 'flex-end', marginTop: '10px' }}>
+                <div className={`toggle-switch ${isDarkMode ? 'on' : 'off'}`} onClick={toggleDarkMode}>
+                    <div className="slider"></div>
+                </div>
+            </div>
+            <div className='flex gap-4 m-2' >
+            <BoxWrapper className="flex-grow" >
+                <div className="rounded-full h-12 w-12 flex items-center justify-center bg-sky-500" >
                     <IoBagHandle className="text-2xl text-white" />
                 </div>
-                <div className="pl-4">
+                <div className="pl-4" >
                     <span className="text-sm text-gray-500 font-light">Total Sales</span>
                     <div className="flex items-center">
                         <strong className="text-xl text-gray-700 font-semibold">$54232</strong>
@@ -16,7 +25,7 @@ const DashboardStatsGrid = () => {
                     </div>
                 </div>
             </BoxWrapper>
-            <BoxWrapper>
+            <BoxWrapper className="flex-grow">
                 <div className="rounded-full h-12 w-12 flex items-center justify-center bg-orange-600">
                     <IoPieChart className="text-2xl text-white" />
                 </div>
@@ -28,7 +37,7 @@ const DashboardStatsGrid = () => {
                     </div>
                 </div>
             </BoxWrapper>
-            <BoxWrapper>
+            <BoxWrapper className="flex-grow">
                 <div className="rounded-full h-12 w-12 flex items-center justify-center bg-yellow-400">
                     <IoPeople className="text-2xl text-white" />
                 </div>
@@ -40,7 +49,7 @@ const DashboardStatsGrid = () => {
                     </div>
                 </div>
             </BoxWrapper>
-            <BoxWrapper>
+            <BoxWrapper className="flex-grow">
                 <div className="rounded-full h-12 w-12 flex items-center justify-center bg-green-600">
                     <IoCart className="text-2xl text-white" />
                 </div>
@@ -52,6 +61,8 @@ const DashboardStatsGrid = () => {
                     </div>
                 </div>
             </BoxWrapper>
+            </div>
+
         </div>
     );
 };
@@ -61,7 +72,7 @@ export default DashboardStatsGrid;
 function BoxWrapper({children}) {
     return (
         <div className='bg-white rounded-sm p-4 flex-1
-                        border border-gray-200 flex items-center'>
+                        border border-gray-200 flex items-center' >
             {children}
         </div>
     )

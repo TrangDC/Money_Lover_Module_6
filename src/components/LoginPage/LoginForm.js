@@ -27,17 +27,23 @@ import {
 } from '@chakra-ui/react'
 
 
-const LoginForm = () => {
+const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
+
+
     let navigate = useNavigate();
     const initialValues = {
         email: '',
         password: '',
     };
     const toast = useToast()
+
     const handleSubmit = async (values, { setSubmitting }) => {
+        setIsLoading(true);
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signin', values);
             localStorage.setItem("user", JSON.stringify(response.data));
+
+            handleLoginSuccess();
             console.log(response.data);
             toast({
                 title: 'Login Successful',
@@ -46,9 +52,70 @@ const LoginForm = () => {
                 duration: 1500,
                 isClosable: true,
             });
+
             setTimeout(() => {
+                setIsLoading(true);
                 navigate('/auth/home');
             }, 2000);
+
+        } catch (error) {
+            console.error('Error during login:', error);
+                toast({
+                    title: 'Login Failed',
+                    description: 'Please check your credentials and try again.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+        }
+
+        setSubmitting(false);
+    };
+
+    const handleGoogleLogin = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            const email = credentialResponseDecoded.email;
+            const password = generatePasswordFromEmail(email);
+
+            const response = await axios.post('http://localhost:8080/api/auth/signin', {
+                email: email,
+                password: password
+            });
+
+            console.log(response.data);
+
+            if (response) {
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        localStorage.setItem('user', JSON.stringify(response.data));
+                        resolve();
+                    }, 1000);
+                });
+                handleLoginSuccess();
+                toast({
+                    title: 'Login Successful',
+                    description: 'You have successfully logged in.',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+
+                setTimeout(() => {
+                    navigate("/auth/home");
+                }, 1000);
+            } else {
+                toast({
+                    title: 'Login Failed',
+                    description: 'Please check your credentials and try again.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                console.log('Email does not match or user does not exist.');
+            }
         } catch (error) {
             console.error('Error during login:', error);
             toast({
@@ -59,7 +126,11 @@ const LoginForm = () => {
                 isClosable: true,
             });
         }
-        setSubmitting(false);
+    };
+
+    const generatePasswordFromEmail = (email) => {
+        const username = email.substring(0, email.indexOf('@'));
+        return username + '123456';
     };
 
     const [showPassword, setShowPassword] = useState(false);
@@ -68,6 +139,29 @@ const LoginForm = () => {
     };
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    //Method get password
+    const [recoverEmail, setRecoverEmail] = useState("");
+    const [isEmailSent, setIsEmailSent] = useState(false);
+    const handleChangeEmail = (event) => {
+        setRecoverEmail(event.target.value);
+    };
+
+    const resetForm = () => {
+        setRecoverEmail('');
+        setIsEmailSent(false);
+    };
+
+    const handleSend = () => {
+        axios.get(`http://localhost:8080/api/auth/forgot_password/${recoverEmail}`).then(r => {
+            console.log(r.data);
+            setIsEmailSent(true);
+        }).catch((e) => {
+            console.log(e)
+        })
+    };
+
     return (
         <Formik initialValues={initialValues}
                 validationSchema={Yup.object({
@@ -95,20 +189,29 @@ const LoginForm = () => {
                                 <ModalHeader>GET PASSWORD</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody>
-                                    <FormControl isRequired>
-                                        <FormLabel>Email</FormLabel>
-                                        <Input placeholder='Enter Email' />
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel>Verification</FormLabel>
-                                        <Input placeholder='Confirmation code has been sent to email' />
-                                    </FormControl>
-                                </ModalBody>
+                                    { isEmailSent ? (
+                                        <>
+                                            <p>Email has been sent!</p>
+                                        </>
+                                        ) : (
+                                            <>
+                                                <FormControl isRequired>
+                                                    <FormLabel>Email</FormLabel>
+                                                    <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
+                                                </FormControl>
+                                            </>
+                                        )
+                                    }
 
+                                </ModalBody>
                                 <ModalFooter>
-                                    <Button colorScheme='blue' mr={3}>
-                                        Submit
-                                    </Button>
+                                    {!isEmailSent ? (
+                                        <Button colorScheme='blue' mr={3} onClick={handleSend}>
+                                            Submit
+                                        </Button>
+                                    ) : (
+                                        <ModalCloseButton />
+                                    )}
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
@@ -123,12 +226,7 @@ const LoginForm = () => {
 
                                     <MDBBtn outline rounded className='mb-3 w-100' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={credentialResponse => {
-                                                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
-                                                console.log(credentialResponseDecoded);
-                                                navigate("/home");
-                                                window.location.reload();
-                                            }}
+                                            onSuccess={handleGoogleLogin}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}

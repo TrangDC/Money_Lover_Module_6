@@ -44,15 +44,18 @@ function UploadImage() {
         })
     }, [])
    return (
-    <div className="App">
-      <input type="file" onChange={(e) => {setImageUpload((e.target.files[0]))}}/>
-        <button onClick={uploadImage}> Upload Image</button>
-
+    <div className="App" style={{display: "flex"}}>
         <div>
             {imageList.map((url, index) => {
-                    return <img src={url}/>
+                return <img src={url}/>
             })}
         </div>
+
+        <div style={{margin: "50px 20px"}}>
+            <input type="file" onChange={(e) => {setImageUpload((e.target.files[0]))}}/>
+            <button onClick={uploadImage} type="button" className="btn btn-primary" data-mdb-ripple-init>Upload Image</button>
+        </div>
+
     </div>
 
   );

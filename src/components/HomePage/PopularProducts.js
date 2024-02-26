@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Link} from "react-router-dom";
+import {ThemeContext} from "../../layout/ThemeDark-Light/ThemeContext";
 
 const PopularProducts = () => {
 
@@ -47,13 +48,13 @@ const PopularProducts = () => {
             product_stock: 453
         }
     ]
-
+    const { isDarkMode } = useContext(ThemeContext);
 
     return (
         <div>
-            <div className='bg-white px-4 pt-3
+            <div className='px-4 pt-3
                             pb-4 rounded-sm border
-                            border-gray-200 w-[20rem]'
+                            border-gray-200 w-[20rem]' style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff'}}
             >
                 <strong>Popular Products</strong>
                 <div className='mt-4 flex flex-col gap-3'>

@@ -16,18 +16,22 @@ import YupPassword from 'yup-password';
 import axios from "axios";
 import {FaApple, FaFacebook, FaGoogle} from "react-icons/fa";
 import {useToast} from "@chakra-ui/react";
+import {jwtDecode} from "jwt-decode";
+import {GoogleLogin} from "@react-oauth/google";
 YupPassword(Yup);
 
-const RegisterForm = () => {
+const RegisterForm = ({setIsLoading }) => {
     const [initialValues, setInitialValues] = useState({
         email: '',
         password: '',
     })
     const navigate = useNavigate();
     const toast = useToast()
+
     const handleSubmit = async (values, {setSubmitting}) => {
+        setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signup', values);
+            const response = await axios.post('http://localhost:8080/api/auth/signup', values)
             console.log(response.data);
             toast({
                 title: 'Register Successful',
@@ -36,9 +40,14 @@ const RegisterForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
+
+            await axios.get(`http://localhost:8080/api/auth/active_account/${values.email}`);
+
             setTimeout(() => {
-                navigate('/login');
-            }, 1500);
+                setIsLoading(false)
+                navigate('/active');
+            }, 1000);
+            ;
         } catch (error) {
             console.error('Error during login:', error);
             toast({
@@ -50,6 +59,42 @@ const RegisterForm = () => {
             });
         }
         setSubmitting(false);
+    };
+
+
+    const handleGoogleRegister = async (credentialResponse) => {
+        try {
+            const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+            console.log(credentialResponseDecoded);
+
+            const email = credentialResponseDecoded.email;
+
+            const password = generatePasswordFromEmail(email);
+
+            const response = await axios.post('http://localhost:8080/api/auth/signup', {
+                email: email,
+                password: password
+            });
+
+            console.log('Signup response:', response.data);
+
+            await axios.get(`http://localhost:8080/api/auth/active_account/${email}`);
+
+            setTimeout(async () => {
+                await new Promise((resolve, reject) => {
+                    localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
+                    resolve();
+                });
+                navigate("/active");
+            }, 3000);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const generatePasswordFromEmail = (email) => {
+        const password = email.substring(0, email.indexOf('@'));
+        return password + '123456';
     };
 
     const SignupSchema = Yup.object().shape({
@@ -92,8 +137,12 @@ const RegisterForm = () => {
                                 <MDBCol col='10' md='6'>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
-                                        <FaGoogle className="mb-1" style={{ width: '20px', height: '20px', marginLeft: '-60px' }} />
-                                        <span className="social-text">Sign in with Gmail</span>
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleRegister}
+                                            onError={() => {
+                                                console.log('Login Failed');
+                                            }}
+                                        />
                                     </MDBBtn>
 
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg'>

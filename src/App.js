@@ -10,31 +10,43 @@ import WalletPage from "./components/UserPage/wallet/WalletPage";
 import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
+
 import CreateWallet from "./components/UserPage/wallet/CreateWallet";
+
+import {useState} from "react";
+import ChangePassword from "./components/UserPage/ChangePassword";
+import ActiveAccount from "./components/UserPage/ActiveAccount";
+import LoginForm from "./components/LoginPage/LoginForm";
+
 
 
 function App() {
+    const [isAuth, setIsAuth] = useState(false);
 
-    const user = window.localStorage.getItem('user');
-  return (
-    <div className="App">
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<Error />}></Route>
-                <Route path='/auth/*' element={user?<Layout />:<Error />}>
-                    <Route path="home" element={user?<Dashboard />:<Error />}/>
-                    <Route path="wallets" element={user?<WalletPage />:<Error />}/>
-                    <Route path="profile" element={user?<InformationUser />:<Error />}/>
-                </Route>
-                <Route path='/login' element={<LoginPage/>}/>
-                <Route path='/register' element={<RegisterPage/>}/>
-                <Route path='/upload' element={<UploadImage/>}/>
-                <Route path='/create' element={<CreateWallet/>}/>
-            </Routes>
-        </BrowserRouter>
+    const user = window.localStorage.getItem('user')
 
-    </div>
-  );
+    const handleLoginSuccess = () => {
+        setIsAuth(true);
+    };
+
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<Error />}></Route>
+                    <Route path='/auth/*' element={(isAuth || user)?<Layout />:<Error />}>
+                        <Route path="home" element={(isAuth || user)?<Dashboard />:<Error />}/>
+                        <Route path="wallets" element={(isAuth || user)?<WalletPage />:<Error />}/>
+                        <Route path="profile" element={(isAuth || user)?<InformationUser />:<Error />}/>
+                    </Route>
+                    <Route path='/login' element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
+                    <Route path='/register' element={<RegisterPage/>}/>
+                    <Route path='/upload' element={<UploadImage/>}/>
+                    <Route path='/active' element={<ActiveAccount/>}/>
+                    <Route path='/loginaa' element={<LoginForm/>}/>
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
-
 export default App;

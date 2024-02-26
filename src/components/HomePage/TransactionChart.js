@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
-
+import {ThemeContext} from "../../layout/ThemeDark-Light/ThemeContext";
 const TransactionChart = () => {
+    const { isDarkMode } = useContext(ThemeContext);
+
     return (
-        <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
+        <div className="h-[22rem] p-4 rounded-sm border border-200 flex flex-col flex-1" style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff'}}>
             <strong className="text-gray-700 font-medium">Transactions</strong>
-            <div className="mt-3 w-full flex-1 text-xs">
+            <div className="mt-3 w-full flex-1 text-xs" style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff'}}>
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         width={500}

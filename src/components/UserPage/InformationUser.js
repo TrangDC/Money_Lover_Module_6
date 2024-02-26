@@ -11,9 +11,14 @@ import {Link} from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
 import ManagerUserPage from "./ManagerUserPage";
+import Upimage from "../FireBase/Upimage";
 
 const InformationUser = () => {
     const [show, setShow] = useState(false);
+    const [showImg, setShowImg] = useState(false);
+
+    const handleShowImg = () => setShowImg(true);
+    const showImgClose = () => setShowImg(false);
 
     const [user, setUser] = useState({})
 
@@ -46,7 +51,7 @@ const InformationUser = () => {
                     </Link>
                 </ListGroup.Item>
 
-                <ListGroup.Item variant="secondary">  <p></p> </ListGroup.Item>
+                <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
 
                 <ListGroup.Item className="d-flex align-items-center">
                     <Link to="/auth/wallets" className="text-dark d-flex align-items-center">
@@ -72,6 +77,7 @@ const InformationUser = () => {
 
             </ListGroup>
 
+
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -83,8 +89,10 @@ const InformationUser = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <div style={{textAlign: 'center'}} >
-                            <Image className= "mb-3" src="https://w.wallhaven.cc/full/m3/wallhaven-m3vp7y.jpg" roundedCircle style={{marginLeft: '195px',width: '60px', height: '60px'}} />
+                        <div style={{textAlign: 'center'}}>
+                            <Link onClick={handleShowImg}>
+                                <Image src={user.image} roundedCircle style={{width: '60px', height: '60px',margin: 'auto'}} className= "mb-3"/>
+                            </Link>
                             <h5>{user.username}</h5>
                             <h7>username@gmail.com</h7>
                         </div>
@@ -93,6 +101,22 @@ const InformationUser = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal
+                show={showImg}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Upimage></Upimage>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={showImgClose}>
                         Close
                     </Button>
                     <Button variant="primary" type="submit">
