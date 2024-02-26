@@ -167,7 +167,7 @@ public class AuthController {
         String newPassword = UUID.randomUUID().toString();
         user.setPassword(encoder.encode(newPassword));
         userRepository.save(user);
-        String emailContent = "Your current password: " + user.getPassword().;
+        String emailContent = "Your new password: " + newPassword;
         emailService.sendEmail(email, "Set up new password", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
