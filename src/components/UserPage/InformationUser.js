@@ -10,7 +10,6 @@ import { LuLogOut } from "react-icons/lu";
 import {Link, useNavigate} from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
-
 import Upimage from "../FireBase/Upimage";
 import axios from "axios";
 import {useToast} from "@chakra-ui/react";
@@ -144,13 +143,15 @@ const InformationUser = () => {
                 keyboard={false}
                 size="lg"
                 style={{height: "600px"}}
+
             >
-                    <div className="row g-0">
+                    <div className="row g-0" >
                         <div
                             className="col-md-4 gradient-custom text-center text-white"
                             style={{
                                 borderTopLeftRadius: ".5rem",
-                                borderBottomLeftRadius: ".5rem"
+                                borderBottomLeftRadius: ".5rem",
+                                backgroundColor: "#25A55F"
                             }}
                         >
                             <Link onClick={handleShowImg}>

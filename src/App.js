@@ -11,7 +11,7 @@ import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
 import {useState} from "react";
-import Profile from "./components/UserPage/profile/Profile";
+
 
 
 function App() {
@@ -36,7 +36,6 @@ function App() {
                     <Route path='/login' element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
-                    <Route path='/profile' element={<Profile/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
