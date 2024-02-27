@@ -1,12 +1,12 @@
-package com.example.money_lover_backend.models;
+package com.example.money_lover_backend.models.category;
 
+import com.example.money_lover_backend.models.Transaction;
+import com.example.money_lover_backend.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -28,6 +28,6 @@ public class Category {
     private List<Transaction> transactions;
 
     @Enumerated(EnumType.STRING)
-    private CategoryType type;
+    private Type type;
 
 }

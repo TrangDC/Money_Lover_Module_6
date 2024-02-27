@@ -1,5 +1,6 @@
-package com.example.money_lover_backend.models;
+package com.example.money_lover_backend.models.category;
 
+import com.example.money_lover_backend.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,12 +15,8 @@ public class DefaultCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private CategoryType type;
+    private Type type;
 }

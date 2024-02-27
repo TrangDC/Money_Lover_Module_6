@@ -1,4 +1,4 @@
-package com.example.money_lover_backend.services.impl;
+package com.example.money_lover_backend.services;
 
-public class DefaultCategoryService {
+public interface IDefaultCategoryService {
 }
