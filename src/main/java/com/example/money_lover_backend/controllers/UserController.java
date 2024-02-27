@@ -4,6 +4,9 @@ import com.example.money_lover_backend.dto.UserImage;
 import com.example.money_lover_backend.enums.ERole;
 import com.example.money_lover_backend.models.Role;
 import com.example.money_lover_backend.models.User;
+import com.example.money_lover_backend.payload.request.ChangePassword;
+import com.example.money_lover_backend.payload.request.EditUser;
+import com.example.money_lover_backend.payload.response.MessageResponse;
 import com.example.money_lover_backend.repositories.RoleRepository;
 import com.example.money_lover_backend.repositories.UserRepository;
 import com.example.money_lover_backend.services.IUserService;
@@ -56,21 +59,21 @@ public class UserController {
 
     @PutMapping("/{id}")
 //    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody EditUser editUser) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        user.setId(userOptional.get().getId());
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setImage(userOptional.get().getImage());
-        user.setActive(true);
-
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        Set<Role> rolesSet = new HashSet<Role>();
-        rolesSet.add(userRole);
-        user.setRoles(rolesSet);
+        String email = editUser.getEmail();
+        if(userRepository.existsByEmail(email)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        User user = userOptional.get();
+        user.setEmail(editUser.getEmail());
+        user.setName(editUser.getName());
+        user.setUsername(editUser.getUsername());
         return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
     }
 
@@ -95,5 +98,18 @@ public class UserController {
             return new ResponseEntity<>("Active successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
+    }
+    @PostMapping("/{id}/change_password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword, @PathVariable Long id) {
+        //
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String userPassword = userOptional.get().getDecode_password();
+        if (userPassword == changePassword.getOldPassword() && changePassword.getNewPassword() == changePassword.getComfirmPassword()) {
+            return new ResponseEntity<>("changePassword succes !", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
