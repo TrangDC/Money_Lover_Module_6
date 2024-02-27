@@ -11,6 +11,7 @@ import {useToast} from "@chakra-ui/react";
 import {GiWallet} from "react-icons/gi";
 import {FaPiggyBank} from "react-icons/fa6";
 import {GiPiggyBank} from "react-icons/gi";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const WalletPage = () => {
     const [show, setShow] = useState(false);
@@ -211,10 +212,8 @@ const WalletPage = () => {
                                   className="text-green-400"/>
                         My Wallet
                     </h4>
-
-                    <Button variant="success" style={{marginLeft: 'auto'}} className="m-2" onClick={handleShowC}>Create
-                        New Wallet</Button>
-
+                    <MdCreateNewFolder onClick={handleShowC}  style={{width: '40px', height: '40px',marginRight: '-360px'}}
+                                       className="text-green-400"/>
                     <Form onSubmit={handleSearch} style={{marginTop: '15px'}}>
                         <InputGroup className="mb-3">
                             <Form.Control
@@ -269,7 +268,8 @@ const WalletPage = () => {
                                     </td>
                                 </Link>
                                 <td style={{verticalAlign: 'middle'}}>
-                                    <GiPiggyBank onClick={() => handleShowM(wallet.id)} style={{width: '40px', height: '40px'}}
+                                    <GiPiggyBank onClick={() => handleShowM(wallet.id)}
+                                                 style={{width: '40px', height: '40px'}}
                                                  className="text-green-400"/>
                                 </td>
                             </tr>

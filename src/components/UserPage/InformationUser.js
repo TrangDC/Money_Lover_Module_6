@@ -12,6 +12,11 @@ import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
 import ManagerUserPage from "./ManagerUserPage";
 import Upimage from "../FireBase/Upimage";
+import { FaUserEdit } from "react-icons/fa";
+import { HiMiniWallet } from "react-icons/hi2";
+import { BiSolidCategory } from "react-icons/bi";
+import { RiLogoutBoxFill } from "react-icons/ri";
+import { BiLogOut } from "react-icons/bi";
 
 const InformationUser = () => {
     const [show, setShow] = useState(false);
@@ -33,7 +38,7 @@ const InformationUser = () => {
     }, []);
 
     return (
-        <div>
+        <div style={{textAlign: 'center'}}>
             <Container>
                 <div style={{textAlign: 'center'}}>
                         <Image src={user.image} className= "mb-3" roundedCircle style={{width: '70px', height: '70px',margin: 'auto'}} />
@@ -41,13 +46,11 @@ const InformationUser = () => {
                         <h7>{user.email}</h7>
                 </div>
             </Container>
-            <ListGroup style={{marginTop: '45px'}}>
+            <ListGroup style={{marginTop: '50px',width:'400px',height: '600px',margin: 'auto'}}>
                 <ListGroup.Item className="d-flex align-items-center">
-                    <Link onClick={handleShow} className="text-dark d-flex align-items-center">
-                        <MDBTypography className="d-flex align-items-center">
-                            <BsPersonFill className="mr-2" style={{ width: '30px', height: '30px' }} />
-                            <span style={{ fontWeight: 'bold' }} title='strong'>Account Management</span>
-                        </MDBTypography>
+                    <Link  onClick={handleShow} className="text-dark d-flex align-items-center">
+                        <FaUserEdit className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
+                        <span style={{fontWeight: 'bold'}}>Account Management</span>
                     </Link>
                 </ListGroup.Item>
 
@@ -55,23 +58,22 @@ const InformationUser = () => {
 
                 <ListGroup.Item className="d-flex align-items-center">
                     <Link to="/auth/wallets" className="text-dark d-flex align-items-center">
-                        <IoMdWallet className="mr-2" style={{ width: '25px', height: '25px' }} />
-                        <span>My Wallet</span>
+                        <HiMiniWallet className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
+                        <span style={{fontWeight: 'bold'}}>My Wallet</span>
                     </Link>
                 </ListGroup.Item>
-
+                <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
                 <ListGroup.Item className="d-flex align-items-center">
                     <Link to= "/auth/categories" className="text-dark d-flex align-items-center">
-                    <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
-                    <span> Group </span>
+                    <BiSolidCategory  className="mx-2 text-green-700" style={{width: '25px' ,height: '25px'}}/>
+                    <span style={{fontWeight: 'bold'}}> Group </span>
                     </Link>
                 </ListGroup.Item>
-
                 <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>
                     <ListGroup.Item className="d-flex align-items-center">
                         <Link className="text-dark d-flex align-items-center">
-                        <LuLogOut className="mr-2" style={{width: '25px' ,height: '25px'}}/>
-                        <span>Logout</span>
+                        <BiLogOut  className="mx-2 text-green-700" style={{width: '25px' ,height: '25px'}}/>
+                        <span style={{fontWeight: 'bold'}}>Logout</span>
                         </Link>
                 </ListGroup.Item>
 
