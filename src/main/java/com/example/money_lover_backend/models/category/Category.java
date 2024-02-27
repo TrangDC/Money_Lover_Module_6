@@ -7,28 +7,27 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Transaction {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transaction_id")
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String name;
 
-    private BigDecimal amount;
-    private String note;
-    private Timestamp transactionDate;
+    @OneToMany(mappedBy = "category")
+    private List<Transaction> transactions;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
 
 }
-

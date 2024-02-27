@@ -61,8 +61,10 @@ public class User {
     @Setter
     private String activeToken;
 
-
     private boolean isActive;
+
+    @OneToMany(mappedBy = "user")
+    private List<Category> defaultCategories;
 
     public boolean isActive() {
         return isActive;

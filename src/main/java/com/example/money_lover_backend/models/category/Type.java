@@ -1,4 +1,6 @@
 package com.example.money_lover_backend.models;
 
-public class Category {
+public enum CategoryType {
+    INCOME,
+    EXPENSE
 }
