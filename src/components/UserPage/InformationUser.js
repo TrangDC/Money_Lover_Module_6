@@ -35,7 +35,16 @@ const InformationUser = () => {
     const showImgClose = () => setShowImg(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
+    const handleSubmit = () => {
+        axios
+            .put('http://localhost:8080/api/users/' + users.id, editUser)
+            .then((res) => {
+                console.log("update success")
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     useEffect(() => {
         const userdata = localStorage.getItem("user");
@@ -46,6 +55,7 @@ const InformationUser = () => {
     const [images, setImage] = useState("")
 
     const users = JSON.parse(localStorage.getItem('user'));
+
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + users.id)
@@ -148,18 +158,34 @@ const InformationUser = () => {
                                         <MDBInput label='Enter email' id='form1' type='text'
                                                   value={editUser.email} name='email'
                                                   onChange={(event) => {
-                                                      setEditUser({...editUser, [event.target.name]: event.target.value})
+                                                  setEditUser({...editUser, [event.target.name]: event.target.value})
                                         }}/>
 
                                     </div>
                                     <div className="col-6 mb-3">
                                         <h6>Name</h6>
-                                        <MDBInput label='Enter name' id='form1' type='text' />
+                                        <MDBInput label='Enter name' id='form1' type='text'
+                                                  value={editUser.name} name='name'
+                                                  onChange={(event) => {
+                                                      setEditUser({
+                                                          ...editUser,
+                                                          [event.target.name]: event.target.value
+                                                      })
+                                                  }}
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-6 mb-3">
                                     <h6>User Name</h6>
-                                    <MDBInput label='User Name' id='form1' type='text' />
+                                    <MDBInput label='User Name' id='form1' type='text'
+                                              value={editUser.username} name='username'
+                                              onChange={(event) => {
+                                                  setEditUser({
+                                                      ...editUser,
+                                                      [event.target.name]: event.target.value
+                                                  })
+                                              }}
+                                    />
 
                                 </div>
                                 <div className="row pt-1">
@@ -167,7 +193,7 @@ const InformationUser = () => {
                                         <Button variant="secondary" onClick={handleClose}>
                                             Close
                                         </Button>
-                                        <Button variant="primary" type="submit">
+                                        <Button variant="primary" type="submit" onClick={handleSubmit}>
                                             Submit
                                         </Button>
                                     </Modal.Footer>
