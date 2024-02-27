@@ -3,17 +3,17 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import { BsPersonFill } from "react-icons/bs";
-import { MDBTypography } from 'mdb-react-ui-kit';
+import {MDBInput, MDBTypography} from 'mdb-react-ui-kit';
 import {IoMdArrowRoundBack, IoMdWallet} from "react-icons/io";
 import { FaLayerGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import {Link} from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
-import ManagerUserPage from "./ManagerUserPage";
+
 import Upimage from "../FireBase/Upimage";
 import axios from "axios";
-import Profile from "./profile/Profile";
+
 
 const InformationUser = () => {
     const [show, setShow] = useState(false);
@@ -93,15 +93,69 @@ const InformationUser = () => {
             </ListGroup>
 
 
+            <div onClick={handleShow}>
+                Account Management
+            </div>
             <Modal
                 show={show}
                 onHide={handleClose}
-                backdrop="static"
                 keyboard={false}
                 size="lg"
-
+                style={{height: "600px"}}
             >
-                <Profile></Profile>
+                    <div className="row g-0">
+                        <div
+                            className="col-md-4 gradient-custom text-center text-white"
+                            style={{
+                                borderTopLeftRadius: ".5rem",
+                                borderBottomLeftRadius: ".5rem"
+                            }}
+                        >
+                            <Link onClick={handleShowImg}>
+                                <Image src={images} alt="Avatar"
+                                       className="img-fluid my-5"
+                                       style={{ width: 80 ,
+                                           margin: "auto"}} />
+                            </Link>
+                            <h5>{user.username}</h5>
+                            <p>{user.email}</p>
+                            <i className="far fa-edit mb-5" />
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card-body p-4">
+                                <h3>Information</h3>
+                                <hr className="mt-0 mb-4" />
+                                <div className="row pt-1">
+                                    <div className="col-6 mb-3">
+                                        <h6>Email</h6>
+                                        <MDBInput label='Enter email' id='form1' type='text' />
+
+                                    </div>
+                                    <div className="col-6 mb-3">
+                                        <h6>Name</h6>
+                                        <MDBInput label='Enter name' id='form1' type='text' />
+                                    </div>
+                                </div>
+                                <div className="col-6 mb-3">
+                                    <h6>User Name</h6>
+                                    <MDBInput label='User Name' id='form1' type='text' />
+
+                                </div>
+                                <div className="row pt-1">
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose}>
+                                            Close
+                                        </Button>
+                                        <Button variant="primary" type="submit">
+                                            Submit
+                                        </Button>
+                                    </Modal.Footer>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 {/*<Modal.Header closeButton >*/}
                 {/*    <Modal.Title style={{marginLeft: '165px'}} >Edit Account</Modal.Title>*/}
                 {/*</Modal.Header>*/}
@@ -125,7 +179,9 @@ const InformationUser = () => {
                 {/*        Submit*/}
                 {/*    </Button>*/}
                 {/*</Modal.Footer>*/}
+
             </Modal>
+
             <Modal
                 show={showImg}
                 onHide={handleClose}

@@ -6,7 +6,7 @@ const Profile = () => {
         <div>
             <section className="vh-100" style={{ backgroundColor: "#f4f5f7" }}>
                 <div className="container py-5 h-100">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
+                    <div className="row d-flex justify-content-center align-items-center h-75">
                         <div className="col col-lg-12 mb-4 mb-lg-0">
                             <div className="card mb-3" style={{ borderRadius: ".5rem" }}>
                                 <div className="row g-0">

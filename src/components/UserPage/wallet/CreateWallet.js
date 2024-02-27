@@ -26,9 +26,6 @@ const CreateWallet = () => {
             })
             .catch(err => console.log(err));
     };
-
-
-
     return (
         <div>
             <Navbar className="bg-body-tertiary justify-content-between">
