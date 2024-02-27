@@ -8,9 +8,9 @@ import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Modal from 'react-bootstrap/Modal';
 import {useToast} from "@chakra-ui/react";
-import { GiWallet } from "react-icons/gi";
-import { FaPiggyBank } from "react-icons/fa6";
-import { GiPiggyBank } from "react-icons/gi";
+import {GiWallet} from "react-icons/gi";
+import {FaPiggyBank} from "react-icons/fa6";
+import {GiPiggyBank} from "react-icons/gi";
 
 const WalletPage = () => {
     const [show, setShow] = useState(false);
@@ -167,18 +167,18 @@ const WalletPage = () => {
 
     const [showM, setShowM] = useState(false);
     const handleCloseM = () => setShowM(false);
-    const handleShowM = () => setShowM(true);
+
+    const handleShowM = (walletId) => {
+        setSelectedWalletId(walletId);
+        setShowM(true);
+        const selectedWallet = wallets.find(wallet => wallet.id === walletId);
+        setEditWallet(selectedWallet);
+    };
+
     const handleSubmitM = (event) => {
         event.preventDefault();
-        // Lấy số tiền được nhập từ input
         const money = parseFloat(event.target.money.value);
-        // Cộng số tiền vào ví
-        const updatedWallet = {
-            ...editWallet,
-            balance: parseFloat(editWallet.balance) + money
-        };
-        axios
-            .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, updatedWallet)
+        axios.put(`http://localhost:8080/api/wallets/${selectedWalletId}/add-money`, {money: money})
             .then((res) => {
                 console.log(res.data);
                 handleCloseM();
@@ -200,17 +200,20 @@ const WalletPage = () => {
                 });
             });
     };
+
     return (
         <>
             <div className="flex flex-col gap-4">
                 <Navbar className="bg-body-tertiary justify-content-between">
 
-                    <h4 className="my-2" style={{ display: 'flex', alignItems: 'center', marginLeft: '30px' }}>
-                        <GiWallet style={{ marginRight: '10px',width: '40px', height: '40px' }} className="text-green-400"/>
+                    <h4 className="my-2" style={{display: 'flex', alignItems: 'center', marginLeft: '30px'}}>
+                        <GiWallet style={{marginRight: '10px', width: '40px', height: '40px'}}
+                                  className="text-green-400"/>
                         My Wallet
                     </h4>
 
-                    <Button variant="success" style={{marginLeft: 'auto'}} className="m-2" onClick={handleShowC}>Create New Wallet</Button>
+                    <Button variant="success" style={{marginLeft: 'auto'}} className="m-2" onClick={handleShowC}>Create
+                        New Wallet</Button>
 
                     <Form onSubmit={handleSearch} style={{marginTop: '15px'}}>
                         <InputGroup className="mb-3">
@@ -253,9 +256,10 @@ const WalletPage = () => {
                         </tr>
                         {wallets.map((wallet) => (
                             <tr style={{backgroundColor: 'white', border: '1px solid silver', height: '40px'}}>
-                                <Link className="text-dark" onClick={() => handleShow(wallet.id)} style={{display: 'flex', alignItems: 'center'}}>
+                                <Link className="text-dark" onClick={() => handleShow(wallet.id)}
+                                      style={{display: 'flex', alignItems: 'center'}}>
                                     <td className="rounded-full h-13 w-13 bg-green-500 flex items-center ">
-                                        <FaPiggyBank  style={{width: '40px', height: '40px'}} className="text-white"/>
+                                        <FaPiggyBank style={{width: '40px', height: '40px'}} className="text-white"/>
                                     </td>
                                     <td style={{width: 'calc(100% - 70px)', verticalAlign: 'middle'}}>
                                         <div>
@@ -264,9 +268,10 @@ const WalletPage = () => {
                                         </div>
                                     </td>
                                 </Link>
-                                    <td style={{verticalAlign: 'middle'}}>
-                                            <GiPiggyBank onClick={handleShowM} style={{width: '40px', height: '40px'}} className="text-green-400"/>
-                                    </td>
+                                <td style={{verticalAlign: 'middle'}}>
+                                    <GiPiggyBank onClick={() => handleShowM(wallet.id)} style={{width: '40px', height: '40px'}}
+                                                 className="text-green-400"/>
+                                </td>
                             </tr>
                         ))}
                         </tbody>
@@ -361,7 +366,9 @@ const WalletPage = () => {
                                         </Form.Group>
                                     </div>
                                     <div>
-                                        <img src="https://img.freepik.com/premium-vector/sack-money-big-pile-cash-money-icon-illustration-money-bag-flat-icon_385450-362.jpg" style={{width: '100px',height: '100px'}} />
+                                        <img
+                                            src="https://img.freepik.com/premium-vector/sack-money-big-pile-cash-money-icon-illustration-money-bag-flat-icon_385450-362.jpg"
+                                            style={{width: '100px', height: '100px'}}/>
                                     </div>
                                 </Modal.Body>
 
