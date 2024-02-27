@@ -197,7 +197,7 @@ const Header = () => {
 
                                     )}
                                 </Menu.Item>
-                                <Menu.Item>
+                                <Menu.Item onClick={handleChangePassword}>
                                     {({ active }) => (
                                         <div
                                             className={classNames(
@@ -207,10 +207,8 @@ const Header = () => {
                                                 'focus:bg-gray-200'
                                             )}
                                             >
-                                            <Link onClick={handleChangePassword}>Change Password</Link>
-
+                                          Change Password
                                         </div>
-
                                     )}
                                 </Menu.Item>
                                 <Menu.Item>
