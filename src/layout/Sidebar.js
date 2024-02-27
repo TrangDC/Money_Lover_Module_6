@@ -27,12 +27,12 @@ const Sidebar = () => {
             const user = JSON.parse(localStorage.getItem('user'));
             const accessToken = user.accessToken;
             console.log(user);
-            // await axios.post('http://localhost:8080/api/auth/logout', { token: accessToken })
-            //     .then((response) => {
-            //         localStorage.removeItem('user');
-            //         console.log('Response from server:', response.data);
-            //         navigate("/login");
-            //     });
+            await axios.post('http://localhost:8080/api/auth/logout', { token: accessToken })
+                .then((response) => {
+                    localStorage.removeItem('user');
+                    console.log('Response from server:', response.data);
+                    navigate("/login");
+                });
         } catch (error) {
             console.error('Error:', error);
         }

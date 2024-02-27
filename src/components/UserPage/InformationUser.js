@@ -7,12 +7,13 @@ import {MDBInput, MDBTypography} from 'mdb-react-ui-kit';
 import {IoMdArrowRoundBack, IoMdWallet} from "react-icons/io";
 import { FaLayerGroup } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
 
 import Upimage from "../FireBase/Upimage";
 import axios from "axios";
+import {useToast} from "@chakra-ui/react";
 
 
 const InformationUser = () => {
@@ -28,21 +29,35 @@ const InformationUser = () => {
     })
     const [user, setUser] = useState({})
 
-    const [containerUsers, setUsers] = useState([]);
-
 
     const handleShowImg = () => setShowImg(true);
     const showImgClose = () => setShowImg(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const toast = useToast();
     const handleSubmit = () => {
         axios
             .put('http://localhost:8080/api/users/' + users.id, editUser)
-            .then((res) => {
-                console.log("update success")
-            })
-            .catch((err) => {
-                console.log(err)
+            .then(res => {
+                toast({
+                    title: 'Update success!',
+                    description: 'You successfully update a information!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+                setTimeout(() => {
+                    handleClose();
+                }, 1000);
+            }).catch(err => {
+                toast({
+                    title: 'Update Failed',
+                    description: 'Error: Email is already in use!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             })
     }
 
@@ -77,8 +92,8 @@ const InformationUser = () => {
             <Container>
                 <div style={{textAlign: 'center'}}>
                     <Image src={images} className= "mb-3" roundedCircle style={{width: '70px', height: '70px',margin: 'auto'}} />
-                    <h5>{user.username}</h5>
-                    <h7>{user.email}</h7>
+                    <h5>{editUser.username}</h5>
+                    <h7>{editUser.email}</h7>
                 </div>
             </Container>
             <ListGroup style={{marginTop: '45px'}}>
