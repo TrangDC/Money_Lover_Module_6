@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {IoBagHandle, IoCart, IoPeople, IoPieChart} from "react-icons/io5";
 import {ThemeContext} from "../../layout/ThemeDark-Light/ThemeContext";
 import "./ToggleDarkLight.css"
+import { FaMoneyBill1Wave } from "react-icons/fa6";
 const DashboardStatsGrid = () => {
     const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
 
@@ -15,10 +16,10 @@ const DashboardStatsGrid = () => {
             <div className='flex gap-4 m-2' >
             <BoxWrapper className="flex-grow" >
                 <div className="rounded-full h-12 w-12 flex items-center justify-center bg-sky-500" >
-                    <IoBagHandle className="text-2xl text-white" />
+                    <FaMoneyBill1Wave  className="text-2xl text-white" />
                 </div>
                 <div className="pl-4" >
-                    <span className="text-sm text-gray-500 font-light">Total Sales</span>
+                    <span className="text-sm text-gray-500 font-light">Total Money</span>
                     <div className="flex items-center">
                         <strong className="text-xl text-gray-700 font-semibold">$54232</strong>
                         <span className="text-sm text-green-500 pl-2">+343</span>
@@ -49,18 +50,7 @@ const DashboardStatsGrid = () => {
                     </div>
                 </div>
             </BoxWrapper>
-            <BoxWrapper className="flex-grow">
-                <div className="rounded-full h-12 w-12 flex items-center justify-center bg-green-600">
-                    <IoCart className="text-2xl text-white" />
-                </div>
-                <div className="pl-4">
-                    <span className="text-sm text-gray-500 font-light">Total Orders</span>
-                    <div className="flex items-center">
-                        <strong className="text-xl text-gray-700 font-semibold">16432</strong>
-                        <span className="text-sm text-red-500 pl-2">-43</span>
-                    </div>
-                </div>
-            </BoxWrapper>
+
             </div>
 
         </div>

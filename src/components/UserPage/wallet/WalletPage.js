@@ -15,23 +15,25 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Input, useDisclosure, useToast,
+    ModalCloseButton, Input, useDisclosure, useToast, transform,
 } from '@chakra-ui/react'
 import {
     FormControl,
     FormLabel,
 } from '@chakra-ui/react'
+import { GiWallet } from "react-icons/gi";
 
 const WalletPage = () => {
     const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const handleClose = () => setShow(false);
     const handleShow = (walletId) => {
+        onOpen(onOpenE);
         setSelectedWalletId(walletId);
-        setShow(true);
         const selectedWallet = wallets.find(wallet => wallet.id === walletId);
         setEditWallet(selectedWallet);
     };
+
     const [wallets, setWallets] = useState([]);
     const [wallet, setWallet] = useState({
         name: '',
@@ -174,6 +176,9 @@ const WalletPage = () => {
             .catch((err) => console.error(err));
     };
 
+    //Modal edit wallet
+    const { isOpenE, onOpenE, onCloseE } = useDisclosure()
+
     return (
         <>
             <div className="flex flex-col gap-4">
@@ -225,11 +230,12 @@ const WalletPage = () => {
                         </tr>
                         {wallets.map((wallet) => (
                             <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
+
                                 <tr style={{ backgroundColor: 'white', border: '1px solid silver', height: '40px' }}>
-                                    <td style={{ verticalAlign: 'top' }}>
-                                        <CiWallet style={{ width: '40px', height: '40px', marginTop: '10px' }} />
+                                    <td className="rounded-full h-12 w-12 flex items-center bg-green-500" style={{marginTop: '18px',marginLeft: '10px'}}>
+                                        <GiWallet style={{ width: '50px', height: '50px'}} className="text-yellow-400" />
                                     </td>
-                                    <td style={{ width: '395px', marginTop: '-30px', verticalAlign: 'top' }}>
+                                    <td style={{ width: '395px', verticalAlign: 'top' }}>
                                         <div>
                                             <p>{wallet.name}</p>
                                             <p>+ {wallet.balance} đ</p>
@@ -240,40 +246,61 @@ const WalletPage = () => {
                         ))}
                         </tbody>
                     </Table>
+            {/*form edit*/}
+            {/*        <div>*/}
+            {/*            <Offcanvas show={show} onHide={handleClose} backdrop="static">*/}
+            {/*                <Offcanvas.Header closeButton>*/}
+            {/*                    <Offcanvas.Title>Wallet Details</Offcanvas.Title>*/}
+            {/*                </Offcanvas.Header>*/}
+            {/*                <Offcanvas.Body>*/}
+            {/*                    <Form>*/}
+            {/*                        <Form.Group className="mb-3" controlId="formGroupName">*/}
+            {/*                            <Form.Label>Name Wallet</Form.Label>*/}
+            {/*                            <Form.Control type="text"*/}
+            {/*                                          placeholder="Name Wallet"*/}
+            {/*                                          name="name"*/}
+            {/*                                          value={editWallet.name}*/}
+            {/*                                          onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />*/}
+            {/*                        </Form.Group>*/}
+            {/*                        <Form.Group className="mb-3" controlId="formGroupBalance">*/}
+            {/*                            <Form.Label>Total Money</Form.Label>*/}
+            {/*                            <Form.Control type="number"*/}
+            {/*                                          name="balance"*/}
+            {/*                                          placeholder="Money"*/}
+            {/*                                          value={editWallet.balance}*/}
+            {/*                                          onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />*/}
+            {/*                        </Form.Group>*/}
+            {/*                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>*/}
+            {/*                            <Button variant="dark" onClick={handleUpdate}>Edit</Button>*/}
+            {/*                            <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>*/}
+            {/*                        </div>*/}
+            {/*                    </Form>*/}
+            {/*                </Offcanvas.Body>*/}
 
-                    <div>
-                        <Offcanvas show={show} onHide={handleClose} backdrop="static">
-                            <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>Wallet Details</Offcanvas.Title>
-                            </Offcanvas.Header>
-                            <Offcanvas.Body>
-                                <Form>
-                                    <Form.Group className="mb-3" controlId="formGroupName">
-                                        <Form.Label>Name Wallet</Form.Label>
-                                        <Form.Control type="text"
-                                                      placeholder="Name Wallet"
-                                                      name="name"
-                                                      value={editWallet.name}
-                                                      onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formGroupBalance">
-                                        <Form.Label>Total Money</Form.Label>
-                                        <Form.Control type="number"
-                                                      name="balance"
-                                                      placeholder="Money"
-                                                      value={editWallet.balance}
-                                                      onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
-                                    </Form.Group>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                                        <Button variant="dark" onClick={handleUpdate}>Edit</Button>
-                                        <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
-                                    </div>
-                                </Form>
-                            </Offcanvas.Body>
+            {/*            </Offcanvas>*/}
+            {/*        </div>*/}
+            {/*thay bang modal*/}
+                    <Modal isOpen={isOpenE} onClose={onCloseE}>
+                        <ModalOverlay />
+                        <ModalContent>
+                            <ModalHeader>Modal Title</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
 
-                        </Offcanvas>
-                    </div>
+                            </ModalBody>
 
+                            <ModalFooter>
+                                <Button colorScheme='blue' mr={3} onClick={onCloseE}>
+                                    Close
+                                </Button>
+                                <Button variant='ghost'>Secondary Action</Button>
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+
+
+
+                    {/*form create*/}
                     <Modal isOpen={isOpen} onClose={onClose} >
                         <ModalOverlay />
                         <ModalContent>
