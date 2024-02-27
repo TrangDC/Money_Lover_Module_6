@@ -10,5 +10,5 @@ import lombok.*;
 public class ChangePassword {
     private String oldPassword;
     private String newPassword;
-    private String comfirmPassword;
+    private String confirmPassword;
 }
