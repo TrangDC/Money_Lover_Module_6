@@ -46,7 +46,7 @@ const InformationUser = () => {
                         <h7>{user.email}</h7>
                 </div>
             </Container>
-            <ListGroup style={{marginTop: '50px',width:'400px',height: '600px',margin: 'auto'}}>
+            <ListGroup style={{marginTop: '60px',width:'400px',height: '600px',margin: 'auto'}}>
                 <ListGroup.Item className="d-flex align-items-center">
                     <Link  onClick={handleShow} className="text-dark d-flex align-items-center">
                         <FaUserEdit className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
