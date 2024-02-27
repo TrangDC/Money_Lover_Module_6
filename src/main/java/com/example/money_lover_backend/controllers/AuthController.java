@@ -169,12 +169,8 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email not found!"));
         }
         User user = userOptional.get();
-//        String newPassword = UUID.randomUUID().toString();
-//        user.setPassword(encoder.encode(newPassword));
-//        userRepository.save(user);
-        String emailContent = "Your current password: " +
-                user.getDecode_password() + ". " +
-                "Use this to login again.";
+        String emailContent = "Your current password:  " +
+                user.getDecode_password();
         emailService.sendEmail(email, "Get forgotten password", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
@@ -208,9 +204,8 @@ public class AuthController {
 
         user.setActiveToken(token);
         userRepository.save(user);
-        String emailContent = "Your active code: " +
-                user.getActiveToken() + ". " +
-                "Use this to active your account.";
+        String emailContent = "Your active code:  " +
+                user.getActiveToken() + ". ";
         emailService.sendEmail(email, "Get auth code", emailContent);
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
