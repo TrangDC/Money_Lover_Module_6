@@ -66,7 +66,9 @@ public class UserController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         String email = editUser.getEmail();
-        if(userRepository.existsByEmail(email) ) {
+
+        String userEmail = userOptional.get().getEmail();
+        if(userRepository.existsByEmail(email) && !userEmail.equals(email)) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -100,16 +102,21 @@ public class UserController {
         }
         return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
-    @PostMapping("/{id}/change_password")
+    @PutMapping("/{id}/change_password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword, @PathVariable Long id) {
-        //
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        String oldPassword = changePassword.getOldPassword();
+        String newPassword = changePassword.getNewPassword();
+        String confirmPassword = changePassword.getConfirmPassword();
         String userPassword = userOptional.get().getDecode_password();
-        if (userPassword == changePassword.getOldPassword() && changePassword.getNewPassword() == changePassword.getComfirmPassword()) {
-            return new ResponseEntity<>("changePassword succes !", HttpStatus.OK);
+        if (userPassword.equals(oldPassword) && newPassword.equals(confirmPassword) && !userPassword.equals(newPassword)) {
+            userOptional.get().setDecode_password(newPassword);
+            userOptional.get().setPassword(encoder.encode(newPassword));
+            userRepository.save(userOptional.get());
+            return new ResponseEntity<>("changePassword success !", HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
