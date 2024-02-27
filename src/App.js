@@ -15,7 +15,6 @@ import ActiveAccount from "./components/UserPage/ActiveAccount";
 import LoginForm from "./components/LoginPage/LoginForm";
 
 
-
 function App() {
     const [isAuth, setIsAuth] = useState(false);
 
@@ -29,13 +28,14 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<Error />}></Route>
-                    <Route path='/auth/*' element={(isAuth || user)?<Layout />:<Error />}>
-                        <Route path="home" element={(isAuth || user)?<Dashboard />:<Error />}/>
-                        <Route path="wallets" element={(isAuth || user)?<WalletPage />:<Error />}/>
-                        <Route path="profile" element={(isAuth || user)?<InformationUser />:<Error />}/>
+                    <Route path='/' element={<Error/>}></Route>
+                    <Route path='/auth/*' element={(isAuth || user) ? <Layout/> : <Error/>}>
+                        <Route path="home" element={(isAuth || user) ? <Dashboard/> : <Error/>}/>
+                        <Route path="wallets" element={(isAuth || user) ? <WalletPage/> : <Error/>}/>
+                        <Route path="profile" element={(isAuth || user) ? <InformationUser/> : <Error/>}/>
                     </Route>
-                    <Route path='/login' element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
+                    <Route path='/login'
+                           element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
                     <Route path='/active' element={<ActiveAccount/>}/>
@@ -45,4 +45,5 @@ function App() {
         </div>
     );
 }
+
 export default App;

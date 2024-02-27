@@ -47,7 +47,7 @@ const RegisterForm = ({setIsLoading }) => {
                 setIsLoading(false)
                 navigate('/active');
             }, 1000);
-            ;
+
         } catch (error) {
             console.error('Error during login:', error);
             toast({
