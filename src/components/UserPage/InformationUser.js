@@ -19,11 +19,20 @@ const InformationUser = () => {
     const [show, setShow] = useState(false);
     const [showImg, setShowImg] = useState(false);
 
-    const handleShowImg = () => setShowImg(true);
-    const showImgClose = () => setShowImg(false);
 
+
+    const [editUser, setEditUser] = useState({
+        email: "",
+        name: "",
+        username: ""
+    })
     const [user, setUser] = useState({})
 
+    const [containerUsers, setUsers] = useState([]);
+
+
+    const handleShowImg = () => setShowImg(true);
+    const showImgClose = () => setShowImg(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -42,10 +51,16 @@ const InformationUser = () => {
         axios.get('http://localhost:8080/api/users/' + users.id)
             .then(res => {
                 console.log(res.data);
+                const userData = res.data;
+                setEditUser({
+                    email: userData.email,
+                    name: userData.name,
+                    username: userData.username
+                });
                 setImage(res.data.image);
             })
             .catch(err => console.error(err))
-    }, )
+    }, [users.id])
 
     return (
         <div>
@@ -96,6 +111,8 @@ const InformationUser = () => {
             <div onClick={handleShow}>
                 Account Management
             </div>
+
+{/*-------------- Edit user -----------*/}
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -128,7 +145,11 @@ const InformationUser = () => {
                                 <div className="row pt-1">
                                     <div className="col-6 mb-3">
                                         <h6>Email</h6>
-                                        <MDBInput label='Enter email' id='form1' type='text' />
+                                        <MDBInput label='Enter email' id='form1' type='text'
+                                                  value={editUser.email} name='email'
+                                                  onChange={(event) => {
+                                                      setEditUser({...editUser, [event.target.name]: event.target.value})
+                                        }}/>
 
                                     </div>
                                     <div className="col-6 mb-3">
@@ -155,33 +176,8 @@ const InformationUser = () => {
                             </div>
                         </div>
                     </div>
-
-                {/*<Modal.Header closeButton >*/}
-                {/*    <Modal.Title style={{marginLeft: '165px'}} >Edit Account</Modal.Title>*/}
-                {/*</Modal.Header>*/}
-                {/*<Modal.Body>*/}
-                {/*    <Container>*/}
-                {/*        <div style={{textAlign: 'center'}}>*/}
-                {/*            <Link onClick={handleShowImg}>*/}
-                {/*                <Image src={images} roundedCircle style={{margin: 'auto',width: '60px', height: '60px'}} />*/}
-                {/*            </Link>*/}
-                {/*            <h5 >{user.username}</h5>*/}
-                {/*            <h7 >{user.email}</h7>*/}
-                {/*        </div>*/}
-                {/*    </Container>*/}
-                {/*    <ManagerUserPage/>*/}
-                {/*</Modal.Body>*/}
-                {/*<Modal.Footer>*/}
-                {/*    <Button variant="secondary" onClick={handleClose}>*/}
-                {/*        Close*/}
-                {/*    </Button>*/}
-                {/*    <Button variant="primary" type="submit">*/}
-                {/*        Submit*/}
-                {/*    </Button>*/}
-                {/*</Modal.Footer>*/}
-
             </Modal>
-
+{/*-------------- upload img -----------------*/}
             <Modal
                 show={showImg}
                 onHide={handleClose}
