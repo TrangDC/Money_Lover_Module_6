@@ -1,10 +1,3 @@
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000; /* đảm bảo header hiển thị trên cùng */
-}
 .toggle-switch {
     width: 50px;
     height: 25px;
@@ -13,6 +6,7 @@
     position: relative;
     cursor: pointer;
 }
+
 .toggle-switch .slider {
     width: 20px;
     height: 20px;
@@ -30,4 +24,13 @@
 
 .toggle-switch.off .slider {
     transform: translateX(0);
+}
+.toggle-switch-container {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.flex-grow {
+    flex-grow: 1;
 }

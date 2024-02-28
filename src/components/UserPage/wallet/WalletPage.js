@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import Navbar from 'react-bootstrap/Navbar';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { CiWallet } from "react-icons/ci";
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton, Input, useDisclosure, useToast,
-} from '@chakra-ui/react'
-import {
-    FormControl,
-    FormLabel,
-} from '@chakra-ui/react'
+import Modal from 'react-bootstrap/Modal';
+import {useToast} from "@chakra-ui/react";
+import {GiWallet} from "react-icons/gi";
+import {FaPiggyBank} from "react-icons/fa6";
+import {GiPiggyBank} from "react-icons/gi";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const WalletPage = () => {
     const [show, setShow] = useState(false);
@@ -32,6 +23,7 @@ const WalletPage = () => {
         const selectedWallet = wallets.find(wallet => wallet.id === walletId);
         setEditWallet(selectedWallet);
     };
+
     const [wallets, setWallets] = useState([]);
     const [wallet, setWallet] = useState({
         name: '',
@@ -42,20 +34,21 @@ const WalletPage = () => {
         balance: ''
     });
     const [selectedWalletId, setSelectedWalletId] = useState(null);
-    const { id } = useParams();
+    const {id} = useParams();
     const toast = useToast()
-    //create wallet
+
     const navigate = useNavigate();
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const [user, setUser] = useState({})
+    const [showC, setShowC] = useState(false);
+    const handleCloseC = () => setShowC(false);
+    const handleShowC = () => setShowC(true);
     const handleSubmitC = (event) => {
         event.preventDefault();
         axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
             .then(res => {
                 console.log(res);
                 navigate("/auth/wallets")
-                onClose();
+                handleCloseC();
                 fetchWallets();
                 toast({
                     title: 'Create success!',
@@ -73,7 +66,7 @@ const WalletPage = () => {
                 isClosable: true,
             }));
     };
-//update wallet
+
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/wallets/${id}`)
@@ -110,7 +103,7 @@ const WalletPage = () => {
                 });
             });
     };
-    //xoa wallet
+
     const handleDelete = (id) => {
         const confirm = window.confirm('Are You Sure ?');
         if (confirm) {
@@ -136,8 +129,11 @@ const WalletPage = () => {
                 }));
         }
     };
-//hien thi danh sach
+
     useEffect(() => {
+        const userdata = localStorage.getItem("user");
+        console.log(JSON.parse(userdata));
+        setUser(JSON.parse(userdata))
         fetchWallets();
     }, []);
 
@@ -161,12 +157,49 @@ const WalletPage = () => {
         }
     };
     const fetchWallets = () => {
-        axios.get('http://localhost:8080/api/wallets')
-            .then(res => {
+        axios
+            .get(`http://localhost:8080/api/wallets`)
+            .then((res) => {
                 console.log(res);
                 setWallets(res.data);
             })
-            .catch(err => console.error(err))
+            .catch((err) => console.error(err));
+    };
+
+    const [showM, setShowM] = useState(false);
+    const handleCloseM = () => setShowM(false);
+
+    const handleShowM = (walletId) => {
+        setSelectedWalletId(walletId);
+        setShowM(true);
+        const selectedWallet = wallets.find(wallet => wallet.id === walletId);
+        setEditWallet(selectedWallet);
+    };
+
+    const handleSubmitM = (event) => {
+        event.preventDefault();
+        const money = parseFloat(event.target.money.value);
+        axios.put(`http://localhost:8080/api/wallets/${selectedWalletId}/add-money`, {money: money})
+            .then((res) => {
+                console.log(res.data);
+                handleCloseM();
+                fetchWallets();
+                toast({
+                    title: 'Money added successfully',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+                toast({
+                    title: 'Failed to add money',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            });
     };
 
     return (
@@ -174,12 +207,14 @@ const WalletPage = () => {
             <div className="flex flex-col gap-4">
                 <Navbar className="bg-body-tertiary justify-content-between">
 
-                    <h4 className="my-2" style={{marginLeft: '30px'}}>
+                    <h4 className="my-2" style={{display: 'flex', alignItems: 'center', marginLeft: '30px'}}>
+                        <GiWallet style={{marginRight: '10px', width: '40px', height: '40px'}}
+                                  className="text-green-400"/>
                         My Wallet
                     </h4>
-                    <Button variant="secondary" style={{marginLeft: 'auto'}} className="m-2" onClick={onOpen}>Create New Wallet</Button>
-
-                    <Form onSubmit={handleSearch}  style={{marginTop: '15px'}}>
+                    <MdCreateNewFolder onClick={handleShowC}  style={{width: '40px', height: '40px',marginRight: '-360px'}}
+                                       className="text-green-400"/>
+                    <Form onSubmit={handleSearch} style={{marginTop: '15px'}}>
                         <InputGroup className="mb-3">
                             <Form.Control
                                 value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
@@ -188,7 +223,7 @@ const WalletPage = () => {
                                 aria-label="Recipient's username"
                                 aria-describedby="basic-addon2"
                             />
-                            <Button type="submit" variant="secondary" id="button-addon2">
+                            <Button type="submit" variant="success" id="button-addon2">
                                 Search
                             </Button>
                         </InputGroup>
@@ -210,7 +245,7 @@ const WalletPage = () => {
                     >
                         <tbody>
                         <tr>
-                            <td colSpan={2} style={{
+                            <td colSpan={3} style={{
                                 backgroundColor: '#EEEEEE',
                                 fontSize: '14px',
                                 fontWeight: 'normal',
@@ -219,94 +254,136 @@ const WalletPage = () => {
                             </td>
                         </tr>
                         {wallets.map((wallet) => (
-                            <Link  className="text-dark" onClick={() => handleShow(wallet.id)}>
-                                <tr style={{ backgroundColor: 'white', border: '1px solid silver', height: '40px' }}>
-                                    <td style={{ verticalAlign: 'top' }}>
-                                        <CiWallet style={{ width: '40px', height: '40px', marginTop: '10px' }} />
+                            <tr style={{backgroundColor: 'white', border: '1px solid silver', height: '40px'}}>
+                                <Link className="text-dark" onClick={() => handleShow(wallet.id)}
+                                      style={{display: 'flex', alignItems: 'center'}}>
+                                    <td className="rounded-full h-13 w-13 bg-green-500 flex items-center ">
+                                        <FaPiggyBank style={{width: '40px', height: '40px'}} className="text-white"/>
                                     </td>
-                                    <td style={{ width: '395px', marginTop: '-30px', verticalAlign: 'top' }}>
+                                    <td style={{width: 'calc(100% - 70px)', verticalAlign: 'middle'}}>
                                         <div>
                                             <p>{wallet.name}</p>
                                             <p>+ {wallet.balance} đ</p>
                                         </div>
                                     </td>
-                                </tr>
-                            </Link>
+                                </Link>
+                                <td style={{verticalAlign: 'middle'}}>
+                                    <GiPiggyBank onClick={() => handleShowM(wallet.id)}
+                                                 style={{width: '40px', height: '40px'}}
+                                                 className="text-green-400"/>
+                                </td>
+                            </tr>
                         ))}
                         </tbody>
                     </Table>
 
-                    <div>
-                        <Offcanvas show={show} onHide={handleClose} backdrop="static">
-                            <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>Wallet Details</Offcanvas.Title>
-                            </Offcanvas.Header>
-                            <Offcanvas.Body>
-                                <Form>
-                                    <Form.Group className="mb-3" controlId="formGroupName">
-                                        <Form.Label>Name Wallet</Form.Label>
-                                        <Form.Control type="text"
-                                                      placeholder="Name Wallet"
-                                                      name="name"
-                                                      value={editWallet.name}
-                                                      onChange={(e) => setEditWallet({ ...editWallet, name: e.target.value })} />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formGroupBalance">
-                                        <Form.Label>Total Money</Form.Label>
-                                        <Form.Control type="number"
-                                                      name="balance"
-                                                      placeholder="Money"
-                                                      value={editWallet.balance}
-                                                      onChange={(e) => setEditWallet({ ...editWallet, balance: e.target.value })} />
-                                    </Form.Group>
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                                        <Button variant="dark" onClick={handleUpdate}>Edit</Button>
-                                        <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
-                                    </div>
-                                </Form>
-                            </Offcanvas.Body>
-
-                        </Offcanvas>
-                    </div>
-
-                    <Modal isOpen={isOpen} onClose={onClose} >
-                        <ModalOverlay />
-                        <ModalContent>
-                            <form onSubmit={handleSubmitC}>
-                                <ModalHeader>CREATE WALLET</ModalHeader>
-                                <ModalCloseButton />
-                                <ModalBody>
-                                    <FormControl isRequired>
-                                        <FormLabel>Name Wallet</FormLabel>
-                                        <Input name='name'
-                                               className='form-control'
-                                               onChange={(e) =>
-                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
-                                               }
-                                               type="text" placeholder="Enter name" />
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel>Blance</FormLabel>
-                                        <Input name='balance'
-                                               className='form-control'
-                                               onChange={(e) =>
-                                                   setWallet({ ...wallet, [e.target.name]: e.target.value })
-                                               }
-                                               type="number" placeholder="Enter balance" />
-                                    </FormControl>
-                                </ModalBody>
-
-                                <ModalFooter>
-                                    <Button colorScheme='blue' mr={3} type="submit">
-                                        Create
-                                    </Button>
-                                </ModalFooter>
-                            </form>
-                        </ModalContent>
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Wallet Details</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form>
+                                <Form.Group className="mb-3" controlId="formGroupName">
+                                    <Form.Label>Name Wallet</Form.Label>
+                                    <Form.Control type="text"
+                                                  placeholder="Name Wallet"
+                                                  name="name"
+                                                  value={editWallet.name}
+                                                  onChange={(e) => setEditWallet({
+                                                      ...editWallet,
+                                                      name: e.target.value
+                                                  })}/>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formGroupBalance">
+                                    <Form.Label>Total Money</Form.Label>
+                                    <Form.Control type="number"
+                                                  name="balance"
+                                                  placeholder="Money"
+                                                  value={editWallet.balance}
+                                                  onChange={(e) => setEditWallet({
+                                                      ...editWallet,
+                                                      balance: e.target.value
+                                                  })}/>
+                                </Form.Group>
+                                <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                                    <Button variant="dark" onClick={handleUpdate}>Edit</Button>
+                                    <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
+                                </div>
+                            </Form>
+                        </Modal.Body>
                     </Modal>
 
-                </div>
 
+                    <Modal show={showC} onHide={handleCloseC}>
+                        <Form onSubmit={handleSubmitC}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Create Wallet</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+
+                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                    <Form.Label>Name Wallet</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter name"
+                                                  name='name'
+                                                  onChange={(e) =>
+                                                      setWallet({...wallet, [e.target.name]: e.target.value})
+                                                  }
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Label>Balance</Form.Label>
+                                    <Form.Control type="number" placeholder="Enter Banlance"
+                                                  name='balance'
+                                                  onChange={(e) =>
+                                                      setWallet({...wallet, [e.target.name]: e.target.value})
+                                                  }
+                                    />
+                                </Form.Group>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleCloseC}>
+                                    Close
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    Submit
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
+
+                    <Modal show={showM} onHide={handleCloseM}>
+                        <Modal.Body>
+                            <Form onSubmit={handleSubmitM}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>More Money</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body style={{display: 'flex', alignItems: 'center'}}>
+                                    <div style={{flex: '1'}}>
+                                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                                            <Form.Label>Money</Form.Label>
+                                            <Form.Control type="number" placeholder="Enter money" name='money'/>
+                                        </Form.Group>
+                                    </div>
+                                    <div>
+                                        <img
+                                            src="https://img.freepik.com/premium-vector/sack-money-big-pile-cash-money-icon-illustration-money-bag-flat-icon_385450-362.jpg"
+                                            style={{width: '100px', height: '100px'}}/>
+                                    </div>
+                                </Modal.Body>
+
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={handleCloseM}>
+                                        Close
+                                    </Button>
+                                    <Button variant="primary" type="submit">
+                                        Submit
+                                    </Button>
+                                </Modal.Footer>
+                            </Form>
+                        </Modal.Body>
+                    </Modal>
+                </div>
             </div>
         </>
     );

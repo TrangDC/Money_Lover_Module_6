@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {FcBullish} from "react-icons/fc";
 import {DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS} from "../services/lib/consts";
 import {Link, useLocation, useNavigate} from "react-router-dom";
@@ -19,7 +19,6 @@ const Sidebar = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
 
     const handleLogout = async () => {
         try {
@@ -42,40 +41,43 @@ const Sidebar = () => {
 
     return (
         <div className="flex flex-col bg-green-400 w-60 p-3">
-            <div className='flex items-center gap-2 px-1 py-3'>
-                <FcBullish fontSize={24}/>
-                <span className='text-neutral-900 text-lg'>Money Lover</span>
-            </div>
-            <div className='flex-1'>
-                {DASHBOARD_SIDEBAR_LINKS.map((item) => (
-                    <SidebarLink key={item.index} item={item}/>
-                ))}
-            </div>
-            <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700'>
-                {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
-                    <SidebarLink key={item.index} item={item}/>
-                ))}
-                <div className={classNames('cursor-pointer text-white text-base',linkClasses)}>
-                    <Button onClick={handleShow}>
-                        <span><HiOutlineLogout /> Logout</span>
-                    </Button>
-                </div>
-            </div>
 
-            <Modal show={show} onHide={handleClose} >
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Logout</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure you want to logout?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Nope
-                    </Button>
-                    <Button variant="primary" onClick={handleLogout}>
-                        Yes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                <div className='flex items-center gap-2 px-1 py-3'>
+                    <FcBullish fontSize={24}/>
+                    <span className='text-neutral-900 text-lg'>Money Lover</span>
+                </div>
+                <div className='flex-1'>
+                    {DASHBOARD_SIDEBAR_LINKS.map((item) => (
+                        <SidebarLink key={item.index} item={item}/>
+                    ))}
+                </div>
+                <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700'>
+                    {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
+                        <SidebarLink key={item.index} item={item}/>
+                    ))}
+                    <div className={classNames('cursor-pointer text-white text-base',linkClasses)}>
+                        <Button onClick={handleShow}>
+                            <span><HiOutlineLogout /> Logout</span>
+                        </Button>
+                    </div>
+                </div>
+
+                <Modal show={show} onHide={handleClose} >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirm Logout</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure you want to logout?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Nope
+                        </Button>
+                        <Button variant="primary" onClick={handleLogout}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
 
         </div>
     );

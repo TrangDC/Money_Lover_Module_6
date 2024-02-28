@@ -20,7 +20,7 @@ import {jwtDecode} from "jwt-decode";
 import {GoogleLogin} from "@react-oauth/google";
 YupPassword(Yup);
 
-const RegisterForm = () => {
+const RegisterForm = ({setIsLoading }) => {
     const [initialValues, setInitialValues] = useState({
         email: '',
         password: '',
@@ -29,6 +29,7 @@ const RegisterForm = () => {
     const toast = useToast()
 
     const handleSubmit = async (values, {setSubmitting}) => {
+        setIsLoading(true);
         try {
             const response = await axios.post('http://localhost:8080/api/auth/signup', values)
             console.log(response.data);
@@ -39,9 +40,14 @@ const RegisterForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
+
+            await axios.get(`http://localhost:8080/api/auth/active_account/${values.email}`);
+
             setTimeout(() => {
-                navigate('/login');
-            }, 3000);
+                setIsLoading(false)
+                navigate('/active');
+            }, 1000);
+
         } catch (error) {
             console.error('Error during login:', error);
             toast({
@@ -51,6 +57,7 @@ const RegisterForm = () => {
                 duration: 3000,
                 isClosable: true,
             });
+            setIsLoading(false)
         }
         setSubmitting(false);
     };
@@ -65,8 +72,6 @@ const RegisterForm = () => {
 
             const password = generatePasswordFromEmail(email);
 
-
-
             const response = await axios.post('http://localhost:8080/api/auth/signup', {
                 email: email,
                 password: password
@@ -74,12 +79,14 @@ const RegisterForm = () => {
 
             console.log('Signup response:', response.data);
 
+            await axios.get(`http://localhost:8080/api/auth/active_account/${email}`);
+
             setTimeout(async () => {
                 await new Promise((resolve, reject) => {
                     localStorage.setItem('user', JSON.stringify(credentialResponseDecoded));
                     resolve();
                 });
-                navigate("/login");
+                navigate("/active");
             }, 3000);
         } catch (error) {
             console.error('Error:', error);

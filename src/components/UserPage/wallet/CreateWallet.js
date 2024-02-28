@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import Navbar from "react-bootstrap/Navbar";
 import {Link, useNavigate} from "react-router-dom";
-import {IoMdArrowRoundBack} from "react-icons/io";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import axios from "axios";
 import {Card} from "react-bootstrap";
+import axios from "axios";
 
 const CreateWallet = () => {
     //create wallet
@@ -28,16 +25,6 @@ const CreateWallet = () => {
     };
     return (
         <div>
-            <Navbar className="bg-body-tertiary justify-content-between">
-
-                <Link to="/user/wallet" className="text-dark" >
-                    <IoMdArrowRoundBack className="my-2" style={{marginLeft: '100px', width: '30px', height: '30px' }} />
-                </Link>
-                <h4 className="my-2" style={{marginRight: 'auto'}}>
-                    My Wallet
-                </h4>
-            </Navbar>
-
             <div  style={{
                 backgroundColor: '#DDDDDD',
                 width: '1400px',
