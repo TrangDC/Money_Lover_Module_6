@@ -3,7 +3,6 @@ import {FcBullish} from "react-icons/fc";
 import {DASHBOARD_SIDEBAR_BOTTOM_LINKS, DASHBOARD_SIDEBAR_LINKS} from "../services/lib/consts";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import classNames from "classnames";
-import {HiOutlineLogout} from "react-icons/hi";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -55,11 +54,12 @@ const Sidebar = () => {
                     {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
                         <SidebarLink key={item.index} item={item}/>
                     ))}
-                    <div className={classNames('cursor-pointer text-white text-base',linkClasses)}>
-                        <Button onClick={handleShow}>
-                            <span><HiOutlineLogout /> Logout</span>
-                        </Button>
-                    </div>
+                </div>
+                <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700' onClick={handleShow}>
+                    {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
+                        <SidebarLink key={item.index} item={item}/>
+                    ))}
+
                 </div>
 
                 <Modal show={show} onHide={handleClose} >
