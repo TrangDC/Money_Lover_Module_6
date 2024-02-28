@@ -67,15 +67,15 @@ const WalletPage = () => {
             }));
     };
 
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/api/wallets/${id}`)
-            .then((res) => {
-                setWallet(res.data);
-            })
-            .catch((err) => console.error(err));
-
-    }, [id]);
+    // useEffect(() => {
+    //     axios
+    //         .get(`http://localhost:8080/api/wallets/${id}`)
+    //         .then((res) => {
+    //             setWallet(res.data);
+    //         })
+    //         .catch((err) => console.error(err));
+    //
+    // }, [id]);
     const handleUpdate = () => {
         axios
             .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, editWallet)
@@ -131,37 +131,36 @@ const WalletPage = () => {
     };
 
     useEffect(() => {
-        const userdata = localStorage.getItem("user");
-        console.log(JSON.parse(userdata));
-        setUser(JSON.parse(userdata))
-        fetchWallets();
-    }, []);
+        const userdata = JSON.parse(localStorage.getItem("user"));
+        console.log(userdata);
+        setUser(userdata)
+        fetchWallets(userdata);
+    }, [user.id]);
 
     const handleSearch = (event) => {
-        event.preventDefault();
-
-        if (searchTerm) {
-            axios.get(`http://localhost:8080/api/wallets/searchWallet?nameWallet=${searchTerm}`)
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        } else {
-            axios.get('http://localhost:8080/api/wallets')
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        }
+        // event.preventDefault();
+        //
+        // if (searchTerm) {
+        //     axios.get(`http://localhost:8080/api/wallets/searchWallet?nameWallet=${searchTerm}`)
+        //         .then(res => {
+        //             console.log(res);
+        //             setWallets(res.data);
+        //         })
+        //         .catch(err => console.error(err));
+        // } else {
+        //     axios.get('http://localhost:8080/api/wallets')
+        //         .then(res => {
+        //             console.log(res);
+        //             setWallets(res.data);
+        //         })
+        //         .catch(err => console.error(err));
+        // }
     };
-    const fetchWallets = () => {
-        axios
-            .get(`http://localhost:8080/api/wallets`)
+    const fetchWallets = (userdata) => {
+        axios.get('http://localhost:8080/api/users/' + userdata.id)
             .then((res) => {
-                console.log(res);
-                setWallets(res.data);
+                console.log(res.data);
+                setWallets(res.data.wallets);
             })
             .catch((err) => console.error(err));
     };

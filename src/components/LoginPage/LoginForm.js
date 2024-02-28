@@ -72,13 +72,40 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
         setSubmitting(false);
     };
 
+
+    const verifyGoogleAccount = async (credentialResponse) => {
+        try {
+            // Lấy email từ credentialResponse của Google
+            const email = credentialResponse.email;
+
+            // Gửi email đến API của bạn thông qua yêu cầu POST
+            const response = await axios.post('http://localhost:8080/api/users/google', { email });
+
+            // Xử lý phản hồi từ API
+            if (response.status === 200) {
+                // Người dùng được tìm thấy, xử lý logic đăng nhập thành công
+                console.log('Đăng nhập thành công!');
+            } else {
+                // Người dùng không được tìm thấy, hiển thị thông báo lỗi cho người dùng
+                console.log('Người dùng không được tìm thấy!');
+            }
+        } catch (error) {
+            // Xử lý lỗi nếu có
+            console.error('Đã xảy ra lỗi:', error);
+        }
+    };
+
+
     const handleGoogleLogin = async (credentialResponse) => {
+
         try {
             const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
             console.log(credentialResponseDecoded);
 
             const email = credentialResponseDecoded.email;
             const password = generatePasswordFromEmail(email);
+            // const response1 = await axios.get('http://localhost:8080/api/users/google_login/' + email);
+            // console.log(response1.data)
 
             const response = await axios.post('http://localhost:8080/api/auth/signin', {
                 email: email,
@@ -226,7 +253,7 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
 
                                     <MDBBtn outline rounded className='mb-3 w-100' color='danger'>
                                         <GoogleLogin
-                                            onSuccess={handleGoogleLogin}
+                                            onSuccess={verifyGoogleAccount}
                                             onError={() => {
                                                 console.log('Login Failed');
                                             }}

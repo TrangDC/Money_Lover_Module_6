@@ -98,46 +98,44 @@ const InformationUser = () => {
                     <h7>{editUser.email}</h7>
                 </div>
             </Container>
-            <ListGroup style={{marginTop: '60px',width:'400px',height: '600px',margin: 'auto'}}>
-                <ListGroup.Item className="d-flex align-items-center">
-                    <Link  onClick={handleShow} className="text-dark d-flex align-items-center">
-                        <FaUserEdit className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
-                        <span style={{fontWeight: 'bold'}}>Account Management</span>
-                    </Link>
-                </ListGroup.Item>
+            <div style={{marginTop: '60px'}}>
+                <ListGroup style={{width:'400px',height: '600px',margin: 'auto'}}>
+                    <ListGroup.Item className="d-flex align-items-center">
+                        <Link  onClick={handleShow} className="text-dark d-flex align-items-center">
+                            <FaUserEdit className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
+                            <span style={{fontWeight: 'bold'}}>Account Management</span>
+                        </Link>
+                    </ListGroup.Item>
 
-                <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
+                    <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
 
-                <ListGroup.Item className="d-flex align-items-center">
-                    <Link to="/auth/wallets" className="text-dark d-flex align-items-center">
-                        <HiMiniWallet className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
-                        <span style={{fontWeight: 'bold'}}>My Wallet</span>
-                    </Link>
-                </ListGroup.Item>
-                <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
-                <ListGroup.Item className="d-flex align-items-center">
-                    <Link to= "/auth/categories" className="text-dark d-flex align-items-center">
+                    <ListGroup.Item className="d-flex align-items-center">
+                        <Link to="/auth/wallets" className="text-dark d-flex align-items-center">
+                            <HiMiniWallet className="mx-2 text-green-700" style={{ width: '25px', height: '25px' }} />
+                            <span style={{fontWeight: 'bold'}}>My Wallet</span>
+                        </Link>
+                    </ListGroup.Item>
+                    <ListGroup.Item variant="secondary"><p></p> </ListGroup.Item>
+                    <ListGroup.Item className="d-flex align-items-center">
+                        <Link to= "/auth/categories" className="text-dark d-flex align-items-center">
 
-                        <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
-                        <span> Group </span>
+                            <FaLayerGroup  className="mr-2" style={{width: '25px' ,height: '25px'}}/>
+                            <span> Group </span>
 
-                    </Link>
-                </ListGroup.Item>
-                <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>
+                        </Link>
+                    </ListGroup.Item>
+                    <ListGroup.Item variant="secondary"><p></p></ListGroup.Item>
 
-                <ListGroup.Item className="d-flex align-items-center">
-                    <Link className="text-dark d-flex align-items-center">
-                        <LuLogOut className="mr-2" style={{width: '25px' ,height: '25px'}}/>
-                        <span>Logout</span>
-                    </Link>
+                    <ListGroup.Item className="d-flex align-items-center">
+                        <Link className="text-dark d-flex align-items-center">
+                            <LuLogOut className="mr-2" style={{width: '25px' ,height: '25px'}}/>
+                            <span>Logout</span>
+                        </Link>
 
-                </ListGroup.Item>
+                    </ListGroup.Item>
 
-            </ListGroup>
+                </ListGroup>
 
-
-            <div onClick={handleShow}>
-                Account Management
             </div>
 
 

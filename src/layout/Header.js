@@ -36,6 +36,7 @@ const Header = () => {
                     isClosable: true,
                 });
                 setTimeout(() => {
+
                     navigate("/login")
                 }, 1000);
             }).catch(err => {
@@ -51,11 +52,13 @@ const Header = () => {
     const [image, setImage] = useState("")
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const [userLocal, setUserLocal] = useState([])
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
             .then(res => {
                 console.log(res.data);
+                setUserLocal(res.data);
                 setImage(res.data.image);
             })
             .catch(err => console.error(err))

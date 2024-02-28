@@ -76,6 +76,13 @@ const RegisterForm = ({setIsLoading }) => {
                 email: email,
                 password: password
             });
+            toast({
+                title: 'Register Successful',
+                description: 'Registered successfully, Log In now !',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
 
             console.log('Signup response:', response.data);
 
@@ -90,6 +97,13 @@ const RegisterForm = ({setIsLoading }) => {
             }, 3000);
         } catch (error) {
             console.error('Error:', error);
+            toast({
+                title: 'Register Failed',
+                description: 'Registration failed, register again !',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
         }
     };
 

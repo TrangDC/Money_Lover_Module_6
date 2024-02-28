@@ -7,7 +7,10 @@ import {
 } from 'mdb-react-ui-kit';
 import axios from "axios";
 import LoadingOverlay from 'react-loading-overlay';
+import {useNavigate} from "react-router-dom";
 const ActiveAccount = () => {
+
+    const navigate = useNavigate();
 
     const [authCode, setAuthCode] = useState('');
     const [activeSuccess, setActiveSuccess] = useState(false);
@@ -18,6 +21,7 @@ const ActiveAccount = () => {
     };
 
     const handleSubmit = async (event) => {
+
         event.preventDefault();
         setIsLoading(true);
         try {
@@ -28,7 +32,7 @@ const ActiveAccount = () => {
 
             setTimeout(() => {
                 setIsLoading(true);
-                window.location.replace('/login');
+                navigate('/login');
             }, 5000);
         } catch (error) {
             setIsLoading(true);

@@ -12,6 +12,7 @@ import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
 import {useState} from "react";
 import ActiveAccount from "./components/UserPage/ActiveAccount";
+import Transactions from "./TransactionsPage/Transactions";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
                     <Route path='/active' element={<ActiveAccount/>}/>
+                    <Route path='/transactions' element={<Transactions/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
