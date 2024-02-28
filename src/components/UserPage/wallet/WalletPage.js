@@ -34,7 +34,6 @@ const WalletPage = () => {
         balance: ''
     });
     const [selectedWalletId, setSelectedWalletId] = useState(null);
-    const {id} = useParams();
     const toast = useToast()
 
     const navigate = useNavigate();
@@ -67,15 +66,15 @@ const WalletPage = () => {
             }));
     };
 
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/api/wallets/${id}`)
-            .then((res) => {
-                setWallet(res.data);
-            })
-            .catch((err) => console.error(err));
-
-    }, [id]);
+    // useEffect(() => {
+    //     axios
+    //         .get(`http://localhost:8080/api/wallets/${id}`)
+    //         .then((res) => {
+    //             setWallet(res.data);
+    //         })
+    //         .catch((err) => console.error(err));
+    //
+    // }, [id]);
     const handleUpdate = () => {
         axios
             .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, editWallet)
@@ -131,45 +130,42 @@ const WalletPage = () => {
     };
 
     useEffect(() => {
-        const userdata = localStorage.getItem("user");
-        const parsedUserData = JSON.parse(userdata);
-        setUser(parsedUserData);
-        const wallets = parsedUserData.wallets;
-        console.log(parsedUserData);
-        console.log(typeof wallets);
-        fetchWallets();
-    }, []);
+        const userdata = JSON.parse(localStorage.getItem("user"));
+        console.log(userdata);
+        setUser(userdata)
+        fetchWallets(userdata);
+    }, [wallet]);
 
-    const fetchWallets = () => {
-        axios
-            .get(`http://localhost:8080/api/wallets`)
+    const handleSearch = (event) => {
+        // event.preventDefault();
+        //
+        // if (searchTerm) {
+        //     axios.get(`http://localhost:8080/api/wallets/searchWallet?nameWallet=${searchTerm}`)
+        //         .then(res => {
+        //             console.log(res);
+        //             setWallets(res.data);
+        //         })
+        //         .catch(err => console.error(err));
+        // } else {
+        //     axios.get('http://localhost:8080/api/wallets')
+        //         .then(res => {
+        //             console.log(res);
+        //             setWallets(res.data);
+        //         })
+        //         .catch(err => console.error(err));
+        // }
+    };
+    const fetchWallets = (userdata) => {
+        axios.get('http://localhost:8080/api/users/' + userdata.id)
             .then((res) => {
-                console.log(res);
-                setWallets(res.data);
+                console.log(res.data);
+
+                window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+                const wallets = JSON.parse(localStorage.getItem("wallets"));
+                setWallets(wallets);
             })
             .catch((err) => console.error(err));
     };
-
-    const handleSearch = (event) => {
-        event.preventDefault();
-
-        if (searchTerm) {
-            axios.get(`http://localhost:8080/api/wallets/searchWallet?nameWallet=${searchTerm}`)
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        } else {
-            axios.get('http://localhost:8080/api/wallets')
-                .then(res => {
-                    console.log(res);
-                    setWallets(res.data);
-                })
-                .catch(err => console.error(err));
-        }
-    };
-
 
     const [showM, setShowM] = useState(false);
     const handleCloseM = () => setShowM(false);
@@ -311,7 +307,7 @@ const WalletPage = () => {
                                                   })}/>
                                 </Form.Group>
                                 <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
-                                    <Button variant="dark" onClick={handleUpdate}>Edit</Button>
+                                    <Button variant="success" onClick={handleUpdate}>Edit</Button>
                                     <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
                                 </div>
                             </Form>
@@ -350,7 +346,7 @@ const WalletPage = () => {
                                 <Button variant="secondary" onClick={handleCloseC}>
                                     Close
                                 </Button>
-                                <Button variant="primary" type="submit">
+                                <Button variant="success" type="submit">
                                     Submit
                                 </Button>
                             </Modal.Footer>
@@ -381,7 +377,7 @@ const WalletPage = () => {
                                     <Button variant="secondary" onClick={handleCloseM}>
                                         Close
                                     </Button>
-                                    <Button variant="primary" type="submit">
+                                    <Button variant="success" type="submit">
                                         Submit
                                     </Button>
                                 </Modal.Footer>

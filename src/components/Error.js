@@ -11,7 +11,7 @@ const Error = () => {
                 <h2 style={{marginTop: '0', color: '#333', textAlign: 'center'}}>Vui Lòng Đăng Nhập Để Sử Dụng</h2>
                 <Link to="/login" style={{display: 'flex', justifyContent: 'center'}}>
                     <Button type="button" variant="outline-success">
-                        Đăng Nhập
+                        LogIn
                     </Button>
                 </Link>
             </div>
