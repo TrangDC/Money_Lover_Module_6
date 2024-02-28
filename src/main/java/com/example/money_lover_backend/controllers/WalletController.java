@@ -24,7 +24,17 @@ public class WalletController {
         return new ResponseEntity<>(walletService.saveWallet(wallet), HttpStatus.CREATED);
     }
 
-    @GetMapping("")
+    // API gọi danh sách ví của 1 user
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<Iterable<Wallet>> getAllWalletByUser(@PathVariable String user_id) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(wallets, HttpStatus.OK);
+    }
+
+    @GetMapping("/")
     public ResponseEntity<Iterable<Wallet>> getAllWallet() {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWallet();
         if (wallets.isEmpty()) {

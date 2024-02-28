@@ -18,4 +18,6 @@ public interface IWaletService{
     public String deleteWallet(Long id);
 
     public Wallet editWallet(Wallet wallet,Long id);
+
+    Iterable<Wallet> getAllWalletByUserId(String id);
 }
