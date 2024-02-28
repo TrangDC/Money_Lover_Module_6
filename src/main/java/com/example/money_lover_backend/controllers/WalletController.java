@@ -67,9 +67,9 @@ public class WalletController {
     }
 
     //API gọi 1 ví của 1 user
-    @GetMapping("/user/{user_id}/{wallet_id}")
+    @GetMapping("/user/{user_id}/details/{wallet_id}")
     public ResponseEntity<?> getOneWalletByUser(@PathVariable String user_id,
-                                                               @PathVariable String wallet_id) {
+                                                @PathVariable String wallet_id) {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
         if (wallets.isEmpty()) {
             return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
@@ -78,15 +78,56 @@ public class WalletController {
         if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) {
             return new ResponseEntity<Wallet>(walletOptional.get(), HttpStatus.OK);
         }
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
+        return new ResponseEntity<String>("Wallet not found", HttpStatus.NOT_FOUND);
+    }
+
+    //API tạo mới 1 ví cho 1 user
+    @PostMapping("/user/{user_id}/create")
+    public ResponseEntity<?> create(@PathVariable String user_id, @RequestBody Wallet wallet) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
+        }
+        wallets.add(wallet);
+        return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
     }
 
     //API edit thông tin 1 ví của 1 user
-
+    @PutMapping("/user/{user_id}/edit/{wallet_id}")
+    public ResponseEntity<?> edit(@PathVariable String user_id,
+                                  @PathVariable String wallet_id,
+                                  @RequestBody Wallet wallet) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Wallet> walletOptional = walletService.getWalletById(Long.valueOf(wallet_id));
+        if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) {
+            wallet.setId(walletOptional.get().getId());
+            return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+    }
 
     //APi thêm tiền vào ví cho 1 user
-
+    @PutMapping("/user/{user_id}/add_money/{wallet_id}/{amount}")
+    public ResponseEntity<?> addMoney(@PathVariable String user_id,
+                                      @PathVariable String wallet_id,
+                                      @PathVariable Long amount) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Wallet> walletOptional = walletService.getWalletById(Long.valueOf(wallet_id));
+        if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) {
+            Long balance = walletOptional.get().getBalance();
+            walletOptional.get().setBalance(amount + balance);
+            return new ResponseEntity<Wallet>(walletService.saveWallet(walletOptional.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+    }
 
     //API xóa ví của 1 user
+
 
 }
