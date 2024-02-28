@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,11 +90,18 @@ public class WalletController {
     @PostMapping("/user/{user_id}/create")
     public ResponseEntity<?> create(@PathVariable String user_id, @RequestBody Wallet wallet) {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
-        if (wallets.isEmpty()) {
-            return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
+        Optional<User> user = userRepository.findById(Long.valueOf(user_id));
+        if (user.isPresent()) {
+            if (wallets.isEmpty()) {
+                List<Wallet> newWallet = new ArrayList<Wallet>();
+                newWallet.add(wallet);
+                user.get().setWallets(newWallet);
+                return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
+            }
+            wallets.add(wallet);
+            return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
         }
-        wallets.add(wallet);
-        return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
+        return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
     }
 
     //API edit thông tin 1 ví của 1 user
