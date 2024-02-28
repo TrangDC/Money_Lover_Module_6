@@ -8,7 +8,9 @@ import Modal from 'react-bootstrap/Modal';
 import Button from "react-bootstrap/Button";
 import {useToast} from "@chakra-ui/react";
 import {MDBInput} from "mdb-react-ui-kit";
+import {Dropdown, Ripple, initMDB} from "mdb-ui-kit";
 
+initMDB({Dropdown, Ripple});
 const Header = () => {
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [show, setShow] = useState(false);
@@ -34,6 +36,7 @@ const Header = () => {
                     isClosable: true,
                 });
                 setTimeout(() => {
+
                     navigate("/login")
                 }, 1000);
             }).catch(err => {
@@ -49,31 +52,48 @@ const Header = () => {
     const [image, setImage] = useState("")
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const [userLocal, setUserLocal] = useState([])
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
             .then(res => {
                 console.log(res.data);
+                setUserLocal(res.data);
                 setImage(res.data.image);
             })
             .catch(err => console.error(err))
-    },)
-
-
+    }, [])
     const navigate = useNavigate();
 
     return (
         <div className='bg-white h-16 px-4 flex justify-between items-center
                         border-b border-gray-200'>
             <div className='relative'>
-                <HiOutlineSearch fontSize={20}
-                                 className='text-gray-400 absolute
-                                            top-1/2 -translate-y-1/2 left-3'/>
-                <input type='text'
-                       placeholder='Search your wallet...'
-                       className='text-sm focus:outline-none active:outline-none
-                                  h-10 w-[24rem] border border-gray-400 rounded-sm pr-4 pl-11'
-                />
+                {/*    <HiOutlineSearch fontSize={20}*/}
+                {/*                     className='text-gray-400 absolute*/}
+                {/*                            top-1/2 -translate-y-1/2 left-3'/>*/}
+                {/*    <input type='text'*/}
+                {/*           placeholder='Search your wallet...'*/}
+                {/*           className='text-sm focus:outline-none active:outline-none*/}
+                {/*                  h-10 w-[24rem] border border-gray-400 rounded-sm pr-4 pl-11'*/}
+                {/*    />*/}
+                <div className="btn-group">
+                    <button type="button" className="btn btn-success dropdown-toggle" data-mdb-dropdown-init
+                            data-mdb-ripple-init aria-expanded="false">
+                        Action
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Action</a></li>
+                        <li><a className="dropdown-item" href="#">Another action</a></li>
+                        <li><a className="dropdown-item" href="#">Something else here</a></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        {/*<li><Link to="/auth/wallets"><a class="dropdown-item">See more</a><Link/></li>*/}
+                        {/*/auth/wallets*/}
+                    </ul>
+                </div>
+
             </div>
             <div className='flex items-center gap-2 mr-2'>
 
@@ -157,7 +177,6 @@ const Header = () => {
                         <Menu.Button className="ml-2 inline-flex rounded-full
                                                 focus:outline-none focus:ring-2
                                                 focus:ring-neutral-400"
-
                         >
                             <span className="sr-only">Open user menu</span>
                             <div className='h-10 w-10 rounded-full bg-white
@@ -244,13 +263,14 @@ const Header = () => {
                 style={{height: "600px"}}
             >
                 <div className="flex ">
-                    <div className="flex-1" style={{margin: 'auto'}}>
-                        <img style={{margin: 'auto'}}
-                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn8H2SopcK0uWEabLJYoia07KZOdnUKXsuEViS5kIoug&s"
+                    <div className="flex-1">
+                        <img style={{marginTop: "130px"}} className="justify-center align-items-center"
+                             src="https://firebasestorage.googleapis.com/v0/b/upload-img-76277.appspot.com/o/images%2Fstatic%2F1200x630wa.png?alt=media&token=dce9577a-5ee2-416c-ad05-dde82e371407"
                              alt=""/>
                     </div>
-                    <div className="flex-1 w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+                    <div
+                        className="flex-1 w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             Change Password
                         </h2>
                         <div className="mt-4 space-y-4 lg:mt-5 md:space-y-5">
@@ -301,7 +321,7 @@ const Header = () => {
                             <div>
                                 <label
                                     htmlFor="confirm-password"
-                                    className="block mb-2 text-sm font-medium text-gray-900"
+                                    className="block mb-2 text-sm font-medium text-gray-900 "
                                 >
                                     Confirm password
                                 </label>
@@ -361,9 +381,9 @@ const Header = () => {
                             </Button>
                         </div>
                     </div>
+
                 </div>
             </Modal>
-
         </div>
     );
 };
