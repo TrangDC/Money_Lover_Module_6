@@ -10,7 +10,10 @@ import Button from "react-bootstrap/Button";
 import {useToast} from "@chakra-ui/react";
 import Image from "react-bootstrap/Image";
 import {MDBInput} from "mdb-react-ui-kit";
+// Initialization for ES Users
+import { Dropdown, Ripple, initMDB } from "mdb-ui-kit";
 
+initMDB({ Dropdown, Ripple });
 const Header = () => {
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [show, setShow] = useState(false);
@@ -69,14 +72,28 @@ const Header = () => {
         <div className='bg-white h-16 px-4 flex justify-between items-center
                         border-b border-gray-200'>
                 <div className='relative'>
-                    <HiOutlineSearch fontSize={20}
-                                     className='text-gray-400 absolute
-                                            top-1/2 -translate-y-1/2 left-3'/>
-                    <input type='text'
-                           placeholder='Search your wallet...'
-                           className='text-sm focus:outline-none active:outline-none
-                                  h-10 w-[24rem] border border-gray-400 rounded-sm pr-4 pl-11'
-                    />
+                {/*    <HiOutlineSearch fontSize={20}*/}
+                {/*                     className='text-gray-400 absolute*/}
+                {/*                            top-1/2 -translate-y-1/2 left-3'/>*/}
+                {/*    <input type='text'*/}
+                {/*           placeholder='Search your wallet...'*/}
+                {/*           className='text-sm focus:outline-none active:outline-none*/}
+                {/*                  h-10 w-[24rem] border border-gray-400 rounded-sm pr-4 pl-11'*/}
+                    {/*    />*/}
+                    <div className="btn-group">
+                        <button type="button" className="btn btn-success dropdown-toggle" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+                            Action
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><a className="dropdown-item" href="#">Action</a></li>
+                            <li><a className="dropdown-item" href="#">Another action</a></li>
+                            <li><a className="dropdown-item" href="#">Something else here</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            {/*<li><Link to="/auth/wallets"><a class="dropdown-item">See more</a><Link/></li>*/}
+                            {/*/auth/wallets*/}
+                        </ul>
+                    </div>
+
                 </div>
                 <div className='flex items-center gap-2 mr-2'>
 

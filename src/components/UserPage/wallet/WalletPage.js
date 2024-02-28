@@ -34,7 +34,6 @@ const WalletPage = () => {
         balance: ''
     });
     const [selectedWalletId, setSelectedWalletId] = useState(null);
-    const {id} = useParams();
     const toast = useToast()
 
     const navigate = useNavigate();
@@ -160,7 +159,8 @@ const WalletPage = () => {
         axios.get('http://localhost:8080/api/users/' + userdata.id)
             .then((res) => {
                 console.log(res.data);
-                setWallets(res.data.wallets);
+                // setWallets(res.data.wallets);
+                window.localStorage.setItem("wallets", res.data.wallets);
             })
             .catch((err) => console.error(err));
     };
@@ -252,27 +252,27 @@ const WalletPage = () => {
                                 <p style={{marginBottom: 0}}>Excluded from Total</p>
                             </td>
                         </tr>
-                        {wallets.map((wallet) => (
-                            <tr style={{backgroundColor: 'white', border: '1px solid silver', height: '40px'}}>
-                                <Link className="text-dark" onClick={() => handleShow(wallet.id)}
-                                      style={{display: 'flex', alignItems: 'center'}}>
-                                    <td className="rounded-full h-13 w-13 bg-green-500 flex items-center ">
-                                        <FaPiggyBank style={{width: '40px', height: '40px'}} className="text-white"/>
-                                    </td>
-                                    <td style={{width: 'calc(100% - 70px)', verticalAlign: 'middle'}}>
-                                        <div>
-                                            <p>{wallet.name}</p>
-                                            <p>+ {wallet.balance} đ</p>
-                                        </div>
-                                    </td>
-                                </Link>
-                                <td style={{verticalAlign: 'middle'}}>
-                                    <GiPiggyBank onClick={() => handleShowM(wallet.id)}
-                                                 style={{width: '40px', height: '40px'}}
-                                                 className="text-green-400"/>
-                                </td>
-                            </tr>
-                        ))}
+                        {/*{wallets.map((wallet) => (*/}
+                        {/*    <tr style={{backgroundColor: 'white', border: '1px solid silver', height: '40px'}}>*/}
+                        {/*        <Link className="text-dark" onClick={() => handleShow(wallet.id)}*/}
+                        {/*              style={{display: 'flex', alignItems: 'center'}}>*/}
+                        {/*            <td className="rounded-full h-13 w-13 bg-green-500 flex items-center ">*/}
+                        {/*                <FaPiggyBank style={{width: '40px', height: '40px'}} className="text-white"/>*/}
+                        {/*            </td>*/}
+                        {/*            <td style={{width: 'calc(100% - 70px)', verticalAlign: 'middle'}}>*/}
+                        {/*                <div>*/}
+                        {/*                    <p>{wallet.name}</p>*/}
+                        {/*                    <p>+ {wallet.balance} đ</p>*/}
+                        {/*                </div>*/}
+                        {/*            </td>*/}
+                        {/*        </Link>*/}
+                        {/*        <td style={{verticalAlign: 'middle'}}>*/}
+                        {/*            <GiPiggyBank onClick={() => handleShowM(wallet.id)}*/}
+                        {/*                         style={{width: '40px', height: '40px'}}*/}
+                        {/*                         className="text-green-400"/>*/}
+                        {/*        </td>*/}
+                        {/*    </tr>*/}
+                        {/*))}*/}
                         </tbody>
                     </Table>
 
