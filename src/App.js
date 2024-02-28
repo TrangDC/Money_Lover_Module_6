@@ -1,48 +1,61 @@
-import './App.css';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import RegisterPage from "./components/RegisterPage/RegisterPage";
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import LoginPage from "./components/LoginPage/LoginPage";
-import Layout from "./layout/Layout";
-import Dashboard from "./components/HomePage/Dashboard";
-import WalletPage from "./components/UserPage/wallet/WalletPage";
-import InformationUser from "./components/UserPage/InformationUser";
-import UploadImage from "./components/FireBase/Upimage";
-import Error from "./components/Error";
-import {useState} from "react";
-import ActiveAccount from "./components/UserPage/ActiveAccount";
-import LoginForm from "./components/LoginPage/LoginForm";
+import React, {useState} from 'react';
 
-function App() {
-    const [isAuth, setIsAuth] = useState(false);
+import {
+    MDBInput,
+    MDBCol,
+    MDBBtn
+} from 'mdb-react-ui-kit';
+import axios from "axios";
+const ActiveAccount = () => {
 
-    const user = window.localStorage.getItem('user')
+    const [authCode, setAuthCode] = useState('');
+    const [activeSuccess, setActiveSuccess] = useState(false);
 
-    const handleLoginSuccess = () => {
-        setIsAuth(true);
+    const handleAuthCodeChange = (event) => {
+        setAuthCode(event.target.value);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.get(`http://localhost:8080/api/users/process_active/${authCode}`);
+            console.log(response.data);
+
+            setActiveSuccess(true);
+
+            setTimeout(() => {
+                window.location.replace('/login');
+            }, 5000);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
-        <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path='/' element={<Error/>}></Route>
-                    <Route path='/auth/*' element={(isAuth || user) ? <Layout/> : <Error/>}>
-                        <Route path="home" element={(isAuth || user) ? <Dashboard/> : <Error/>}/>
-                        <Route path="wallets" element={(isAuth || user) ? <WalletPage/> : <Error/>}/>
-                        <Route path="profile" element={(isAuth || user) ? <InformationUser/> : <Error/>}/>
-                    </Route>
-                    <Route path='/login'
-                           element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
-                    <Route path='/register' element={<RegisterPage/>}/>
-                    <Route path='/upload' element={<UploadImage/>}/>
-                    <Route path='/active' element={<ActiveAccount/>}/>
-                    <Route path='/loginaa' element={<LoginForm/>}/>
-                </Routes>
-            </BrowserRouter>
-        </div>
-    );
-}
+        <div style={{ position: "relative", backgroundColor: "#98FB98", height: "100vh" }}>
+            <div style={{ position: "absolute", top: "45%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                <img src="https://note.moneylover.me/content/images/2017/05/Money-Lover---Logo.png" style={{ margin: "auto" }} />
+                {activeSuccess ? (
+                    <h5 style={{ textAlign: "center" }}>Active successful! Redirect to login...</h5>
+                ) : (
+                    <div style={{ width: "400px", height: "250px", backgroundColor: "#98FB98", margin: "auto" }}>
+                        <form style={{ position: "relative", textAlign: "center", margin: "auto" }} onSubmit={handleSubmit}>
+                            <h2 className= "my-2 text-green-600"  style={{ margin: "auto" }}>Wait a minute!</h2>
+                            <p className= "my-2"  style={{ margin: "auto" }}>An active code has been sent to your email !</p>
 
-export default App;
+                            <MDBCol col="12" md="12">
+                                <MDBInput style={{ backgroundColor: "white" }} className="mb-4" type="password" id="form1Example2" label="Enter Auth Code" value={authCode} onChange={handleAuthCodeChange} />
+                                <MDBBtn type="submit" class="btn btn-outline-success">
+                                    Submit
+                                </MDBBtn>
+                            </MDBCol>
+                        </form>
+                    </div>
+                )}
+            </div>
+        </div>
+
+    );
+};
+
+export default ActiveAccount;
