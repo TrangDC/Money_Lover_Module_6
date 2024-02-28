@@ -263,14 +263,13 @@ const Header = () => {
                 style={{height: "600px"}}
             >
                 <div className="flex ">
-                    <div className="flex-1">
-                        <img style={{marginTop: "130px"}} className="justify-center align-items-center"
-                             src="https://firebasestorage.googleapis.com/v0/b/upload-img-76277.appspot.com/o/images%2Fstatic%2F1200x630wa.png?alt=media&token=dce9577a-5ee2-416c-ad05-dde82e371407"
+                    <div className="flex-1" style={{margin: 'auto'}}>
+                        <img style={{margin: 'auto'}}
+                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn8H2SopcK0uWEabLJYoia07KZOdnUKXsuEViS5kIoug&s"
                              alt=""/>
                     </div>
-                    <div
-                        className="flex-1 w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    <div className="flex-1 w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                             Change Password
                         </h2>
                         <div className="mt-4 space-y-4 lg:mt-5 md:space-y-5">
@@ -321,7 +320,7 @@ const Header = () => {
                             <div>
                                 <label
                                     htmlFor="confirm-password"
-                                    className="block mb-2 text-sm font-medium text-gray-900 "
+                                    className="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                     Confirm password
                                 </label>
@@ -381,7 +380,6 @@ const Header = () => {
                             </Button>
                         </div>
                     </div>
-
                 </div>
             </Modal>
         </div>
