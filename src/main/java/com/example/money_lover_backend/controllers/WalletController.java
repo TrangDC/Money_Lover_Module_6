@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,16 +23,6 @@ public class WalletController {
     @PostMapping("/saveWallet")
     public ResponseEntity<Wallet> saveWallet(@RequestBody Wallet wallet) {
         return new ResponseEntity<>(walletService.saveWallet(wallet), HttpStatus.CREATED);
-    }
-
-    // API gọi danh sách ví của 1 user
-    @GetMapping("/user/{user_id}")
-    public ResponseEntity<Iterable<Wallet>> getAllWalletByUser(@PathVariable String user_id) {
-        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
-        if (wallets.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
     @GetMapping("/")
@@ -64,4 +55,38 @@ public class WalletController {
         List<Wallet> wallets = walletService.searchWalletByName(nameWallet);
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
+
+    // API gọi danh sách ví của 1 user
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<Iterable<Wallet>> getAllWalletByUser(@PathVariable String user_id) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(wallets, HttpStatus.OK);
+    }
+
+    //API gọi 1 ví của 1 user
+    @GetMapping("/user/{user_id}/{wallet_id}")
+    public ResponseEntity<?> getOneWalletByUser(@PathVariable String user_id,
+                                                               @PathVariable String wallet_id) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Wallet> walletOptional = walletService.getWalletById(Long.valueOf(wallet_id));
+        if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) {
+            return new ResponseEntity<Wallet>(walletOptional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(wallets, HttpStatus.OK);
+    }
+
+    //API edit thông tin 1 ví của 1 user
+
+
+    //APi thêm tiền vào ví cho 1 user
+
+
+    //API xóa ví của 1 user
+
 }
