@@ -16,7 +16,7 @@ const LoginPage = ({ handleLoginSuccess }) => {
                 active={isLoading}
                 spinner
                 text="Đang tải..."
-                className="overlay"
+                className="overlay h-screen w-screen"
             >
             <MDBContainer fluid>
                 <div className="p-5 bg-image" style={{background:"green", height: '350px'}}>

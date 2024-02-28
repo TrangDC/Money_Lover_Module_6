@@ -138,8 +138,8 @@ const InformationUser = () => {
                 style={{height: "600px"}}
 
             >
-                <Modal.Header closeButton >
-                    <Modal.Title style={{textAlign: 'center'}} >Edit Information</Modal.Title>
+                <Modal.Header closeButton>
+                        <Modal.Title>Edit Information</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="row g-0" >
@@ -202,20 +202,22 @@ const InformationUser = () => {
                                     />
 
                                 </div>
-                                <div className="row pt-1">
-                                    <Modal.Footer>
-                                        <Button variant="secondary" onClick={handleClose}>
-                                            Close
-                                        </Button>
-                                        <Button variant="primary" type="submit" onClick={handleSubmit}>
-                                            Submit
-                                        </Button>
-                                    </Modal.Footer>
-                                </div>
+
+
 
                             </div>
                         </div>
                     </div>
+
+                        <Modal.Footer>
+                            <Button variant="success" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="success" type="submit" onClick={handleSubmit}>
+                                Submit
+                            </Button>
+                        </Modal.Footer>
+
                 </Modal.Body>
             </Modal>
 

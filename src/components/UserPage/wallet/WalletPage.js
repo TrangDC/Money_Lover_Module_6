@@ -132,10 +132,23 @@ const WalletPage = () => {
 
     useEffect(() => {
         const userdata = localStorage.getItem("user");
-        console.log(JSON.parse(userdata));
-        setUser(JSON.parse(userdata))
+        const parsedUserData = JSON.parse(userdata);
+        setUser(parsedUserData);
+        const wallets = parsedUserData.wallets;
+        console.log(parsedUserData);
+        console.log(typeof wallets);
         fetchWallets();
     }, []);
+
+    const fetchWallets = () => {
+        axios
+            .get(`http://localhost:8080/api/wallets`)
+            .then((res) => {
+                console.log(res);
+                setWallets(res.data);
+            })
+            .catch((err) => console.error(err));
+    };
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -156,15 +169,7 @@ const WalletPage = () => {
                 .catch(err => console.error(err));
         }
     };
-    const fetchWallets = () => {
-        axios
-            .get(`http://localhost:8080/api/wallets`)
-            .then((res) => {
-                console.log(res);
-                setWallets(res.data);
-            })
-            .catch((err) => console.error(err));
-    };
+
 
     const [showM, setShowM] = useState(false);
     const handleCloseM = () => setShowM(false);
