@@ -68,11 +68,12 @@ const Sidebar = () => {
                         <Modal.Title>Confirm Logout</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>Are you sure you want to logout?</Modal.Body>
+                    <img src="https://web.moneylover.me/static/img/image-404.8f4ef91.png"/>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
                             Nope
                         </Button>
-                        <Button variant="primary" onClick={handleLogout}>
+                        <Button variant="success" onClick={handleLogout}>
                             Yes
                         </Button>
                     </Modal.Footer>
