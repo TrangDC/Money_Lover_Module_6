@@ -6,6 +6,7 @@ import classNames from "classnames";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { FaPiggyBank } from "react-icons/fa";
 
 const linkClasses =
     'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base'
@@ -42,8 +43,8 @@ const Sidebar = () => {
         <div className="flex flex-col bg-green-400 w-60 p-3">
 
                 <div className='flex items-center gap-2 px-1 py-3'>
-                    <FcBullish fontSize={24}/>
-                    <span className='text-neutral-900 text-lg'>Money Lover</span>
+                    <FaPiggyBank className="text-yellow-800 mb-2.5" fontSize={40}/>
+                    <span className='text-neutral-900 text-2xl font-semibold'>Money Lover</span>
                 </div>
                 <div className='flex-1'>
                     {DASHBOARD_SIDEBAR_LINKS.map((item) => (
