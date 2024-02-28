@@ -14,6 +14,8 @@ import Upimage from "../FireBase/Upimage";
 
 import axios from "axios";
 import {useToast} from "@chakra-ui/react";
+import {FaUserEdit} from "react-icons/fa";
+import {HiMiniWallet} from "react-icons/hi2";
 
 
 const InformationUser = () => {

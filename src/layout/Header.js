@@ -247,14 +247,14 @@ const Header = () => {
                         <img style={{marginTop: "130px"}} className="justify-center align-items-center" src="https://firebasestorage.googleapis.com/v0/b/upload-img-76277.appspot.com/o/images%2Fstatic%2F1200x630wa.png?alt=media&token=dce9577a-5ee2-416c-ad05-dde82e371407" alt=""/>
                     </div>
                     <div className="flex-1 w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             Change Password
                         </h2>
                         <div className="mt-4 space-y-4 lg:mt-5 md:space-y-5">
                             <div>
                                 <label
                                     htmlFor="email"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                     Old Password
                                 </label>
@@ -262,7 +262,7 @@ const Header = () => {
                                     type="password"
                                     name="oldPassword"
                                     id="password"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="••••••••"
                                     required=""
                                     onChange={(e) => {
@@ -276,7 +276,7 @@ const Header = () => {
                             <div>
                                 <label
                                     htmlFor="password"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="block mb-2 text-sm font-medium text-gray-900 "
                                 >
                                     New Password
                                 </label>
@@ -285,7 +285,7 @@ const Header = () => {
                                     name="newPassword"
                                     id="password"
                                     placeholder="••••••••"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required=""
                                     onChange={(e) => {
                                         setChangePassword({
@@ -298,7 +298,7 @@ const Header = () => {
                             <div>
                                 <label
                                     htmlFor="confirm-password"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="block mb-2 text-sm font-medium text-gray-900 "
                                 >
                                     Confirm password
                                 </label>
@@ -307,7 +307,7 @@ const Header = () => {
                                     name="confirmPassword"
                                     id="confirm-password"
                                     placeholder="••••••••"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required=""
                                     onChange={(e) => {
                                         setChangePassword({
