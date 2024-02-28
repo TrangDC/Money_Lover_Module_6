@@ -137,87 +137,199 @@ const InformationUser = () => {
             </div>
 
 {/*-------------- Edit user -----------*/}
+{/*            <Modal*/}
+{/*                show={show}*/}
+{/*                onHide={handleClose}*/}
+{/*                keyboard={false}*/}
+{/*                size="lg"*/}
+{/*                style={{height: "600px"}}*/}
+
+{/*            >*/}
+{/*                    <div className="row g-0" >*/}
+{/*                        <div*/}
+{/*                            className="col-md-4 gradient-custom text-center text-white"*/}
+{/*                            style={{*/}
+{/*                                borderTopLeftRadius: ".5rem",*/}
+{/*                                borderBottomLeftRadius: ".5rem",*/}
+{/*                                backgroundColor: "#25A55F"*/}
+{/*                            }}*/}
+{/*                        >*/}
+{/*                            <Link onClick={handleShowImg}>*/}
+{/*                                <Image src={images} alt="Avatar"*/}
+{/*                                       className="img-fluid my-5"*/}
+{/*                                       style={{ width: 80 ,*/}
+{/*                                           margin: "auto"}} />*/}
+{/*                            </Link>*/}
+{/*                            <h5>{user.username}</h5>*/}
+{/*                            <p>{user.email}</p>*/}
+{/*                            <i className="far fa-edit mb-5" />*/}
+{/*                        </div>*/}
+{/*                        <div className="col-md-8">*/}
+{/*                            <div className="card-body p-4">*/}
+{/*                                <h3>Information</h3>*/}
+{/*                                <hr className="mt-0 mb-4" />*/}
+{/*                                <div className="row pt-1">*/}
+{/*                                    <div className="col-6 mb-3">*/}
+{/*                                        <h6>Email</h6>*/}
+{/*                                        <MDBInput label='Enter email' id='form1' type='text'*/}
+{/*                                                  value={editUser.email} name='email'*/}
+{/*                                                  onChange={(event) => {*/}
+{/*                                                  setEditUser({...editUser, [event.target.name]: event.target.value})*/}
+{/*                                        }}/>*/}
+
+{/*                                    </div>*/}
+{/*                                    <div className="col-6 mb-3">*/}
+{/*                                        <h6>Name</h6>*/}
+{/*                                        <MDBInput label='Enter name' id='form1' type='text'*/}
+{/*                                                  value={editUser.name} name='name'*/}
+{/*                                                  onChange={(event) => {*/}
+{/*                                                      setEditUser({*/}
+{/*                                                          ...editUser,*/}
+{/*                                                          [event.target.name]: event.target.value*/}
+{/*                                                      })*/}
+{/*                                                  }}*/}
+{/*                                        />*/}
+{/*                                    </div>*/}
+{/*                                </div>*/}
+{/*                                <div className="col-6 mb-3">*/}
+{/*                                    <h6>User Name</h6>*/}
+{/*                                    <MDBInput label='User Name' id='form1' type='text'*/}
+{/*                                              value={editUser.username} name='username'*/}
+{/*                                              onChange={(event) => {*/}
+{/*                                                  setEditUser({*/}
+{/*                                                      ...editUser,*/}
+{/*                                                      [event.target.name]: event.target.value*/}
+{/*                                                  })*/}
+{/*                                              }}*/}
+{/*                                    />*/}
+
+{/*                                </div>*/}
+{/*                                <div className="row pt-1">*/}
+{/*                                    <Modal.Footer>*/}
+{/*                                        <Button variant="secondary" onClick={handleClose}>*/}
+{/*                                            Close*/}
+{/*                                        </Button>*/}
+{/*                                        <Button variant="primary" type="submit" onClick={handleSubmit}>*/}
+{/*                                            Submit*/}
+{/*                                        </Button>*/}
+{/*                                    </Modal.Footer>*/}
+{/*                                </div>*/}
+
+{/*                            </div>*/}
+{/*                        </div>*/}
+{/*                    </div>*/}
+{/*            </Modal>*/}
+
+            {/*------new edit user-------------*/}
             <Modal
                 show={show}
                 onHide={handleClose}
                 keyboard={false}
                 size="lg"
                 style={{height: "600px"}}
-
             >
-                    <div className="row g-0" >
-                        <div
-                            className="col-md-4 gradient-custom text-center text-white"
-                            style={{
-                                borderTopLeftRadius: ".5rem",
-                                borderBottomLeftRadius: ".5rem",
-                                backgroundColor: "#25A55F"
-                            }}
-                        >
-                            <Link onClick={handleShowImg}>
-                                <Image src={images} alt="Avatar"
-                                       className="img-fluid my-5"
-                                       style={{ width: 80 ,
-                                           margin: "auto"}} />
-                            </Link>
-                            <h5>{user.username}</h5>
-                            <p>{user.email}</p>
-                            <i className="far fa-edit mb-5" />
-                        </div>
-                        <div className="col-md-8">
-                            <div className="card-body p-4">
-                                <h3>Information</h3>
-                                <hr className="mt-0 mb-4" />
-                                <div className="row pt-1">
-                                    <div className="col-6 mb-3">
-                                        <h6>Email</h6>
-                                        <MDBInput label='Enter email' id='form1' type='text'
-                                                  value={editUser.email} name='email'
-                                                  onChange={(event) => {
-                                                  setEditUser({...editUser, [event.target.name]: event.target.value})
-                                        }}/>
-
-                                    </div>
-                                    <div className="col-6 mb-3">
-                                        <h6>Name</h6>
-                                        <MDBInput label='Enter name' id='form1' type='text'
-                                                  value={editUser.name} name='name'
-                                                  onChange={(event) => {
-                                                      setEditUser({
-                                                          ...editUser,
-                                                          [event.target.name]: event.target.value
-                                                      })
-                                                  }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-6 mb-3">
-                                    <h6>User Name</h6>
-                                    <MDBInput label='User Name' id='form1' type='text'
-                                              value={editUser.username} name='username'
-                                              onChange={(event) => {
-                                                  setEditUser({
-                                                      ...editUser,
-                                                      [event.target.name]: event.target.value
-                                                  })
-                                              }}
-                                    />
-
-                                </div>
-                                <div className="row pt-1">
-                                    <Modal.Footer>
-                                        <Button variant="secondary" onClick={handleClose}>
-                                            Close
-                                        </Button>
-                                        <Button variant="primary" type="submit" onClick={handleSubmit}>
-                                            Submit
-                                        </Button>
-                                    </Modal.Footer>
-                                </div>
+                <div className="flex ">
+                    <div className="flex-1">
+                        <img style={{marginTop: "130px"}} className="justify-center align-items-center" src="https://firebasestorage.googleapis.com/v0/b/upload-img-76277.appspot.com/o/images%2Fstatic%2F1200x630wa.png?alt=media&token=dce9577a-5ee2-416c-ad05-dde82e371407" alt=""/>
+                    </div>
+                    <div className="flex-1 w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+                        <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                            Update User
+                        </h2>
+                        <div className="mt-4 space-y-4 lg:mt-5 md:space-y-5">
+                            <div>
+                                <label
+                                    htmlFor="email"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Email
+                                </label>
+                                <MDBInput label='Enter email' id='form1' type='text'
+                                          value={editUser.email} name='email'
+                                          onChange={(event) => {
+                                              setEditUser({...editUser, [event.target.name]: event.target.value})
+                                          }}
+                                />
 
                             </div>
+                            <div>
+                                <label
+                                    htmlFor="password"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Name
+                                </label>
+                                <MDBInput label='Enter name' id='form1' type='text'
+                                          value={editUser.name} name='name'
+                                          onChange={(event) => {
+                                              setEditUser({
+                                                  ...editUser,
+                                                  [event.target.name]: event.target.value
+                                              })
+                                          }}
+                                />
+
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="confirm-password"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    User Name
+                                </label>
+                                <MDBInput label='User Name' id='form1' type='text'
+                                          value={editUser.username} name='username'
+                                          onChange={(event) => {
+                                              setEditUser({
+                                                  ...editUser,
+                                                  [event.target.name]: event.target.value
+                                              })
+                                          }}
+                                />
+                            </div>
+                            <div className="flex items-start">
+                                <div className="flex items-center h-5">
+                                    <input
+                                        id="newsletter"
+                                        aria-describedby="newsletter"
+                                        type="checkbox"
+                                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                                        required=""
+                                    />
+                                </div>
+                                <div className="ml-3 text-sm">
+                                    <label
+                                        htmlFor="newsletter"
+                                        className="font-light text-gray-500 dark:text-gray-300"
+                                    >
+                                        I accept the{" "}
+                                        <a
+                                            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                                            href="#"
+                                        >
+                                            Terms and Conditions
+                                        </a>
+                                    </label>
+                                </div>
+                            </div>
+                            <Button
+                                type="submit"
+                                onClick={handleSubmit}
+                                className="btn btn-success w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                onClick={handleClose}
+                                className="btn btn-success w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            >
+                                Cancel
+                            </Button>
                         </div>
                     </div>
+
+                </div>
             </Modal>
 {/*-------------- upload img -----------------*/}
             <Modal
