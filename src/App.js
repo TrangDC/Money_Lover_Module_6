@@ -14,7 +14,6 @@ import {useState} from "react";
 import ActiveAccount from "./components/UserPage/ActiveAccount";
 import LoginForm from "./components/LoginPage/LoginForm";
 
-
 function App() {
     const [isAuth, setIsAuth] = useState(false);
 

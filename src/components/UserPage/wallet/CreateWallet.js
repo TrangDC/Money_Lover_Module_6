@@ -23,9 +23,6 @@ const CreateWallet = () => {
             })
             .catch(err => console.log(err));
     };
-
-
-
     return (
         <div>
             <div  style={{
