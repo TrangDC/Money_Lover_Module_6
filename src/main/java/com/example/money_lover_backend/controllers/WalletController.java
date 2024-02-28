@@ -2,6 +2,7 @@ package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.Wallet;
+import com.example.money_lover_backend.repositories.UserRepository;
 import com.example.money_lover_backend.services.impl.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class WalletController {
     @Autowired
     private WalletService walletService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/saveWallet")
     public ResponseEntity<Wallet> saveWallet(@RequestBody Wallet wallet) {
@@ -41,7 +45,7 @@ public class WalletController {
 
     @DeleteMapping("/deleteWallet/{id}")
     public ResponseEntity<?> deleteWallet(@PathVariable Long id) {
-        walletService.deleteWallet(id);
+        walletService.delete(id);
         return ResponseEntity.ok().build();
     }
 
@@ -55,6 +59,8 @@ public class WalletController {
         List<Wallet> wallets = walletService.searchWalletByName(nameWallet);
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
+
+
 
     // API gọi danh sách ví của 1 user
     @GetMapping("/user/{user_id}")
@@ -128,6 +134,22 @@ public class WalletController {
     }
 
     //API xóa ví của 1 user
-
+    @DeleteMapping("/user/{user_id}/delete/{wallet_id}")
+    public ResponseEntity<?> delete(@PathVariable String user_id,
+                                    @PathVariable Long wallet_id) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Wallet> walletOptional = walletService.getWalletById(wallet_id);
+        if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) { // Loại bỏ ví khỏi danh sách
+            wallets.remove(walletOptional.get());
+            walletService.delete(wallet_id);
+            Optional<User> userOptional = userRepository.findById(Long.valueOf(user_id));
+            userRepository.save(userOptional.get());
+            return new ResponseEntity<Iterable<Wallet>>(wallets, HttpStatus.OK); // Trả về danh sách wallets đã được cập nhật
+        }
+        return new ResponseEntity<String>("Wallet not found", HttpStatus.NOT_FOUND);
+    }
 
 }

@@ -42,14 +42,9 @@ public class WalletService implements IWaletService {
     }
 
     @Override
-    public String deleteWallet(Long id) {
-        Wallet wallet = walletRepository.findById(id).get();
-
-        if (wallet != null) {
-            walletRepository.delete(wallet);
-            return "Wallet Delete Sucessfully";
-        }
-        return "Something wrong on server";
+    public String delete(Long id) {
+        walletRepository.deleteById(id);
+        return "Successfully delete wallet";
     }
 
     @Override
