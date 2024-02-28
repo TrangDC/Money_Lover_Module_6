@@ -60,8 +60,6 @@ public class WalletController {
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
-
-
     // API gọi danh sách ví của 1 user
     @GetMapping("/user/{user_id}")
     public ResponseEntity<Iterable<Wallet>> getAllWalletByUser(@PathVariable String user_id) {
@@ -151,5 +149,4 @@ public class WalletController {
         }
         return new ResponseEntity<String>("Wallet not found", HttpStatus.NOT_FOUND);
     }
-
 }

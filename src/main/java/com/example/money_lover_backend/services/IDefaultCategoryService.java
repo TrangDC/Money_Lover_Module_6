@@ -1,4 +1,6 @@
 package com.example.money_lover_backend.services;
 
-public interface IDefaultCategoryService {
+import com.example.money_lover_backend.models.category.DefaultCategory;
+
+public interface IDefaultCategoryService extends IGeneralService<DefaultCategory> {
 }
