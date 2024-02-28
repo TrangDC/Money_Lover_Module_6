@@ -45,7 +45,7 @@ const ActiveAccount = () => {
 
                             <MDBCol col="12" md="12">
                                 <MDBInput style={{ backgroundColor: "white" }} className="mb-4" type="password" id="form1Example2" label="Enter Auth Code" value={authCode} onChange={handleAuthCodeChange} />
-                                <MDBBtn type="submit" class="btn btn-outline-success">
+                                <MDBBtn type="submit" class="btn btn-outline-success" style={{margin: 'auto'}}>
                                     Submit
                                 </MDBBtn>
                             </MDBCol>

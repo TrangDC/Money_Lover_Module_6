@@ -43,12 +43,12 @@ const WalletPage = () => {
     const handleShowC = () => setShowC(true);
     const handleSubmitC = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8080/api/wallets/saveWallet', wallet)
+        axios.post(`http://localhost:8080/api/wallets/user/${user.id}/create`, wallet)
             .then(res => {
                 console.log(res);
                 navigate("/auth/wallets")
                 handleCloseC();
-                fetchWallets();
+                fetchWallets(user); // Truyền đối số user vào để sử dụng trong fetchWallets
                 toast({
                     title: 'Create success!',
                     description: 'You successfully created a wallet!',
@@ -57,32 +57,38 @@ const WalletPage = () => {
                     isClosable: true,
                 });
             })
-            .catch(err => toast({
-                title: 'Create Failed',
-                description: 'You successfully created a wallet!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            }));
+            .catch(err => {
+                console.error(err);
+                toast({
+                    title: 'Create Failed',
+                    description: 'Failed to create a wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            });
     };
+
 
     // useEffect(() => {
     //     axios
-    //         .get(`http://localhost:8080/api/wallets/${id}`)
+    //         .get(`http://localhost:8080/api/wallets/user/${user.id}/details/${id}`)
     //         .then((res) => {
     //             setWallet(res.data);
     //         })
     //         .catch((err) => console.error(err));
     //
     // }, [id]);
-    const handleUpdate = () => {
+    const handleUpdate = (event) => {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của sự kiện submit
+
         axios
-            .put(`http://localhost:8080/api/wallets/${selectedWalletId}`, editWallet)
+            .put(`http://localhost:8080/api/wallets/user/${user.id}/edit/${selectedWalletId}`, editWallet)
             .then((res) => {
                 console.log(res.data);
                 handleClose();
                 navigate("/auth/wallets")
-                fetchWallets();
+                fetchWallets(user);
                 toast({
                     title: 'Update Successful',
                     description: 'You successfully repaired your wallet!',
@@ -103,14 +109,15 @@ const WalletPage = () => {
             });
     };
 
+
     const handleDelete = (id) => {
         const confirm = window.confirm('Are You Sure ?');
         if (confirm) {
-            axios.delete(`http://localhost:8080/api/wallets/deleteWallet/${selectedWalletId}`)
+            axios.delete(`http://localhost:8080/api/wallets/user/${user.id}/delete/${selectedWalletId}`)
                 .then(res => {
                     navigate("/auth/wallets")
                     handleClose();
-                    fetchWallets();
+                    fetchWallets(user);
                     toast({
                         title: 'Delete Successful',
                         description: 'You successfully deleted your wallet!',
@@ -180,11 +187,12 @@ const WalletPage = () => {
     const handleSubmitM = (event) => {
         event.preventDefault();
         const money = parseFloat(event.target.money.value);
-        axios.put(`http://localhost:8080/api/wallets/${selectedWalletId}/add-money`, {money: money})
+        // axios.put(`http://localhost:8080/api/wallets/${selectedWalletId}/add-money`, {money: money})
+        axios.put(`http://localhost:8080/api/wallets/user/${user.id}/add_money/${selectedWalletId}/${money}`, {money: money})
             .then((res) => {
                 console.log(res.data);
                 handleCloseM();
-                fetchWallets();
+                fetchWallets(user);
                 toast({
                     title: 'Money added successfully',
                     status: 'success',
