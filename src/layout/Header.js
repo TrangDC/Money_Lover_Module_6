@@ -65,7 +65,7 @@ const Header = () => {
                 setImage(res.data.image);
             })
             .catch(err => console.error(err))
-    }, )
+    }, [])
     const navigate = useNavigate();
 
     return (
