@@ -31,5 +31,8 @@ public class Transaction {
     private String note;
     private Timestamp transactionDate;
 
+    private String lender;
+    private String borrower;
+
 }
 
