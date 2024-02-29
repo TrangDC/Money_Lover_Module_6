@@ -75,7 +75,7 @@ public class CategoryController {
     @GetMapping("/user/{user_id}")
     public ResponseEntity<?> findCategoriesByUser(@PathVariable Long user_id) {
         Optional<User> userOptional = userService.findById(user_id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Iterable<Category> categories = userOptional.get().getCategories();
@@ -87,7 +87,7 @@ public class CategoryController {
     public ResponseEntity<?> create(@PathVariable Long user_id,
                                     @RequestBody Category category) {
         Optional<User> userOptional = userService.findById(user_id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Category savedCategory = categoryService.save(category);
@@ -105,11 +105,11 @@ public class CategoryController {
                                            @PathVariable Long category_id,
                                            @RequestBody Category category) {
         Optional<User> userOptional = userService.findById(user_id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Optional<Category> categoryOptional = categoryService.findById(category_id);
-        if (!categoryOptional.isPresent()) {
+        if (categoryOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         category.setId(categoryOptional.get().getId());

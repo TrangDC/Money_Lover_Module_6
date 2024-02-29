@@ -18,22 +18,24 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private BigDecimal amount;
+    private Long amount;
 
     private String note;
 
     private Timestamp transactionDate;
+
+    private Timestamp endDate;
 
     private String lender;
 
     private String borrower;
 
     @ManyToOne
-    @JoinColumn(name = "wallet_id") // Tên cột khoá ngoại trong bảng Transaction
+    @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
     @ManyToOne
-    @JoinColumn(name = "category_id") // Tên cột khoá ngoại trong bảng Transaction
+    @JoinColumn(name = "category_id")
     private Category category;
 }
 
