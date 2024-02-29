@@ -96,7 +96,7 @@ public class TransactionController {
     }
 
     //API tạo mới một khoản chi
-    @PostMapping("/user/{user_id}/expense")
+    @PostMapping("/user/{user_id}/expense_income")
     public ResponseEntity<?> create(@PathVariable Long user_id,
                                     @RequestBody CreateTransaction createTransaction) {
         Optional<User> userOptional = userService.findById(user_id);
@@ -126,17 +126,20 @@ public class TransactionController {
         //Kiểm tra danh mục có phải EXPENSE hay không
         transaction.setCategory(categoryOptional.get());
         String type = String.valueOf(categoryOptional.get().getType());
-        if (!type.equals("EXPENSE")) {
+        if (!type.equals("EXPENSE") && !type.equals("INCOME")) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Category invalid!"));
         }
-
-        //Trừ đi số tiền trong ví
         Wallet wallet = walletOptional.get();
         Long amount = createTransaction.getAmount();
-        wallet.setBalance(wallet.getBalance() - amount);
-
+        if (type.equals("INCOME")) {
+            //Cộng thêm số tiền trong ví
+            wallet.setBalance(wallet.getBalance() + amount);
+        } else {
+            //Trừ đi số tiền trong ví
+            wallet.setBalance(wallet.getBalance() - amount);
+        }
         Transaction savedTransaction = transactionService.save(transaction);
         List<Transaction> transactions = userOptional.get().getTransactions();
         transactions.add(savedTransaction);
