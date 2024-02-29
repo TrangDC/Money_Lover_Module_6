@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -22,9 +23,9 @@ public class Transaction {
 
     private String note;
 
-    private Timestamp transactionDate;
+    private LocalDate transactionDate;
 
-    private Timestamp endDate;
+    private LocalDate endDate;
 
     private String lender;
 

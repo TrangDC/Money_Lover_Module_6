@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 @Getter
@@ -15,9 +16,9 @@ public class CreateTransaction {
 
     private String note;
 
-    private Timestamp transactionDate;
+    private LocalDate transactionDate;
 
-    private Timestamp endDate;
+    private LocalDate endDate;
 
     private String lender;
 
