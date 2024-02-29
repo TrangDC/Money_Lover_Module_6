@@ -13,6 +13,7 @@ import Error from "./components/Error";
 import {useState} from "react";
 import ActiveAccount from "./components/UserPage/ActiveAccount";
 import LoginForm from "./components/LoginPage/LoginForm";
+import CategoriesPage from "./components/UserPage/category/CategoriesPage";
 
 function App() {
     const [isAuth, setIsAuth] = useState(false);
@@ -32,6 +33,7 @@ function App() {
                         <Route path="home" element={(isAuth || user) ? <Dashboard/> : <Error/>}/>
                         <Route path="wallets" element={(isAuth || user) ? <WalletPage/> : <Error/>}/>
                         <Route path="profile" element={(isAuth || user) ? <InformationUser/> : <Error/>}/>
+                        <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                     </Route>
                     <Route path='/login'
                            element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>

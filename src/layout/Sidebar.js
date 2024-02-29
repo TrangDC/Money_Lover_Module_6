@@ -51,16 +51,11 @@ const Sidebar = () => {
                         <SidebarLink key={item.index} item={item}/>
                     ))}
                 </div>
-                <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700'>
-                    {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
-                        <SidebarLink key={item.index} item={item}/>
-                    ))}
-                </div>
+
                 <div className='flex flex-col gap-0.5 pt-2 border-t border-neutral-700' onClick={handleShow}>
                     {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((item) => (
                         <SidebarLink key={item.index} item={item}/>
                     ))}
-
                 </div>
 
                 <Modal show={show} onHide={handleClose} >

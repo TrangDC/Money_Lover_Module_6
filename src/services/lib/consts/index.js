@@ -26,7 +26,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'categories',
         label: 'Categories',
-        path: '/categories',
+        path: '/auth/categories',
         icon: <HiOutlineShoppingCart />
     },
     {
