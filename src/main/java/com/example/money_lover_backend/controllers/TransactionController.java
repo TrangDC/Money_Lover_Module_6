@@ -1,7 +1,12 @@
 package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.models.Transaction;
+import com.example.money_lover_backend.models.User;
+import com.example.money_lover_backend.repositories.UserRepository;
+import com.example.money_lover_backend.repositories.WalletRepository;
+import com.example.money_lover_backend.services.ICategoryService;
 import com.example.money_lover_backend.services.ITransactionService;
+import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +22,15 @@ public class TransactionController {
 
     @Autowired
     private ITransactionService transactionService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
+    private ICategoryService categoryService;
 
     @GetMapping
     public ResponseEntity<Iterable<Transaction>> findAll() {
@@ -60,5 +74,18 @@ public class TransactionController {
         }
         transactionService.remove(id);
         return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<Iterable<Transaction>> findAll(@PathVariable Long user_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Transaction> transactions = userOptional.get().getTransactions();
+        if (transactions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }

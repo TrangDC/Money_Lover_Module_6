@@ -60,6 +60,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(  name = "user_transactions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+    private List<Transaction> transactions = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wallet> wallets = new ArrayList<>();
 
@@ -126,5 +132,13 @@ public class User {
         this.email = email;
         this.password = password;
         this.wallets = wallets;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

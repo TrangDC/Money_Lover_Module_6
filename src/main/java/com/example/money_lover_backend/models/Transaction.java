@@ -19,11 +19,21 @@ public class Transaction {
     private int id;
 
     private BigDecimal amount;
+
     private String note;
+
     private Timestamp transactionDate;
 
     private String lender;
+
     private String borrower;
 
+    @ManyToOne
+    @JoinColumn(name = "wallet_id") // Tên cột khoá ngoại trong bảng Transaction
+    private Wallet wallet;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id") // Tên cột khoá ngoại trong bảng Transaction
+    private Category category;
 }
 
