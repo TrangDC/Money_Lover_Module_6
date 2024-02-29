@@ -2,6 +2,7 @@ package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.category.Category;
+import com.example.money_lover_backend.repositories.UserRepository;
 import com.example.money_lover_backend.services.ICategoryService;
 import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class CategoryController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<Iterable<Category>> findAll() {
@@ -66,8 +70,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryOptional.get(), HttpStatus.OK);
     }
 
+
+    //API lấy danh sách categories theo một user
     @GetMapping("/user/{user_id}")
-    public ResponseEntity<?> findCategoies(@PathVariable Long user_id) {
+    public ResponseEntity<?> findCategoriesByUser(@PathVariable Long user_id) {
         Optional<User> userOptional = userService.findById(user_id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,7 +82,22 @@ public class CategoryController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
+    //API tạo mới một categories cho user
+    @PostMapping("/user/{user_id}")
+    public ResponseEntity<?> create(@PathVariable Long user_id,
+                                    @RequestBody Category category) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Category savedCategory = categoryService.save(category);
 
+        List<Category> categories = userOptional.get().getCategories();
+        categories.add(savedCategory);
+        userOptional.get().setCategories(categories);
+        userRepository.save(userOptional.get());
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
 
 
 }
