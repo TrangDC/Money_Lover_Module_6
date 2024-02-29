@@ -25,25 +25,25 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'categories',
         label: 'Categories',
-        path: '/categories',
+        path: '/auth/categories',
         icon: <HiOutlineShoppingCart />
     },
     {
         key: 'budgets',
         label: 'Budgets',
-        path: '/budgets',
+        path: '/auth/budgets',
         icon: <HiOutlineUsers />
     },
     {
         key: 'transactions',
         label: 'Transactions',
-        path: '/transactions',
+        path: '/auth/transactions',
         icon: <HiOutlineDocumentText />
     },
     {
         key: 'messages',
         label: 'Messages',
-        path: '/messages',
+        path: '/auth/messages',
         icon: <HiOutlineAnnotation />
     }
 ]

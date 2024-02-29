@@ -94,7 +94,7 @@ const Header = () => {
                             {wallets.slice(0, 3).map((wallet) => (
                                 <MDBDropdownItem link>{wallet.name}</MDBDropdownItem>
                             ))}
-                            <MDBDropdownItem link><Link to="/auth/wallets">See More</Link></MDBDropdownItem>
+                            <MDBDropdownItem onClick={() => navigate("wallets")} link>See More</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>
 

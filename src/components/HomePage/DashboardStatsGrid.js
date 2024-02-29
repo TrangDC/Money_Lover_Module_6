@@ -9,6 +9,7 @@ import axios from "axios";
 const DashboardStatsGrid = () => {
 
     const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+
     const [wallets, setWallets] = useState([])
     const [wallet , setWallet] = useState({
         name: "",
@@ -28,11 +29,7 @@ const DashboardStatsGrid = () => {
                 setTotalBalance(total)
             })
     }
-// useEffect(() => {
-//     // Tính tổng số tiền trong các ví
-//     const total = wallets.reduce((acc, curr) => acc + curr.balance, 0);
-//     setTotalBalance(total);
-// }, [wallets]);
+
     useEffect(() => {
         const userdata = JSON.parse(localStorage.getItem("user"))
         setUserData(userdata)
