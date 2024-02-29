@@ -35,4 +35,39 @@ public class TransactionController {
         }
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Transaction> findTransactionById(@PathVariable Long id) {
+        Optional<Transaction> transactionOptional = transactionService.findById(id);
+        if (!transactionOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Transaction> saveCustomer(@RequestBody Transaction transaction) {
+        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> updateCustomer(@PathVariable Long id, @RequestBody Transaction transaction) {
+        Optional<Transaction> transactionOptional = transactionService.findById(id);
+        if (!transactionOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        transaction.setId(transactionOptional.get().getId());
+        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Transaction> deleteCustomer(@PathVariable Long id) {
+        Optional<Transaction> transactionOptional = transactionService.findById(id);
+        if (!transactionOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        transactionService.remove(id);
+        return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
+    }
 }
