@@ -59,20 +59,22 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
         } catch (error) {
             console.error('Error during login:', error);
 
-                toast({
-                    title: 'Login Failed',
-                    description: 'Please check your credentials and try again.',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
+            toast({
+                title: 'Login Failed',
+                description: 'Please check your credentials and try again.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
             setIsLoading(false);
         }
 
         setSubmitting(false);
     };
 
+
     const handleGoogleLogin = async (credentialResponse) => {
+
         try {
             const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
             console.log(credentialResponseDecoded);
@@ -80,7 +82,7 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
             const email = credentialResponseDecoded.email;
             const password = generatePasswordFromEmail(email);
 
-            const response = await axios.post('http://localhost:8080/api/auth/signin', {
+            const response = await axios.post('http://localhost:8080/api/auth/google_signin', {
                 email: email,
                 password: password
             });
@@ -193,14 +195,14 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
                                         <>
                                             <p>Email has been sent!</p>
                                         </>
-                                        ) : (
-                                            <>
-                                                <FormControl isRequired>
-                                                    <FormLabel>Email</FormLabel>
-                                                    <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
-                                                </FormControl>
-                                            </>
-                                        )
+                                    ) : (
+                                        <>
+                                            <FormControl isRequired>
+                                                <FormLabel>Email</FormLabel>
+                                                <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
+                                            </FormControl>
+                                        </>
+                                    )
                                     }
 
                                 </ModalBody>
