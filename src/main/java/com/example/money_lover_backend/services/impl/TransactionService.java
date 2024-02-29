@@ -31,9 +31,4 @@ public class TransactionService implements ITransactionService {
     public void remove(Long id) {
         transactionRepository.deleteById(id);
     }
-
-    @Override
-    public Iterable<Transaction> findAllByWallet(Wallet wallet) {
-        return transactionRepository.findAllByWallet(wallet);
-    }
 }

@@ -16,8 +16,6 @@ public class Wallet {
     private String name;
     private Long balance;
 
-    @OneToMany(mappedBy = "wallet")
-    private List<Transaction> transactions;
 
     @ManyToMany
     @JoinTable(

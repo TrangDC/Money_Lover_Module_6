@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.example.money_lover_backend.models.User;
+import com.example.money_lover_backend.models.Wallet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private String image;
 
+    private List<Wallet> wallets;
     @JsonIgnore
     private String password;
 
@@ -52,7 +54,8 @@ public class UserDetailsImpl implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 authorities,
-                user.getImage());
+                user.getImage()
+        );
     }
 
     @Override
@@ -114,5 +117,13 @@ public class UserDetailsImpl implements UserDetails {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Wallet> getWallets() {
+        return wallets;
+    }
+
+    public void setWallets(List<Wallet> wallets) {
+        this.wallets = wallets;
     }
 }

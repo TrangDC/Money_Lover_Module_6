@@ -24,9 +24,6 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<Transaction> transactions;
-
     @Enumerated(EnumType.STRING)
     private Type type;
 

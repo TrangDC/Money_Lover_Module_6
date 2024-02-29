@@ -7,6 +7,7 @@ import com.example.money_lover_backend.services.impl.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -25,41 +26,6 @@ public class WalletController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/saveWallet")
-    public ResponseEntity<Wallet> saveWallet(@RequestBody Wallet wallet) {
-        return new ResponseEntity<>(walletService.saveWallet(wallet), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<Iterable<Wallet>> getAllWallet() {
-        List<Wallet> wallets = (List<Wallet>) walletService.getAllWallet();
-        if (wallets.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getWalletById(@PathVariable Long id) {
-        return new ResponseEntity<>(walletService.getWalletById(id), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteWallet/{id}")
-    public ResponseEntity<?> deleteWallet(@PathVariable Long id) {
-        walletService.delete(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editWallet(@RequestBody Wallet wallet, @PathVariable Long id) {
-        return new ResponseEntity<>(walletService.editWallet(wallet, id), HttpStatus.OK);
-    }
-
-    @GetMapping("/searchWallet")
-    public ResponseEntity<?> searchWalletByName(@RequestParam String nameWallet) {
-        List<Wallet> wallets = walletService.searchWalletByName(nameWallet);
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
-    }
 
     // API gọi danh sách ví của 1 user
     @GetMapping("/user/{user_id}")
@@ -90,18 +56,11 @@ public class WalletController {
     @PostMapping("/user/{user_id}/create")
     public ResponseEntity<?> create(@PathVariable String user_id, @RequestBody Wallet wallet) {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
-        Optional<User> user = userRepository.findById(Long.valueOf(user_id));
-        if (user.isPresent()) {
-            if (wallets.isEmpty()) {
-                List<Wallet> newWallet = new ArrayList<Wallet>();
-                newWallet.add(wallet);
-                user.get().setWallets(newWallet);
-                return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
-            }
-            wallets.add(wallet);
-            return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
+        wallets.add(wallet);
+        return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
     }
 
     //API edit thông tin 1 ví của 1 user
