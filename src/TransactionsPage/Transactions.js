@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     MDBBadge,
     MDBBtn,
@@ -33,6 +33,10 @@ import {MDBCardText, MDBIcon, MDBListGroupItem} from "mdbreact";
 import {FaLayerGroup} from "react-icons/fa6";
 import {MdOutlineAttachMoney, MdOutlineNotes} from "react-icons/md";
 import {Input} from "@chakra-ui/react";
+import axios from "axios";
+
+
+
 
 
 export default function Transactions() {
@@ -40,8 +44,31 @@ export default function Transactions() {
     const  openDelete= () => setModalDelete(!modalDelete);
 
     const [modalAddTransaction, setModalAddTransaction] = useState(false);
-
     const openBoxAddTransaction = () => setModalAddTransaction(!modalAddTransaction);
+
+    // --------- getWallets --------
+    const [wallets, setWallets] = useState([])
+    const [wallet, setWallet] = useState({
+        name: "",
+        balance: ""
+    })
+    const [userData, setUserData] = useState({})
+    const fetchWallet = (userdata) => {
+        axios.get('http://localhost:8080/api/users/' + userdata.id)
+            .then((res) => {
+                window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+                const wallets = JSON.parse(localStorage.getItem("wallets"));
+                setWallets(wallets);
+            })
+    }
+
+    useEffect(() => {
+        const userdata = JSON.parse(localStorage.getItem("user"));
+        setUserData(userdata);
+        fetchWallet(userdata)
+    }, [wallet])
+
+
     return (
         <div style={{width: "1200px", margin: "auto", marginTop: "50px"}}>
 
@@ -84,7 +111,6 @@ export default function Transactions() {
                                         <MDBCol sm="10" ><MDBInput id='form4Example1' wrapperClass='mb-4' label='Money' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
-
                                     <MDBCardText className="text-muted">Note</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "25px"}}><MdOutlineNotes /></MDBCol>
@@ -96,8 +122,27 @@ export default function Transactions() {
                                         <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
                                     </MDBRow>
                                     <hr/>
-                                    <MDBCardText className="text-muted">Wallet</MDBCardText>
+                                    <MDBCardText className="text-muted">Wallets</MDBCardText>
+
+                                    <div className='relative'>
+                                        <select className="form-select" aria-label="Default select example">
+                                            {wallets.map((wallet, index) => (
+                                                <option key={index} value={wallet.name}>
+                                                    {wallet.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <hr/>
                                     <MDBCardText className="text-muted">Category</MDBCardText>
+                                    <div className='relative'>
+                                        <select className="form-select" aria-label="Default select example">
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                            <option value="4">Four</option>
+                                        </select>
+                                    </div>
                                 </MDBCard>
 
                                 <MDBBtn type='submit' className='mb-4 btn btn-success' block>

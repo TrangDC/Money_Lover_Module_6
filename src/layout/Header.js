@@ -17,6 +17,7 @@ const Header = () => {
     const toast = useToast();
     const handleChangePassword = () => setShowChangePassword (true);
     const handleClose = () => setShowChangePassword(false);
+    // ------- get wallets ----
     const [wallets, setWallets] = useState([])
     const [wallet, setWallet] = useState({
         name: "",
