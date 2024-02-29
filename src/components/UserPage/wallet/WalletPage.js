@@ -48,7 +48,7 @@ const WalletPage = () => {
                 console.log(res);
                 navigate("/auth/wallets")
                 handleCloseC();
-                fetchWallets(user); // Truyền đối số user vào để sử dụng trong fetchWallets
+                fetchWallets(user);
                 toast({
                     title: 'Create success!',
                     description: 'You successfully created a wallet!',
@@ -70,8 +70,7 @@ const WalletPage = () => {
     };
 
     const handleUpdate = (event) => {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của sự kiện submit
-
+        event.preventDefault();
         axios
             .put(`http://localhost:8080/api/wallets/user/${user.id}/edit/${selectedWalletId}`, editWallet)
             .then((res) => {
@@ -306,16 +305,14 @@ const WalletPage = () => {
                                                   })}/>
                                 </Form.Group>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                                    <Button variant="success" onClick={handleUpdate}>Edit</Button>
-                                    {wallets.length > 1 && ( // Kiểm tra nếu danh sách ví có nhiều hơn 1 ví thì hiển thị nút delete
+                                    {wallets.length > 1 && (
                                         <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
                                     )}
+                                    <Button variant="success" onClick={handleUpdate}>Edit</Button>
                                 </div>
                             </Form>
                         </Modal.Body>
                     </Modal>
-
-
 
                     <Modal show={showC} onHide={handleCloseC}>
                         <Form onSubmit={handleSubmitC}>
