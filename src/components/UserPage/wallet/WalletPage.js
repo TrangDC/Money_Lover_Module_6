@@ -11,7 +11,7 @@ import {useToast} from "@chakra-ui/react";
 import {GiWallet} from "react-icons/gi";
 import {FaPiggyBank} from "react-icons/fa6";
 import {GiPiggyBank} from "react-icons/gi";
-import { MdCreateNewFolder } from "react-icons/md";
+import {MdCreateNewFolder} from "react-icons/md";
 
 const WalletPage = () => {
     const [show, setShow] = useState(false);
@@ -69,16 +69,6 @@ const WalletPage = () => {
             });
     };
 
-
-    // useEffect(() => {
-    //     axios
-    //         .get(`http://localhost:8080/api/wallets/user/${user.id}/details/${id}`)
-    //         .then((res) => {
-    //             setWallet(res.data);
-    //         })
-    //         .catch((err) => console.error(err));
-    //
-    // }, [id]);
     const handleUpdate = (event) => {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của sự kiện submit
 
@@ -221,7 +211,8 @@ const WalletPage = () => {
                                   className="text-green-400"/>
                         My Wallet
                     </h4>
-                    <MdCreateNewFolder onClick={handleShowC}  style={{width: '40px', height: '40px',marginRight: '-360px'}}
+                    <MdCreateNewFolder onClick={handleShowC}
+                                       style={{width: '40px', height: '40px', marginRight: '-360px'}}
                                        className="text-green-400"/>
                     <Form onSubmit={handleSearch} style={{marginTop: '15px'}}>
                         <InputGroup className="mb-3">
@@ -314,13 +305,16 @@ const WalletPage = () => {
                                                       balance: e.target.value
                                                   })}/>
                                 </Form.Group>
-                                <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                                     <Button variant="success" onClick={handleUpdate}>Edit</Button>
-                                    <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
+                                    {wallets.length > 1 && ( // Kiểm tra nếu danh sách ví có nhiều hơn 1 ví thì hiển thị nút delete
+                                        <Button variant="danger" onClick={() => handleDelete(editWallet.id)}>Delete</Button>
+                                    )}
                                 </div>
                             </Form>
                         </Modal.Body>
                     </Modal>
+
 
 
                     <Modal show={showC} onHide={handleCloseC}>
