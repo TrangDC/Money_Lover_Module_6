@@ -123,7 +123,13 @@ public class TransactionController {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
 
-        //Kiểm tra danh mục có phải EXPENSE hay không
+        //Kiểm tra category có thuộc danh mục của user
+        List<Category> categories = userOptional.get().getCategories();
+        if (!categories.contains(categoryOptional.get())) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        //Kiểm tra danh mục có phải EXPENSE và INCOME hay không
         transaction.setCategory(categoryOptional.get());
         String type = String.valueOf(categoryOptional.get().getType());
         if (!type.equals("EXPENSE") && !type.equals("INCOME")) {
@@ -147,5 +153,7 @@ public class TransactionController {
         userService.save(userOptional.get());
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+
 
 }
