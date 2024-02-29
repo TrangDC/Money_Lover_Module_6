@@ -1,21 +1,12 @@
 package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.models.Transaction;
-import com.example.money_lover_backend.models.User;
-import com.example.money_lover_backend.models.Wallet;
-import com.example.money_lover_backend.models.category.Category;
-import com.example.money_lover_backend.models.category.Type;
-import com.example.money_lover_backend.services.ICategoryService;
 import com.example.money_lover_backend.services.ITransactionService;
-import com.example.money_lover_backend.services.IWaletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +38,12 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> saveCustomer(@RequestBody Transaction transaction) {
+    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) {
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Transaction> updateCustomer(@PathVariable Long id, @RequestBody Transaction transaction) {
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
         Optional<Transaction> transactionOptional = transactionService.findById(id);
         if (!transactionOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,7 +53,7 @@ public class TransactionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Transaction> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id) {
         Optional<Transaction> transactionOptional = transactionService.findById(id);
         if (!transactionOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

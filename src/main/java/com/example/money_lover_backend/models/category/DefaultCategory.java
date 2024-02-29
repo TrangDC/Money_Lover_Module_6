@@ -1,6 +1,6 @@
 package com.example.money_lover_backend.models.category;
 
-import com.example.money_lover_backend.models.User;
+import com.example.money_lover_backend.enums.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

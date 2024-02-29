@@ -18,7 +18,6 @@ public class CategoryController {
     //API xem toàn bộ danh mục của user (gồm cả danh mục mặc định)
 
 
-
     //API tạo 1 danh mục thu chi cho 1 user
 
     //API sửa thông tin 1 danh mục thu chi của 1 user
@@ -31,7 +30,7 @@ public class CategoryController {
     private ICategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Iterable<Category>> findAllCustomer() {
+    public ResponseEntity<Iterable<Category>> findAll() {
         List<Category> categories = (List<Category>) categoryService.findAll();
         if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -40,7 +39,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findCustomerById(@PathVariable Long id) {
+    public ResponseEntity<Category> findCategoryById(@PathVariable Long id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,12 +48,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> saveCustomer(@RequestBody Category customer) {
+    public ResponseEntity<Category> saveCategory(@RequestBody Category customer) {
         return new ResponseEntity<>(categoryService.save(customer), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCustomer(@PathVariable Long id, @RequestBody Category category) {
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -64,7 +63,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Category> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,4 +1,4 @@
-package com.example.money_lover_backend.models.category;
+package com.example.money_lover_backend.enums;
 
 public enum Type {
     INCOME,

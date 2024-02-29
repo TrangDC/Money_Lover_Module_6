@@ -18,7 +18,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
     private BigDecimal amount;
     private String note;
     private Timestamp transactionDate;
