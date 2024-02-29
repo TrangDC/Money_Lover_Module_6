@@ -2,12 +2,21 @@ import React, {useEffect, useState} from 'react';
 import Navbar from "react-bootstrap/Navbar";
 import { IoMdCreate } from "react-icons/io";
 import {FaLayerGroup, FaPiggyBank} from "react-icons/fa6";
-import {Tabs, TabList, TabPanels, Tab, TabPanel, useDisclosure, FormControl, FormLabel, Input} from '@chakra-ui/react'
+import {
+    Tabs,
+    TabList,
+    TabPanels,
+    Tab,
+    TabPanel,
+    useDisclosure,
+    FormControl,
+    FormLabel,
+    Input,
+    Select
+} from '@chakra-ui/react'
 import {
     Table,
-    Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -25,8 +34,8 @@ import {
     ModalCloseButton,
 } from '@chakra-ui/react'
 import axios from "axios";
-import {Link} from "react-router-dom";
-import {GiPiggyBank} from "react-icons/gi";
+import {Link, useNavigate} from "react-router-dom";
+
 const CategoriesPage = () => {
     const { isOpen: isOpenModal1, onOpen: onOpenModal1, onClose: onCloseModal1 } = useDisclosure();
     const { isOpen: isOpenModal2, onOpen: onOpenModal2, onClose: onCloseModal2 } = useDisclosure();
@@ -35,6 +44,8 @@ const CategoriesPage = () => {
     const [user, setUser] = useState({})
     const [categoryType, setCategoryType] = useState('');
     const [selectedType, setSelectedType] = useState('');
+    const defaultImagePath = "https://static.moneylover.me/img/icon/ic_category_salary.png";
+    const navigate = useNavigate();
 
     const fetchCategories = (userData) => {
         axios.get('http://localhost:8080/api/users/' + userData.id)
@@ -60,7 +71,22 @@ const CategoriesPage = () => {
         }
         return acc;
     }, []);
-
+    const createCategory = () => {
+        const newCategory = {
+            name: category.name,
+            type: categoryType,
+            image: defaultImagePath,
+        };
+        axios.post(`http://localhost:8080/api/categories/user/${user.id}`, newCategory)
+            .then((response) => {
+                console.log("Category created successfully:", response.data);
+                onCloseModal1();
+                fetchCategories(user);
+            })
+            .catch((error) => {
+                console.error("Error creating category:", error);
+            });
+    };
     return (
         <div>
             <div>
@@ -117,24 +143,39 @@ const CategoriesPage = () => {
                 <ModalContent>
                     <ModalHeader>Create Category New</ModalHeader>
                     <ModalCloseButton />
+
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>Category name</FormLabel>
-                            <Input placeholder='Enter name' />
+                            <Input
+                                placeholder='Enter name'
+                                name='name'
+                                onChange={(event) =>
+                                    setCategory({...category, [event.target.name]: event.target.value})
+                                }
+                            />
                         </FormControl>
 
                         <FormControl mt={4}>
-                            <FormLabel>Last name</FormLabel>
-                            <Input placeholder='Last name' />
+                            <FormLabel>Select Type</FormLabel>
+                            <Select placeholder="Select a type"
+                                value={categoryType}
+                                onChange={(event) => setCategoryType(event.target.value)}
+                            >
+                                {types.map((type, index) => (
+                                    <option key={index} value={type}>{type}</option>
+                                ))}
+                            </Select>
                         </FormControl>
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
-                            Save
-                        </Button>
-                        <Button onClick={onCloseModal1}>Cancel</Button>
-                    </ModalFooter>
+                        <ModalFooter>
+                            <Button colorScheme='blue' mr={3} onClick={createCategory}>
+                                Create
+                            </Button>
+                            <Button onClick={onCloseModal1}>Cancel</Button>
+                        </ModalFooter>
+
                 </ModalContent>
             </Modal>
 
