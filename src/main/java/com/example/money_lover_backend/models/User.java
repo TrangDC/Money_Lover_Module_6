@@ -58,7 +58,7 @@ public class User {
     @JoinTable(  name = "user_categories",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wallet> wallets = new ArrayList<>();
@@ -89,8 +89,17 @@ public class User {
         this.password = password;
         this.decode_password = decode_password;
         this.isActive = false;
+
     }
 
+    public User(String username, String email, String password, String decode_password, List<Category> categories, List<Wallet> wallets) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.decode_password = decode_password;
+        this.categories = categories;
+        this.wallets = wallets;
+    }
 
     public User(String email, String password) {
         this.username = username;

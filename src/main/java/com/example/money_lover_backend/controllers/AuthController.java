@@ -5,7 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.money_lover_backend.models.TokenExpire;
+import com.example.money_lover_backend.models.Wallet;
+import com.example.money_lover_backend.models.category.Category;
+import com.example.money_lover_backend.models.category.DefaultCategory;
 import com.example.money_lover_backend.repositories.TokenExpireRepository;
+import com.example.money_lover_backend.services.ICategoryService;
+import com.example.money_lover_backend.services.IDefaultCategoryService;
 import com.example.money_lover_backend.services.impl.EmailService;
 import jakarta.validation.Valid;
 
@@ -59,6 +64,9 @@ public class AuthController {
     @Autowired
     TokenExpireRepository tokenExpireRepository;
 
+    @Autowired
+    ICategoryService categoryService;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -110,11 +118,22 @@ public class AuthController {
             count++;
         }
 
+        List<Wallet> wallets = new ArrayList<>();
+        Wallet default_wallet = new Wallet();
+        default_wallet.setName("Default Wallet");
+        default_wallet.setBalance(0L);
+        List<Category> active_categories = new ArrayList<>();
+        default_wallet.setActiveCategories(active_categories);
+
+        Iterable<Category> categories = categoryService.createDefaultCategories();
+
         User user = new User(
                 username,
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getPassword()
+                signUpRequest.getPassword(),
+                (List<Category>) categories,
+                wallets
         );
 
         Set<String> strRoles = signUpRequest.getRole();
