@@ -1,7 +1,9 @@
 package com.example.money_lover_backend.controllers;
 
+import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.category.Category;
 import com.example.money_lover_backend.services.ICategoryService;
+import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class CategoryController {
 
     @Autowired
     private ICategoryService categoryService;
+
+    @Autowired
+    private IUserService userService;
 
     @GetMapping
     public ResponseEntity<Iterable<Category>> findAll() {
@@ -60,6 +65,17 @@ public class CategoryController {
         categoryService.remove(id);
         return new ResponseEntity<>(categoryOptional.get(), HttpStatus.OK);
     }
+
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> findCategoies(@PathVariable Long user_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Iterable<Category> categories = userOptional.get().getCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
 
 
 
