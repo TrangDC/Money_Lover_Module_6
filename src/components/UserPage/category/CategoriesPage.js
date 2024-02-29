@@ -12,7 +12,7 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Select
+    Select, useToast
 } from '@chakra-ui/react'
 import {
     Table,
@@ -41,12 +41,13 @@ const CategoriesPage = () => {
     const { isOpen: isOpenModal2, onOpen: onOpenModal2, onClose: onCloseModal2 } = useDisclosure();
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState([]);
+    const [editCate, setEditCate] = useState([]);
     const [user, setUser] = useState({})
     const [categoryType, setCategoryType] = useState('');
     const [selectedType, setSelectedType] = useState('');
     const defaultImagePath = "https://static.moneylover.me/img/icon/ic_category_salary.png";
     const navigate = useNavigate();
-
+    const toast = useToast()
     const fetchCategories = (userData) => {
         axios.get('http://localhost:8080/api/users/' + userData.id)
             .then((res) => {
@@ -82,11 +83,55 @@ const CategoriesPage = () => {
                 console.log("Category created successfully:", response.data);
                 onCloseModal1();
                 fetchCategories(user);
+                toast({
+                    title: 'Create success!',
+                    description: 'You successfully created a category!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
             })
             .catch((error) => {
                 console.error("Error creating category:", error);
+                toast({
+                    title: 'Create Failed',
+                    description: 'Failed to create a category!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             });
     };
+
+    const handleUpdate = (event) => {
+        event.preventDefault();
+        axios
+            .put(`http://localhost:8080/api/categories/user/${user.id}/edit/${editCate.id}`, editCate)
+            .then((res) => {
+                console.log(res.data);
+                fetchCategories(user);
+                onCloseModal2();
+                toast({
+                    title: 'Update Successful',
+                    description: 'Category updated successfully!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+            })
+            .catch((err) => {
+                console.error(err);
+                toast({
+                    title: 'Update Failed',
+                    description: 'Failed to update category!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            });
+    };
+
+
     return (
         <div>
             <div>
@@ -116,7 +161,10 @@ const CategoriesPage = () => {
                                     <Tbody>
                                         {filteredCategories.map((category, index) => (
                                             <Tr key={index}>
-                                                <td onClick={onOpenModal2}>
+                                                <td onClick={() => {
+                                                    onOpenModal2();
+                                                    setEditCate(category);
+                                                }}>
                                                     <div style={{display: 'flex', alignItems: 'center'}}>
                                                         <Image
                                                             borderRadius='full'
@@ -159,9 +207,10 @@ const CategoriesPage = () => {
                         <FormControl mt={4}>
                             <FormLabel>Select Type</FormLabel>
                             <Select placeholder="Select a type"
-                                value={categoryType}
-                                onChange={(event) => setCategoryType(event.target.value)}
+                                    value={categoryType}
+                                    onChange={(event) => setCategoryType(event.target.value)}
                             >
+                                <option value=''>All</option> {/* Thêm lựa chọn mặc định */}
                                 {types.map((type, index) => (
                                     <option key={index} value={type}>{type}</option>
                                 ))}
@@ -169,42 +218,53 @@ const CategoriesPage = () => {
                         </FormControl>
                     </ModalBody>
 
-                        <ModalFooter>
-                            <Button colorScheme='blue' mr={3} onClick={createCategory}>
-                                Create
-                            </Button>
-                            <Button onClick={onCloseModal1}>Cancel</Button>
-                        </ModalFooter>
+                    <ModalFooter>
+                        <Button colorScheme='blue' mr={3} onClick={createCategory}>
+                            Create
+                        </Button>
+                        <Button onClick={onCloseModal1}>Cancel</Button>
+                    </ModalFooter>
 
                 </ModalContent>
             </Modal>
 
-
+{/*edit category here*/}
             <Modal isOpen={isOpenModal2} onClose={onCloseModal2}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Category Detail</ModalHeader>
+                    <ModalHeader>Edit Category</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>Category name</FormLabel>
-                            <Input placeholder='Enter name' />
+                            <Input placeholder='Enter name'
+                                   name="name"
+                                   value={editCate.name}
+                                   onChange={(e) => setEditCate({
+                                       ...editCate,
+                                       name: e.target.value
+                                   })} />
                         </FormControl>
 
                         <FormControl mt={4}>
-                            <FormLabel>Last name</FormLabel>
-                            <Input placeholder='Last name' />
+                            <FormLabel>Type</FormLabel>
+                            <Select placeholder="Select a type" value={editCate.type} onChange={(event) => setEditCate({ ...editCate, type: event.target.value })}>
+                                {types.map((type, index) => (
+                                    <option key={index} value={type}>{type}</option>
+                                ))}
+                            </Select>
                         </FormControl>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
+                        <Button colorScheme='blue' mr={3} onClick={handleUpdate}>
                             Save
                         </Button>
                         <Button onClick={onCloseModal2}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
         </div>
     );
 };
