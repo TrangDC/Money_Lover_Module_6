@@ -529,13 +529,30 @@ const CategoriesPage = () => {
                                 <Table>
                                     <Tbody>
                                         <Tr>
-                                            <Td>inches</Td>
+                                            <Td>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Image
+                                                        borderRadius='full'
+                                                        boxSize='50px'
+                                                        src='https://static.moneylover.me/img/icon/icon_142.png'
+                                                        alt='Dan Abramov'
+                                                    />
+                                                    <span style={{ marginLeft: '10px' }}>Outgoing Transfer</span>
+                                                </div>
+                                            </Td>
                                         </Tr>
                                         <Tr>
-                                            <Td>feet</Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td>yards</Td>
+                                            <Td>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Image
+                                                        borderRadius='full'
+                                                        boxSize='50px'
+                                                        src='https://static.moneylover.me/img/icon/icon_143.png'
+                                                        alt='Dan Abramov'
+                                                    />
+                                                    <span style={{ marginLeft: '10px' }}>Incoming Transfer</span>
+                                                </div>
+                                            </Td>
                                         </Tr>
                                     </Tbody>
                                 </Table>
