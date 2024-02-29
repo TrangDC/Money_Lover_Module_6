@@ -89,9 +89,9 @@ const Header = () => {
                         border-b border-gray-200'>
                 <div className='relative'>
                     <MDBDropdown group>
-                        <MDBDropdownToggle color='success'>Action</MDBDropdownToggle>
+                        <MDBDropdownToggle color='success'>Your Wallets</MDBDropdownToggle>
                         <MDBDropdownMenu>
-                            {wallets.slice(0, 1).map((wallet) => (
+                            {wallets.slice(0, 3).map((wallet) => (
                                 <MDBDropdownItem link>{wallet.name}</MDBDropdownItem>
                             ))}
                             <MDBDropdownItem link><Link to="/auth/wallets">See More</Link></MDBDropdownItem>

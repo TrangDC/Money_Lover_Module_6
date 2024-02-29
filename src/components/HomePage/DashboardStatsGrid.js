@@ -1,10 +1,41 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {IoBagHandle, IoCart, IoPeople, IoPieChart} from "react-icons/io5";
 import {ThemeContext} from "../../layout/ThemeDark-Light/ThemeContext";
 import "./ToggleDarkLight.css"
 import { FaMoneyBill1Wave } from "react-icons/fa6";
+import axios from "axios";
+
+
 const DashboardStatsGrid = () => {
+
     const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+    const [wallets, setWallets] = useState([])
+    const [wallet , setWallet] = useState({
+        name: "",
+        balance: ""
+    })
+    const [userData, setUserData] = useState({})
+    const [totalBalance, setTotalBalance] = useState(0)
+    const fetchWallet = (userdata) => {
+        axios.get('http://localhost:8080/api/users/' + userdata.id)
+            .then((res) => {
+                window.localStorage.setItem("wallets", JSON.stringify((res.data.wallets)));
+                const  wallets = JSON.parse(localStorage.getItem("wallets"))
+                setWallets(wallets)
+            })
+    }
+// useEffect(() => {
+//     // Tính tổng số tiền trong các ví
+//     const total = wallets.reduce((acc, curr) => acc + curr.balance, 0);
+//     setTotalBalance(total);
+// }, [wallets]);
+    useEffect(() => {
+        const userdata = JSON.parse(localStorage.getItem("user"))
+        setUserData(userdata)
+        fetchWallet(userdata)
+        const total = wallets.reduce((first, last) => first + last.balance, 0)
+        setTotalBalance(total)
+    }, [wallet])
 
     return (
         <div className='flex gap-4 w-full flex-column' style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff',textAlign: 'center'}}>
@@ -19,10 +50,11 @@ const DashboardStatsGrid = () => {
                     <FaMoneyBill1Wave  className="text-2xl text-white" />
                 </div>
                 <div className="pl-4" >
+
                     <span className="text-sm text-gray-500 font-light">Total Money</span>
                     <div className="flex items-center">
-                        <strong className="text-xl text-gray-700 font-semibold">$54232</strong>
-                        <span className="text-sm text-green-500 pl-2">+343</span>
+                        <strong className="text-xl text-gray-700 font-semibold">{totalBalance}</strong>
+                        {/*<span className="text-sm text-green-500 pl-2">+343</span>*/}
                     </div>
                 </div>
             </BoxWrapper>
