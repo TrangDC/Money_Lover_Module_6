@@ -49,16 +49,6 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Transaction> findTransactionById(@PathVariable Long id) {
-        Optional<Transaction> transactionOptional = transactionService.findById(id);
-        if (!transactionOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) {
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
@@ -67,7 +57,7 @@ public class TransactionController {
     @PutMapping("/{id}")
     public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
         Optional<Transaction> transactionOptional = transactionService.findById(id);
-        if (!transactionOptional.isPresent()) {
+        if (transactionOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         transaction.setId(transactionOptional.get().getId());
@@ -77,14 +67,14 @@ public class TransactionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id) {
         Optional<Transaction> transactionOptional = transactionService.findById(id);
-        if (!transactionOptional.isPresent()) {
+        if (transactionOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         transactionService.remove(id);
         return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
     }
 
-    //API hiển thị khoản chi tiêu theo user
+    //API hiển thị danh sách giao dịch theo user
     @GetMapping("/user/{user_id}")
     public ResponseEntity<Iterable<Transaction>> findAll(@PathVariable Long user_id) {
         Optional<User> userOptional = userService.findById(user_id);
@@ -259,6 +249,138 @@ public class TransactionController {
         }
         transaction.setCategory(category);
         return transaction;
+    }
+
+    //API sửa một khoản income hoặc expense
+//    @PutMapping("/user/{user_id}/income_expense/{transaction_id}")
+//    public ResponseEntity<?> updateIncome_Expense(@PathVariable Long user_id,
+//                                                            @PathVariable Long transaction_id,
+//                                                            @RequestBody CreateTransaction createTransaction) {
+//
+//        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+//        if (transactionOptional.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        Optional<User> userOptional = userService.findById(user_id);
+//        if (userOptional.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        List<Transaction> transactions = userOptional.get().getTransactions();
+//        if (!transactions.contains(transactionOptional.get())) {
+//            return ResponseEntity.badRequest().body("Error: Invalid request data!");
+//        }
+//
+//        Transaction new_transaction = new Transaction();
+//        new_transaction.setId(transactionOptional.get().getId());
+//        new_transaction.setAmount(createTransaction.getAmount());
+//        new_transaction.setNote(createTransaction.getNote());
+//        new_transaction.setTransactionDate(createTransaction.getTransactionDate());
+//
+//        Long new_wallet_id = createTransaction.getWallet_id();
+//        Long new_category_id = createTransaction.getCategory_id();
+//
+//        Optional<Wallet> walletOptional = walletRepository.findById(new_wallet_id);
+//        Optional<Category> categoryOptional = categoryService.findById(new_category_id);
+//
+//        if (walletOptional.isEmpty() || categoryOptional.isEmpty()) {
+//            return new ResponseEntity<>("Error: Invalid data", HttpStatus.NOT_FOUND);
+//        }
+//
+//        Type new_type = categoryOptional.get().getType();
+//
+//        Transaction old_transaction = transactionOptional.get();
+//
+//        Long old_wallet_id = old_transaction.getWallet().getId();
+//        Type old_type = old_transaction.getCategory().getType();
+//
+//    }
+
+    @PutMapping("/user/{user_id}/income_expense/{transaction_id}")
+    public ResponseEntity<?> updateIncome_Expense(@PathVariable Long user_id,
+                                                  @PathVariable Long transaction_id,
+                                                  @RequestBody CreateTransaction createTransaction) {
+
+        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+        if (transactionOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Transaction existingTransaction = transactionOptional.get();
+
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Transaction> transactions = userOptional.get().getTransactions();
+        if (!transactions.contains(existingTransaction)) {
+            return ResponseEntity.badRequest().body("Error: Invalid request data!");
+        }
+
+        Long new_wallet_id = createTransaction.getWallet_id();
+        Long new_category_id = createTransaction.getCategory_id();
+
+        Optional<Wallet> walletOptional = walletRepository.findById(new_wallet_id);
+        Optional<Category> categoryOptional = categoryService.findById(new_category_id);
+
+        if (walletOptional.isEmpty() || categoryOptional.isEmpty()) {
+            return new ResponseEntity<>("Error: Invalid data", HttpStatus.NOT_FOUND);
+        }
+
+        Wallet newWallet = walletOptional.get();
+        Category newCategory = categoryOptional.get();
+        Type newType = newCategory.getType();
+
+        // Lấy thông tin của ví và loại giao dịch cũ
+        Wallet oldWallet = existingTransaction.getWallet();
+        Category oldCategory = existingTransaction.getCategory();
+        Type oldType = oldCategory.getType();
+        Long old_wallet_id = oldWallet.getId();
+
+        // Kiểm tra nếu wallet_id mới khác wallet_id cũ
+        if (!new_wallet_id.equals(old_wallet_id)) {
+            // Nếu loại là INCOME, trừ số tiền từ số dư của ví cũ
+            // Nếu loại là EXPENSE, cộng số tiền vào số dư của ví cũ
+            if (oldType == Type.INCOME) {
+                oldWallet.setBalance(oldWallet.getBalance() - existingTransaction.getAmount());
+            } else if (oldType == Type.EXPENSE) {
+                oldWallet.setBalance(oldWallet.getBalance() + existingTransaction.getAmount());
+            }
+            // Nếu loại là INCOME, cộng số tiền vào số dư của ví mới
+            // Nếu loại là EXPENSE, trừ số tiền từ số dư của ví mới
+            if (newType == Type.INCOME) {
+                newWallet.setBalance(newWallet.getBalance() + existingTransaction.getAmount());
+            } else if (newType == Type.EXPENSE) {
+                newWallet.setBalance(newWallet.getBalance() - existingTransaction.getAmount());
+            }
+            // Cập nhật ví mới cho giao dịch
+            existingTransaction.setWallet(newWallet);
+        }
+
+        // Cập nhật loại và số tiền của giao dịch
+        existingTransaction.setAmount(createTransaction.getAmount());
+        existingTransaction.setNote(createTransaction.getNote());
+        existingTransaction.setTransactionDate(createTransaction.getTransactionDate());
+        existingTransaction.setCategory(newCategory);
+
+        // Kiểm tra nếu loại mới khác loại cũ
+        if (newType != oldType) {
+            // Nếu loại mới là INCOME và loại cũ là EXPENSE
+            if (newType == Type.INCOME && oldType == Type.EXPENSE) {
+                // Trừ số tiền từ số dư của ví
+                oldWallet.setBalance(oldWallet.getBalance() - existingTransaction.getAmount());
+            }
+            // Nếu loại mới là EXPENSE và loại cũ là INCOME
+            else if (newType == Type.EXPENSE && oldType == Type.INCOME) {
+                // Cộng số tiền vào số dư của ví
+                oldWallet.setBalance(oldWallet.getBalance() + existingTransaction.getAmount());
+            }
+        }
+
+        // Lưu lại giao dịch sau khi cập nhật
+        Transaction updatedTransaction = transactionService.save(existingTransaction);
+
+        return ResponseEntity.ok(updatedTransaction);
     }
 
 }
