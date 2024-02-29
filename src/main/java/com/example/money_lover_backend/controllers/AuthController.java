@@ -98,6 +98,37 @@ public class AuthController {
         return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("/google_signin")
+    public ResponseEntity<?> authenticateGGUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+        if (!userOptional.isPresent()) {
+            throw new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail());
+        }
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
+            User user = userOptional.get();
+
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getDecode_password()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getImage(),
+                    roles));
+        }
+        return new ResponseEntity<>("No user were found", HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
