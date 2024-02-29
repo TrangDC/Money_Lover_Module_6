@@ -99,5 +99,21 @@ public class CategoryController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
+    //API sửa thông tin một category
+    @PutMapping("/user/{user_id}/edit/{category_id}")
+    public ResponseEntity<Category> update(@PathVariable Long user_id,
+                                           @PathVariable Long category_id,
+                                           @RequestBody Category category) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<Category> categoryOptional = categoryService.findById(category_id);
+        if (!categoryOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        category.setId(categoryOptional.get().getId());
+        return new ResponseEntity<>(categoryService.save(category), HttpStatus.OK);
+    }
 
 }
