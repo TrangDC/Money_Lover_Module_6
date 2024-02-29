@@ -97,8 +97,8 @@ const Header = () => {
                             <MDBDropdownItem onClick={() => navigate("wallets")} link>See More</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>
-
                 </div>
+
                 <div className='flex items-center gap-2 mr-2'>
 
                     <Popover className='relative'>

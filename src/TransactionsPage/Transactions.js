@@ -7,7 +7,16 @@ import {
     MDBTableBody,
     MDBContainer,
     MDBInputGroup,
-    MDBInput, MDBCheckbox, MDBRow, MDBCol, MDBCard, MDBCardBody
+    MDBInput,
+    MDBCheckbox,
+    MDBRow,
+    MDBCol,
+    MDBCard,
+    MDBCardBody,
+    MDBDropdown,
+    MDBDropdownToggle,
+    MDBDropdownMenu,
+    MDBDropdownItem
 } from 'mdb-react-ui-kit';
 import {
     MDBNavbarBrand,
@@ -22,6 +31,8 @@ import {
 } from 'mdb-react-ui-kit';
 import {MDBCardText, MDBIcon, MDBListGroupItem} from "mdbreact";
 import {FaLayerGroup} from "react-icons/fa6";
+import {MdOutlineAttachMoney, MdOutlineNotes} from "react-icons/md";
+import {Input} from "@chakra-ui/react";
 
 
 export default function Transactions() {
@@ -66,82 +77,29 @@ export default function Transactions() {
                         </MDBModalHeader>
                         <MDBModalBody>
                             <form>
-                                <MDBCardText className="text-muted">Money number</MDBCardText>
-                                <MDBRow>
-                                    <MDBCol className="mb-4"><FaLayerGroup /></MDBCol>
-                                    <MDBCol><MDBInput id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
-                                </MDBRow>
-                                <MDBCardText className="text-muted">Choose group</MDBCardText>
-                                <MDBInput type='email' id='form4Example2' wrapperClass='mb-4' label='Email address' />
+                                <MDBCard className="mb-4" style={{padding: "20px"}}>
+                                    <MDBCardText className="text-muted">Money number</MDBCardText>
+                                    <MDBRow>
+                                        <MDBCol className="mb-4" sm="2" style={{fontSize: "35px"}}><MdOutlineAttachMoney/></MDBCol>
+                                        <MDBCol sm="10" ><MDBInput id='form4Example1' wrapperClass='mb-4' label='Money' /></MDBCol>
+                                    </MDBRow>
+                                    <hr/>
 
-                                <MDBInput wrapperClass='mb-4' textarea id='form4Example3' rows={4} label='Message' />
-
-
-
-                                {/*------- add ---------*/}
-                                <MDBCard className="mb-4">
-                                    <MDBCardBody>
-                                        <MDBRow>
-                                            <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                                <FaLayerGroup />
-                                                <MDBInput id='form4Example1' wrapperClass='mb-4' label='Name' />
-                                            </MDBListGroupItem>
-                                        </MDBRow>
-
-                                        <MDBRow>
-                                            <MDBCol sm="1">
-                                                <FaLayerGroup />
-                                            </MDBCol>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Full Name</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="8">
-                                                <MDBInput id='form4Example1' wrapperClass='mb-4' label='Name' />
-                                            </MDBCol>
-                                        </MDBRow>
-
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="1">
-                                                <FaLayerGroup />
-                                            </MDBCol>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Full Name</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="8">
-                                                <MDBCardText className="text-muted">Johnatan Smith</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
-
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Phone</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">(097) 234-5678</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Mobile</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">(098) 765-4321</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
-                                        <hr />
-                                        <MDBRow>
-                                            <MDBCol sm="3">
-                                                <MDBCardText>Address</MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">Bay Area, San Francisco, CA</MDBCardText>
-                                            </MDBCol>
-                                        </MDBRow>
-                                    </MDBCardBody>
+                                    <MDBCardText className="text-muted">Note</MDBCardText>
+                                    <MDBRow>
+                                        <MDBCol className="mb-4" sm="2" style={{fontSize: "25px"}}><MdOutlineNotes /></MDBCol>
+                                        <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
+                                    </MDBRow>
+                                    <hr/>
+                                    <MDBRow>
+                                        <MDBCol sm="2"><MDBCardText className="text-muted">Date</MDBCardText></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                    </MDBRow>
+                                    <hr/>
+                                    <MDBCardText className="text-muted">Wallet</MDBCardText>
+                                    <MDBCardText className="text-muted">Category</MDBCardText>
                                 </MDBCard>
+
                                 <MDBBtn type='submit' className='mb-4 btn btn-success' block>
                                     Save
                                 </MDBBtn>
@@ -153,18 +111,27 @@ export default function Transactions() {
             </MDBModal>
             {/*------ add -------*/}
 
-            {/*-----------*/}
-            <MDBNavbar light bgColor='light'>
-                <MDBContainer fluid>
-                    <MDBBtn onClick={openBoxAddTransaction} className='me-1' color='warning'>
-                        + Add Transaction
-                    </MDBBtn>
-                    <MDBInputGroup tag="form" className='d-flex w-auto mb-3'>
-                        <input className='form-control' placeholder="Type query" aria-label="Search" type='Search' />
-                        <MDBBtn outline>Search</MDBBtn>
-                    </MDBInputGroup>
-                </MDBContainer>
-            </MDBNavbar>
+{/*-------------*/}
+            <div className='relative'>
+                <MDBNavbar light bgColor='light'>
+                    <MDBContainer fluid style={{height: "50px"}}>
+                        <MDBDropdown group>
+                            <MDBDropdownToggle color='warning' >+ Add Transaction</MDBDropdownToggle>
+                            <MDBDropdownMenu>
+                                <MDBDropdownItem onClick={openBoxAddTransaction} link>EXPENSE</MDBDropdownItem>
+                                <MDBDropdownItem onClick={openBoxAddTransaction} link>DEBT</MDBDropdownItem>
+                                <MDBDropdownItem onClick={openBoxAddTransaction} link>INCOME</MDBDropdownItem>
+                                <MDBDropdownItem onClick={openBoxAddTransaction} link>LOAN</MDBDropdownItem>
+                            </MDBDropdownMenu>
+                        </MDBDropdown>
+                        <MDBInputGroup tag="form" className='d-flex w-auto mb-3'>
+                            <input className='form-control' placeholder="Type query" aria-label="Search" type='Search' />
+                            <MDBBtn outline>Search</MDBBtn>
+                        </MDBInputGroup>
+                    </MDBContainer>
+                </MDBNavbar>
+            </div>
+            {/*---------------*/}
 
             <MDBTable align='middle'>
                 <MDBTableHead>
