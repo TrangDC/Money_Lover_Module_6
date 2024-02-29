@@ -68,51 +68,70 @@ export default function Transactions() {
             amount: "",
             category: "",
             note: "",
-            andDate: "",
+            endDate: "",
             lender: "",
             borrower: "",
             wallet: "",
             transactionDate: ""
-        })
+        });
 
-        const getTransactions = (userdata) => {
-            axios.get('http://localhost:8080/api/users/' + userdata.id)
-                .then((res) => {
-                    console.log(res)
-                    window.localStorage.setItem("transactions", JSON.stringify(res.data.transactions));
-                    const transactions = JSON.parse(localStorage.getItem("transactions"));
-                    setTransactions(transactions);
-                })
-        }
-        useEffect(() => {
-            const userdata = JSON.parse(localStorage.getItem("user"));
-            setUserData(userdata);
-            getTransactions(userdata)
-        }, [transaction])
-
-// --------- Get Wallets --------
+    const [user, setUser] = useState([]);
     const [wallets, setWallets] = useState([])
     const [wallet, setWallet] = useState({
         name: "",
         balance: ""
     })
-    const [userData, setUserData] = useState({})
-    const fetchWallet = (userdata) => {
-        axios.get('http://localhost:8080/api/users/' + userdata.id)
-            .then((res) => {
-                window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Lấy thông tin người dùng từ localStorage
+                const userdata = JSON.parse(localStorage.getItem("user"));
+                setUser(userdata);
+
                 const wallets = JSON.parse(localStorage.getItem("wallets"));
                 setWallets(wallets);
-            })
-    }
-    useEffect(() => {
-        const userdata = JSON.parse(localStorage.getItem("user"));
-        setUserData(userdata);
-        fetchWallet(userdata)
-    }, [wallet])
+
+                // Gọi API để lấy danh sách giao dịch
+                const transactionResponse = await axios.get('http://localhost:8080/api/transactions/user/' + userdata.id);
+                const transactionsData = transactionResponse.data;
+
+                window.localStorage.setItem("transactions", JSON.stringify(transactionsData));
+                setTransactions(transactionsData);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [wallet]);
+
+//  --------- Get Wallets --------
+//     const [wallets, setWallets] = useState([])
+//     const [wallet, setWallet] = useState({
+//         name: "",
+//         balance: ""
+//     })
+//     const [userData, setUserData] = useState({})
+//     const fetchWallet = (userdata) => {
+//         axios.get('http://localhost:8080/api/users/' + userdata.id)
+//             .then((res) => {
+//                 window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+//                 const wallets = JSON.parse(localStorage.getItem("wallets"));
+//                 setWallets(wallets);
+//             })
+//     }
+//     useEffect(() => {
+//         const userdata = JSON.parse(localStorage.getItem("user"));
+//         setUserData(userdata);
+//         fetchWallet(userdata)
+//     }, [wallet])
 
     return (
         <div style={{width: "1200px", margin: "auto", marginTop: "50px"}}>
+
+
 {/*--------  Menu Add Transactions -----*/}
             <div className='relative'>
                 <MDBNavbar light bgColor='light'>
@@ -138,6 +157,7 @@ export default function Transactions() {
 
             <MDBTable align='middle'>
                 <MDBTableHead>
+
                     <tr>
                         <th scope='col'>Name</th>
                         <th scope='col'>Amount</th>
@@ -151,9 +171,11 @@ export default function Transactions() {
                         <th scope='col'>Delete</th>
                     </tr>
                 </MDBTableHead>
+
+
                 <MDBTableBody>
-                    {transactions.map((transaction) => {
-                        <tr>
+                    {transactions.map((transaction, index) => (
+                        <tr key={index}>
                             <td>
                                 <div className='d-flex align-items-center'>
                                     <img
@@ -169,17 +191,17 @@ export default function Transactions() {
                                 </div>
                             </td>
                             <td>
-                                <p className='fw-normal mb-1'>Software engineer</p>
-                                <p className='text-muted mb-0'>IT department</p>
+                                <p className='fw-normal mb-1'>{transaction.amount}</p>
+                                <p className='text-muted mb-0'></p>
                             </td>
                             <td>
                                 <MDBBadge color='success' pill>
                                     Active
                                 </MDBBadge>
                             </td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.wallet}</td>
-                            <td>Senior</td>
+                            <td></td>
+                            <td>{transaction.transactionDate}</td>
+                            <td>{transaction.lender}</td>
                             <td>Senior</td>
                             <td>Senior</td>
                             <td>
@@ -199,7 +221,8 @@ export default function Transactions() {
                                 </MDBBtn>
                             </td>
                         </tr>
-                    })}
+                    ))}
+
 
                 </MDBTableBody>
             </MDBTable>
