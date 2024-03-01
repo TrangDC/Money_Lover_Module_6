@@ -51,18 +51,10 @@ export default function Transactions() {
         };
 
     const handleDelete = (id) => {
-        const confirmation = window.confirm('Are you sure?');
-        if (confirmation) {
-            // Gọi API để xóa giao dịch
+        const confirm = window.confirm('Are you sủa?');
+        if (confirm) {
             axios.delete(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${id}`)
                 .then(res => {
-                    // Xóa giao dịch khỏi danh sách giao dịch trong state
-                    const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
-                    setTransactions(updatedTransactions);
-
-                    // Cập nhật lại localStorage
-                    localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
-
                     alert("Successful delete!");
                 })
                 .catch(err => console.log(err))

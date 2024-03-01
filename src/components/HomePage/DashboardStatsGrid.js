@@ -34,7 +34,7 @@ const DashboardStatsGrid = () => {
         const userdata = JSON.parse(localStorage.getItem("user"))
         setUserData(userdata)
         fetchWallet(userdata)
-    }, [wallets])
+    }, [wallet])
 
     return (
         <div className='flex gap-4 w-full flex-column' style={{ backgroundColor: isDarkMode ? '#F5F5F5' : '#fff',textAlign: 'center'}}>

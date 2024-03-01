@@ -23,6 +23,8 @@ const Header = () => {
         name: "",
         balance: ""
     })
+    const [category, setCategory] = useState([])
+
     const [userData, setUserData] = useState({})
     const fetchWallet = (userdata) => {
         axios.get('http://localhost:8080/api/users/' + userdata.id)
