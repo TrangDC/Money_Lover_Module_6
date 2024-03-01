@@ -38,7 +38,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'transactions',
         label: 'Transactions',
-        path: '/transactions',
+        path: '/auth/transactions',
         icon: <HiOutlineDocumentText />
     },
     {

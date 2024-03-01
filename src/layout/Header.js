@@ -27,7 +27,7 @@ const Header = () => {
     const fetchWallet = (userdata) => {
         axios.get('http://localhost:8080/api/users/' + userdata.id)
             .then((res) => {
-                window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+                // window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
                 const wallets = JSON.parse(localStorage.getItem("wallets"));
                 setWallets(wallets);
             })

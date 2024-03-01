@@ -102,8 +102,9 @@ const WalletPage = () => {
     const handleDelete = (id) => {
         const confirm = window.confirm('Are You Sure ?');
         if (confirm) {
-            axios.delete(`http://localhost:8080/api/wallets/user/${user.id}/delete/${selectedWalletId}`)
+            axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${selectedWalletId}`)
                 .then(res => {
+                    localStorage.setItem("wallets", JSON.stringify(res.data))
                     navigate("/auth/wallets")
                     handleClose();
                     fetchWallets(user);
@@ -152,11 +153,11 @@ const WalletPage = () => {
         // }
     };
     const fetchWallets = (userdata) => {
-        axios.get('http://localhost:8080/api/users/' + userdata.id)
+        axios.get('http://localhost:8080/api/wallets/user/' + userdata.id)
             .then((res) => {
                 console.log(res.data);
 
-                window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
+                window.localStorage.setItem("wallets", JSON.stringify(res.data));
                 const wallets = JSON.parse(localStorage.getItem("wallets"));
                 setWallets(wallets);
             })
