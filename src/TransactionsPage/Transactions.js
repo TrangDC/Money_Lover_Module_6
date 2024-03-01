@@ -42,8 +42,34 @@ import {FaMoneyBillTransfer} from "react-icons/fa6";
 export default function Transactions() {
 
 // ------ Popup Delete --------
+        const [selectedId, setSelectedId] = useState(null);
         const [modalDelete, setModalDelete] = useState(false);
-        const  openDelete= () => setModalDelete(!modalDelete);
+        const  openDelete= (id) => {
+            setSelectedId(id);
+            console.log(selectedId)
+            setModalDelete(!modalDelete)
+        };
+
+    const handleDelete = (id) => {
+        const confirmation = window.confirm('Are you sure?');
+        if (confirmation) {
+            // Gọi API để xóa giao dịch
+            axios.delete(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${id}`)
+                .then(res => {
+                    // Xóa giao dịch khỏi danh sách giao dịch trong state
+                    const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
+                    setTransactions(updatedTransactions);
+
+                    // Cập nhật lại localStorage
+                    localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+
+                    alert("Successful delete!");
+                })
+                .catch(err => console.log(err))
+        }
+    }
+
+
 
 // ----- Select show form category Transactions ------
         // ---- INCOME ----
@@ -108,26 +134,7 @@ export default function Transactions() {
         fetchData();
     }, [wallet]);
 
-//  --------- Get Wallets --------
-//     const [wallets, setWallets] = useState([])
-//     const [wallet, setWallet] = useState({
-//         name: "",
-//         balance: ""
-//     })
-//     const [userData, setUserData] = useState({})
-//     const fetchWallet = (userdata) => {
-//         axios.get('http://localhost:8080/api/users/' + userdata.id)
-//             .then((res) => {
-//                 window.localStorage.setItem("wallets", JSON.stringify(res.data.wallets));
-//                 const wallets = JSON.parse(localStorage.getItem("wallets"));
-//                 setWallets(wallets);
-//             })
-//     }
-//     useEffect(() => {
-//         const userdata = JSON.parse(localStorage.getItem("user"));
-//         setUserData(userdata);
-//         fetchWallet(userdata)
-//     }, [wallet])
+
 
     return (
         <div style={{width: "1200px", margin: "auto", marginTop: "50px"}}>
@@ -218,7 +225,9 @@ export default function Transactions() {
                                 )}
                             </td>
                             <td>
-                                <MDBBtn className='me-1' onClick={openDelete} color='danger'>
+                                <MDBBtn className='me-1' onClick={() => {
+                                    handleDelete(transaction.id);
+                                }} color='danger'>
                                     Delete
                                 </MDBBtn>
                             </td>
@@ -229,6 +238,26 @@ export default function Transactions() {
                 </MDBTableBody>
             </MDBTable>
 
+{/*--------   Popup Delete  --------*/}
+
+            <MDBModal staticBackdrop tabIndex='-1' open={modalDelete} setOpen={setModalDelete}>
+                <MDBModalDialog>
+                    <MDBModalContent>
+                        <MDBModalHeader className="modal-header bg-danger text-white d-flex justify-content-center">
+                            <MDBModalTitle>Do you want to delete the transaction?</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={openDelete}></MDBBtn>
+                        </MDBModalHeader>
+
+                        <MDBModalBody></MDBModalBody>
+                        <MDBModalFooter>
+                            <MDBBtn className="btn btn-outline-danger" onClick={openDelete}>
+                                No
+                            </MDBBtn>
+                            <MDBBtn className="btn btn-danger" >Delete</MDBBtn>
+                        </MDBModalFooter>
+                    </MDBModalContent>
+                </MDBModalDialog>
+            </MDBModal>
 
 {/*------------ ADD Transaction  INCOME-------------*/}
 
@@ -510,26 +539,7 @@ export default function Transactions() {
                 </MDBModalDialog>
             </MDBModal>
 
-{/*--------   Popup Delete  --------*/}
 
-            <MDBModal staticBackdrop tabIndex='-1' open={modalDelete} setOpen={setModalDelete}>
-                <MDBModalDialog>
-                    <MDBModalContent>
-                        <MDBModalHeader className="modal-header bg-danger text-white d-flex justify-content-center">
-                            <MDBModalTitle>Do you want to delete the transaction?</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={openDelete}></MDBBtn>
-                        </MDBModalHeader>
-
-                        <MDBModalBody></MDBModalBody>
-                        <MDBModalFooter>
-                            <MDBBtn className="btn btn-outline-danger" onClick={openDelete}>
-                                No
-                            </MDBBtn>
-                            <MDBBtn className="btn btn-danger">Delete</MDBBtn>
-                        </MDBModalFooter>
-                    </MDBModalContent>
-                </MDBModalDialog>
-            </MDBModal>
 
         </div>
 
