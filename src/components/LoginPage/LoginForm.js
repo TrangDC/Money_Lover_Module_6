@@ -59,13 +59,13 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
         } catch (error) {
             console.error('Error during login:', error);
 
-                toast({
-                    title: 'Login Failed',
-                    description: 'Please check your credentials and try again.',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
+            toast({
+                title: 'Login Failed',
+                description: 'Please check your credentials and try again.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
             setIsLoading(false);
         }
 
@@ -195,14 +195,14 @@ const LoginForm = ({ handleLoginSuccess, setIsLoading  }) => {
                                         <>
                                             <p>Email has been sent!</p>
                                         </>
-                                        ) : (
-                                            <>
-                                                <FormControl isRequired>
-                                                    <FormLabel>Email</FormLabel>
-                                                    <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
-                                                </FormControl>
-                                            </>
-                                        )
+                                    ) : (
+                                        <>
+                                            <FormControl isRequired>
+                                                <FormLabel>Email</FormLabel>
+                                                <Input placeholder='Enter Email' value={recoverEmail} onChange={handleChangeEmail}/>
+                                            </FormControl>
+                                        </>
+                                    )
                                     }
 
                                 </ModalBody>

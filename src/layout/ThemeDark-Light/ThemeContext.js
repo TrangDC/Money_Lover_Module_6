@@ -1,4 +1,7 @@
 import React, { createContext, useState } from 'react';
+import Modal from "react-bootstrap/Modal";
+import {MDBInput} from "mdb-react-ui-kit";
+import Button from "react-bootstrap/Button";
 
 const ThemeContext = createContext();
 
@@ -17,3 +20,4 @@ const ThemeProvider = ({ children }) => {
 };
 
 export { ThemeProvider, ThemeContext };
+

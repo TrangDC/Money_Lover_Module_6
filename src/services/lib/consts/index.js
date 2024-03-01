@@ -6,7 +6,8 @@ import {
     HiOutlineDocumentText,
     HiOutlineAnnotation,
     HiOutlineQuestionMarkCircle,
-    HiOutlineCog, HiOutlineLogout
+    HiOutlineCog,
+    HiOutlineLogout
 } from 'react-icons/hi'
 
 export const DASHBOARD_SIDEBAR_LINKS = [
@@ -31,19 +32,19 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'budgets',
         label: 'Budgets',
-        path: '/auth/budgets',
+        path: '/budgets',
         icon: <HiOutlineUsers />
     },
     {
         key: 'transactions',
         label: 'Transactions',
-        path: '/auth/transactions',
+        path: '/transactions',
         icon: <HiOutlineDocumentText />
     },
     {
         key: 'messages',
         label: 'Messages',
-        path: '/auth/messages',
+        path: '/messages',
         icon: <HiOutlineAnnotation />
     }
 ]
@@ -64,6 +65,7 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     {
         key: 'logout',
         label: 'Log Out',
-        icon: <HiOutlineLogout/>
+        icon: <HiOutlineLogout />
     }
+
 ]

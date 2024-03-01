@@ -14,7 +14,7 @@ const RegisterPage = () => {
                 active={isLoading}
                 spinner
                 text="Đang tải..."
-                className="overlay"
+                className="overlay h-screen w-screen"
                 timeout={3000}
             >
             <MDBContainer fluid>
