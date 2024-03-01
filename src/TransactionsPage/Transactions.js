@@ -35,6 +35,7 @@ import {Input} from "@chakra-ui/react";
 import axios from "axios";
 import {FaRegCalendarAlt} from "react-icons/fa";
 import {BsWallet} from "react-icons/bs";
+import {FaMoneyBillTransfer} from "react-icons/fa6";
 
 
 
@@ -66,13 +67,13 @@ export default function Transactions() {
         const [transactions, setTransactions] = useState([])
         const [transaction, setTransaction] = useState({
             amount: "",
-            category: "",
             note: "",
+            transactionDate: "",
             endDate: "",
             lender: "",
             borrower: "",
-            wallet: "",
-            transactionDate: ""
+            wallet_id: "",
+            category_id: ""
         });
 
     const [user, setUser] = useState([]);
@@ -159,11 +160,12 @@ export default function Transactions() {
                 <MDBTableHead>
 
                     <tr>
-                        <th scope='col'>Name</th>
+                        <th scope='col'>Index</th>
                         <th scope='col'>Amount</th>
                         <th scope='col'>Category</th>
                         <th scope='col'>Wallet</th>
                         <th scope='col'>Date</th>
+                        <th scope='col'>Type</th>
                         <th scope='col'>Lender</th>
                         <th scope='col'>Borrower</th>
                         <th scope='col'>Note</th>
@@ -178,16 +180,12 @@ export default function Transactions() {
                         <tr key={index}>
                             <td>
                                 <div className='d-flex align-items-center'>
-                                    <img
-                                        src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                                        alt=''
-                                        style={{ width: '45px', height: '45px' }}
-                                        className='rounded-circle'
-                                    />
+                                    <p className='fw-bold mb-1'>{index + 1}</p>
                                     <div className='ms-3'>
-                                        <p className='fw-bold mb-1'>John Doe</p>
-                                        <p className='text-muted mb-0'>john.doe@gmail.com</p>
+                                        <FaMoneyBillTransfer style={{ width: '45px', height: '45px' }}/>
+
                                     </div>
+
                                 </div>
                             </td>
                             <td>
@@ -196,24 +194,28 @@ export default function Transactions() {
                             </td>
                             <td>
                                 <MDBBadge color='success' pill>
-                                    Active
+                                    {transaction.category.name}
                                 </MDBBadge>
                             </td>
-                            <td></td>
+                            <td>{transaction.wallet.name}</td>
                             <td>{transaction.transactionDate}</td>
+                            <td>{transaction.category.type}</td>
                             <td>{transaction.lender}</td>
-                            <td>Senior</td>
-                            <td>Senior</td>
+                            <td>{transaction.borrower}</td>
+                            <td>{transaction.note}</td>
                             <td>
-                                <MDBDropdown group>
-                                    <MDBDropdownToggle color='info' >Edit</MDBDropdownToggle>
-                                    <MDBDropdownMenu>
-                                        <MDBDropdownItem onClick={openAddTransactionIncome} link>INCOME</MDBDropdownItem>
-                                        <MDBDropdownItem onClick={openAddTransactionExpense} link>EXPENSE</MDBDropdownItem>
-                                        <MDBDropdownItem onClick={openAddTransactionDebt} link>DEBT</MDBDropdownItem>
-                                        <MDBDropdownItem onClick={openAddTransactionLoan} link>LOAN</MDBDropdownItem>
-                                    </MDBDropdownMenu>
-                                </MDBDropdown>
+                                {transaction.category.type === 'INCOME' && (
+                                    <MDBBtn color='success' onClick={openAddTransactionIncome}>Edit</MDBBtn>
+                                )}
+                                {transaction.category.type === 'EXPENSE' && (
+                                    <MDBBtn color='primary' onClick={openAddTransactionExpense}>Edit</MDBBtn>
+                                )}
+                                {transaction.category.type === 'DEBT' && (
+                                    <MDBBtn color='secondary' onClick={openAddTransactionDebt}>Edit</MDBBtn>
+                                )}
+                                {transaction.category.type === 'LOAN' && (
+                                    <MDBBtn color='info' onClick={openAddTransactionLoan}>Edit</MDBBtn>
+                                )}
                             </td>
                             <td>
                                 <MDBBtn className='me-1' onClick={openDelete} color='danger'>
