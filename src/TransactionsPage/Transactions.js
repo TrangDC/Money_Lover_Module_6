@@ -31,16 +31,23 @@ import {
 } from 'mdb-react-ui-kit';
 import {MDBCardText, MDBIcon, MDBListGroupItem} from "mdbreact";
 import {MdOutlineAttachMoney, MdOutlineNotes} from "react-icons/md";
-import {Input} from "@chakra-ui/react";
+import {Input, Select} from "@chakra-ui/react";
 import axios from "axios";
 import {FaRegCalendarAlt} from "react-icons/fa";
 import {BsWallet} from "react-icons/bs";
 import {FaMoneyBillTransfer} from "react-icons/fa6";
+import {useToast} from "@chakra-ui/react";
+import Form from 'react-bootstrap/Form';
+import {useNavigate} from "react-router-dom";
+
 
 
 
 export default function Transactions() {
 
+    const toast = useToast()
+
+    const navigate = useNavigate();
 // ------ Popup Delete --------
         const [selectedId, setSelectedId] = useState(null);
         const [modalDelete, setModalDelete] = useState(false);
@@ -55,7 +62,15 @@ export default function Transactions() {
         if (confirm) {
             axios.delete(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${id}`)
                 .then(res => {
-                    alert("Successful delete!");
+                    toast({
+                        title: 'Create success!',
+                        description: 'You successfully deleted a transaction!',
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: true,
+                    });
+                    navigate("/auth/wallets");
+
                 })
                 .catch(err => console.log(err))
         }
@@ -104,16 +119,49 @@ export default function Transactions() {
 
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
+        console.log(e)
+        setTransaction({
+            ...transaction,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Sau khi biểu mẫu được gửi, bạn có thể gửi formData đến API hoặc xử lý nó theo cách khác tùy vào nhu cầu của bạn.
-        console.log(formData);
+    const handleSubmit_Debt_Loan = (event) => {
+        event.preventDefault();
+        const transactionData = {
+            amount: parseInt(transaction.amount),
+            note: transaction.note,
+            transactionDate: transaction.transactionDate,
+            endDate: transaction.endDate,
+            lender: transaction.lender,
+            borrower: transaction.borrower,
+            wallet_id: parseInt(transaction.wallet_id),
+            category_id: parseInt(transaction.category_id)
+        };
+        console.log(transactionData)
+        axios.post(`http://localhost:8080/api/transactions/user/${user.id}/expense_income`, transactionData)
+            .then(res => {
+                console.log(res);
+                toast({
+                    title: 'Create success!',
+                    description: 'You successfully created a transaction!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+                navigate("/auth/wallets");
+
+            })
+            .catch(err => {
+                console.error(err);
+                toast({
+                    title: 'Create Failed',
+                    description: 'Failed to create a wallet!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            });
     };
 
 
@@ -145,7 +193,7 @@ export default function Transactions() {
         };
 
         fetchData();
-    }, [wallet]);
+    }, [transaction]);
 
 
 
@@ -282,37 +330,38 @@ export default function Transactions() {
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionIncome}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit_Debt_Loan}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "35px", color: "#14A44D"}}><MdOutlineAttachMoney/></MDBCol>
-                                        <MDBCol sm="10" ><MDBInput type="number" id='form4Example1' wrapperClass='mb-4' label='Money' /></MDBCol>
+                                        <MDBCol sm="10" ><MDBInput required type="number" name='amount' id='form4Example1' wrapperClass='mb-4' label='Money' value={transaction.amount} onChange={handleChange} /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
-                                        <select className="form-select" aria-label="Default select example">
+                                        <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
+                                            <option>Select category</option>
                                             {categories
                                                 .filter(category => category.type === "INCOME") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
                                                 .map((category) => (
-                                                    <option key={category.id} value={category.type}>
+                                                    <option key={category.id} value={category.id} >
                                                         {category.name}
                                                     </option>
                                                 ))}
-                                        </select>
+                                        </Select>
                                     </div>
                                     <hr/>
                                     <MDBCardText className="text-muted">Note</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "25px"}}><MdOutlineNotes /></MDBCol>
-                                        <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
+                                        <MDBCol><MDBInput name='note' value={transaction.note} onChange={handleChange} style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
-                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                        <MDBCol sm="10"><Input required type={'date'} name='transactionDate' value={transaction.transactionDate} onChange={handleChange}></Input></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Wallets</MDBCardText>
@@ -320,13 +369,14 @@ export default function Transactions() {
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "30px"}}><BsWallet /></MDBCol>
                                         <MDBCol sm="10" >
                                             <div className='relative'>
-                                                <select className="form-select" aria-label="Default select example">
+                                                <Select name='wallet_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
+                                                    <option>Select wallet</option>
                                                     {wallets.map((wallet, index) => (
-                                                        <option key={index} value={wallet.name}>
+                                                        <option key={index} value={wallet.id}>
                                                             {wallet.name}
                                                         </option>
                                                     ))}
-                                                </select>
+                                                </Select>
                                             </div>
                                         </MDBCol>
                                     </MDBRow>
@@ -334,7 +384,7 @@ export default function Transactions() {
                                 <MDBBtn type='submit' className='mb-4 btn btn-success' block>
                                     Save
                                 </MDBBtn>
-                            </form>
+                            </Form>
                         </MDBModalBody>
 
                     </MDBModalContent>
@@ -351,37 +401,38 @@ export default function Transactions() {
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionExpense}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit_Debt_Loan}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "35px", color: "red"}}><MdOutlineAttachMoney/></MDBCol>
-                                        <MDBCol sm="10" ><MDBInput type="number" id='form4Example1' wrapperClass='mb-4' label='Money' /></MDBCol>
+                                        <MDBCol sm="10" ><MDBInput type="number" name='amount' id='form4Example1' wrapperClass='mb-4' label='Money' value={transaction.amount} onChange={handleChange} /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
-                                        <select className="form-select" aria-label="Default select example">
+                                        <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
+                                            <option>Select category</option>
                                             {categories
                                                 .filter(category => category.type === "EXPENSE") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
                                                 .map((category) => (
-                                                    <option key={category.id} value={category.type}>
+                                                    <option key={category.id} value={category.id} >
                                                         {category.name}
                                                     </option>
                                                 ))}
-                                        </select>
+                                        </Select>
                                     </div>
                                     <hr/>
                                     <MDBCardText className="text-muted">Note</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "25px"}}><MdOutlineNotes /></MDBCol>
-                                        <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
+                                        <MDBCol><MDBInput name='note' value={transaction.note} onChange={handleChange} style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
-                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'} name='transactionDate' value={transaction.transactionDate} onChange={handleChange}></Input></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Wallets</MDBCardText>
@@ -389,13 +440,14 @@ export default function Transactions() {
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "30px"}}><BsWallet /></MDBCol>
                                         <MDBCol sm="10" >
                                             <div className='relative'>
-                                                <select className="form-select" aria-label="Default select example">
+                                                <Select name='wallet_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
+                                                    <option>Select wallet</option>
                                                     {wallets.map((wallet, index) => (
-                                                        <option key={index} value={wallet.name}>
+                                                        <option key={index} value={wallet.id}>
                                                             {wallet.name}
                                                         </option>
                                                     ))}
-                                                </select>
+                                                </Select>
                                             </div>
                                         </MDBCol>
                                     </MDBRow>
@@ -403,7 +455,7 @@ export default function Transactions() {
                                 <MDBBtn type='submit' className='mb-4 btn btn-success' block>
                                     Save
                                 </MDBBtn>
-                            </form>
+                            </Form>
                         </MDBModalBody>
 
                     </MDBModalContent>
@@ -420,7 +472,7 @@ export default function Transactions() {
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionDebt}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit_Debt_Loan}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
@@ -501,47 +553,47 @@ export default function Transactions() {
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionLoan}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form onSubmit={handleSubmit}>
+                            <Form onSubmit={handleSubmit_Debt_Loan}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "35px", color: "#14A44D"}}><MdOutlineAttachMoney/></MDBCol>
-                                        <MDBCol sm="10" ><MDBInput type="number" id='form4Example1' wrapperClass='mb-4' label='Money' /></MDBCol>
+                                        <MDBCol sm="10" ><MDBInput type="number" name='amount' id='form4Example1' wrapperClass='mb-4' label='Money' value={transaction.amount} onChange={handleChange} /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
-                                        <select className="form-select" aria-label="Default select example">
+                                        <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
                                             {categories
                                                 .filter(category => category.type === "LOAN") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
                                                 .map((category) => (
-                                                    <option key={category.id} value={category.type}>
+                                                    <option key={category.id} value={category.id} >
                                                         {category.name}
                                                     </option>
                                                 ))}
-                                        </select>
+                                        </Select>
                                     </div>
                                     <hr/>
                                     <MDBCardText className="text-muted">Borrower</MDBCardText>
-                                    <MDBCol sm="12" ><MDBInput type="text" id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
+                                    <MDBCol sm="12" ><MDBInput name='borrower' type="text" id='form4Example1' wrapperClass='mb-4' label='Name' value={transaction.borrower} onChange={handleChange}/></MDBCol>
                                     <hr/>
                                     <MDBCardText className="text-muted">Note</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "25px"}}><MdOutlineNotes /></MDBCol>
-                                        <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
+                                        <MDBCol><MDBInput name='note' value={transaction.note} onChange={handleChange} style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Start Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
-                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'} name='transactionDate' value={transaction.transactionDate} onChange={handleChange}></Input></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <hr/>
                                     <MDBCardText className="text-muted">End Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
-                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'} name='endDate' value={transaction.endDate} onChange={handleChange}></Input></MDBCol>
                                     </MDBRow>
                                     <hr/>
                                     <MDBCardText className="text-muted">Wallets</MDBCardText>
@@ -549,13 +601,13 @@ export default function Transactions() {
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "30px"}}><BsWallet /></MDBCol>
                                         <MDBCol sm="10" >
                                             <div className='relative'>
-                                                <select className="form-select" aria-label="Default select example">
+                                                <Select name='wallet_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
                                                     {wallets.map((wallet, index) => (
-                                                        <option key={index} value={wallet.name}>
+                                                        <option key={index} value={wallet.id}>
                                                             {wallet.name}
                                                         </option>
                                                     ))}
-                                                </select>
+                                                </Select>
                                             </div>
                                         </MDBCol>
                                     </MDBRow>
@@ -563,7 +615,7 @@ export default function Transactions() {
                                 <MDBBtn type='submit' className='mb-4 btn btn-success' block>
                                     Save
                                 </MDBBtn>
-                            </form>
+                            </Form>
                         </MDBModalBody>
 
                     </MDBModalContent>

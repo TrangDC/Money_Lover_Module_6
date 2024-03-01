@@ -149,7 +149,7 @@ const CategoriesPage = () => {
             <div style={{backgroundColor: 'white',width: '40%',margin: 'auto',marginTop: '3%',borderTopLeftRadius: '10px',borderTopRightRadius: '10px',borderBottomLeftRadius: '10px',borderBottomRightRadius: '10px'}}>
                 <Tabs variant='enclosed'>
                     <TabList>
-                        <Tab>
+                        <Tab style={{ fontWeight: 'bold', color: '#32CD32'}}>
                             All
                         </Tab>
                         {types.map((type, index) => (
