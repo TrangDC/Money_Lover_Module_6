@@ -23,7 +23,6 @@ const Header = () => {
         name: "",
         balance: ""
     })
-    const [category, setCategory] = useState([])
 
     const [userData, setUserData] = useState({})
     const fetchWallet = (userdata) => {
@@ -82,9 +81,11 @@ const Header = () => {
                 console.log(res.data);
                 setUserLocal(res.data);
                 setImage(res.data.image);
+                localStorage.setItem("categories", JSON.stringify(res.data.categories))
             })
             .catch(err => console.error(err))
     }, [])
+
     const navigate = useNavigate();
 
     return (

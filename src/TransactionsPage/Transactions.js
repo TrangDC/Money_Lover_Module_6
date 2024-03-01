@@ -83,6 +83,7 @@ export default function Transactions() {
 // --------- Get list Transaction -----------
 
         const [transactions, setTransactions] = useState([])
+        const [categories, setCategories] = useState([]);
         const [transaction, setTransaction] = useState({
             amount: "",
             note: "",
@@ -94,12 +95,29 @@ export default function Transactions() {
             category_id: ""
         });
 
-    const [user, setUser] = useState([]);
-    const [wallets, setWallets] = useState([])
-    const [wallet, setWallet] = useState({
-        name: "",
-        balance: ""
-    })
+        const [user, setUser] = useState([]);
+        const [wallets, setWallets] = useState([])
+        const [wallet, setWallet] = useState({
+            name: "",
+            balance: ""
+        })
+
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Sau khi biểu mẫu được gửi, bạn có thể gửi formData đến API hoặc xử lý nó theo cách khác tùy vào nhu cầu của bạn.
+        console.log(formData);
+    };
+
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -117,6 +135,9 @@ export default function Transactions() {
 
                 window.localStorage.setItem("transactions", JSON.stringify(transactionsData));
                 setTransactions(transactionsData);
+
+                const categories_data = JSON.parse(window.localStorage.getItem("categories"));
+                setCategories(categories_data);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -257,11 +278,11 @@ export default function Transactions() {
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader>
-                            <MDBModalTitle>+ Add Transaction</MDBModalTitle>
+                            <MDBModalTitle>+ Add Income</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionIncome}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
@@ -272,10 +293,13 @@ export default function Transactions() {
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
                                         <select className="form-select" aria-label="Default select example">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
+                                            {categories
+                                                .filter(category => category.type === "INCOME") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                                .map((category) => (
+                                                    <option key={category.id} value={category.type}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
                                     <hr/>
@@ -323,11 +347,11 @@ export default function Transactions() {
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader>
-                            <MDBModalTitle>+ Add Transaction</MDBModalTitle>
+                            <MDBModalTitle>+ Add Expense</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionExpense}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
@@ -338,11 +362,13 @@ export default function Transactions() {
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
                                         <select className="form-select" aria-label="Default select example">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
-                                            <option value="4">Four</option>
+                                            {categories
+                                                .filter(category => category.type === "EXPENSE") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                                .map((category) => (
+                                                    <option key={category.id} value={category.type}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
                                     <hr/>
@@ -390,11 +416,11 @@ export default function Transactions() {
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader>
-                            <MDBModalTitle>+ Add Transaction</MDBModalTitle>
+                            <MDBModalTitle>+ Add Debt</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionDebt}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
@@ -405,19 +431,18 @@ export default function Transactions() {
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
                                         <select className="form-select" aria-label="Default select example">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
-                                            <option value="4">Four</option>
+                                            {categories
+                                                .filter(category => category.type === "DEBT") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                                .map((category) => (
+                                                    <option key={category.id} value={category.type}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
 
                                     <hr/>
                                     <MDBCardText className="text-muted">Lender</MDBCardText>
-                                    <MDBCol sm="12" ><MDBInput type="text" id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
-                                    <hr/>
-                                    <MDBCardText className="text-muted">Borrower</MDBCardText>
                                     <MDBCol sm="12" ><MDBInput type="text" id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
                                     <hr/>
                                     <MDBCardText className="text-muted">Note</MDBCardText>
@@ -426,7 +451,14 @@ export default function Transactions() {
                                         <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
-                                    <MDBCardText className="text-muted">Date</MDBCardText>
+                                    <MDBCardText className="text-muted">Start Date</MDBCardText>
+                                    <MDBRow>
+                                        <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                    </MDBRow>
+                                    <hr/>
+                                    <hr/>
+                                    <MDBCardText className="text-muted">End Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
                                         <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
@@ -465,11 +497,11 @@ export default function Transactions() {
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader>
-                            <MDBModalTitle>+ Add Transaction</MDBModalTitle>
+                            <MDBModalTitle>+ Add Loan</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={openAddTransactionLoan}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <MDBCard className="mb-4" style={{padding: "20px"}}>
                                     <MDBCardText className="text-muted">Money number</MDBCardText>
                                     <MDBRow>
@@ -480,15 +512,15 @@ export default function Transactions() {
                                     <MDBCardText className="text-muted">Category</MDBCardText>
                                     <div className='relative'>
                                         <select className="form-select" aria-label="Default select example">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
+                                            {categories
+                                                .filter(category => category.type === "LOAN") // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                                .map((category) => (
+                                                    <option key={category.id} value={category.type}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
-                                    <hr/>
-                                    <MDBCardText className="text-muted">Lender</MDBCardText>
-                                    <MDBCol sm="12" ><MDBInput type="text" id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
                                     <hr/>
                                     <MDBCardText className="text-muted">Borrower</MDBCardText>
                                     <MDBCol sm="12" ><MDBInput type="text" id='form4Example1' wrapperClass='mb-4' label='Name' /></MDBCol>
@@ -499,7 +531,14 @@ export default function Transactions() {
                                         <MDBCol><MDBInput style={{height: "60px"}} wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Additional information' /></MDBCol>
                                     </MDBRow>
                                     <hr/>
-                                    <MDBCardText className="text-muted">Date</MDBCardText>
+                                    <MDBCardText className="text-muted">Start Date</MDBCardText>
+                                    <MDBRow>
+                                        <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
+                                        <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
+                                    </MDBRow>
+                                    <hr/>
+                                    <hr/>
+                                    <MDBCardText className="text-muted">End Date</MDBCardText>
                                     <MDBRow>
                                         <MDBCol sm="2" style={{fontSize: "30px"}}><FaRegCalendarAlt /></MDBCol>
                                         <MDBCol sm="10"><Input type={'date'}></Input></MDBCol>
