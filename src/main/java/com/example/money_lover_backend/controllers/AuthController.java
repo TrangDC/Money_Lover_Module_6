@@ -230,7 +230,7 @@ public class AuthController {
     @GetMapping("/active_account/{email}")
     public ResponseEntity<?> processActiveAccount(@PathVariable String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email not found!"));

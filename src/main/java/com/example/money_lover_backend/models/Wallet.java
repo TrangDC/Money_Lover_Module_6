@@ -16,6 +16,8 @@ public class Wallet {
     private String name;
     private Long balance;
 
+    private boolean isActive;
+
 
     @ManyToMany
     @JoinTable(

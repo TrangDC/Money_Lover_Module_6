@@ -31,10 +31,17 @@ public class WalletController {
     @GetMapping("/user/{user_id}")
     public ResponseEntity<Iterable<Wallet>> getAllWalletByUser(@PathVariable String user_id) {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        List<Wallet> activeWallets = new ArrayList<Wallet>();
+        for (Wallet wallet: wallets) {
+            if (wallet.isActive()) {
+                activeWallets.add(wallet);
+            }
+        }
+
         if (wallets.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
+        return new ResponseEntity<>(activeWallets, HttpStatus.OK);
     }
 
     //API gọi 1 ví của 1 user
@@ -56,8 +63,12 @@ public class WalletController {
     @PostMapping("/user/{user_id}/create")
     public ResponseEntity<?> create(@PathVariable String user_id, @RequestBody Wallet wallet) {
         List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        wallet.setActive(true);
         if (wallets.isEmpty()) {
             return new ResponseEntity<String> ("User not found", HttpStatus.NOT_FOUND);
+        }
+        if (wallet.getBalance() == null) {
+            wallet.setBalance(0L);
         }
         wallets.add(wallet);
         return new ResponseEntity<Wallet>(walletService.saveWallet(wallet), HttpStatus.CREATED);
@@ -116,4 +127,22 @@ public class WalletController {
         }
         return new ResponseEntity<String>("Wallet not found", HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/user/{user_id}/deactivate/{wallet_id}")
+    public ResponseEntity<?> deactivateWallet(@PathVariable String user_id,
+                                              @PathVariable Long wallet_id) {
+        List<Wallet> wallets = (List<Wallet>) walletService.getAllWalletByUserId(user_id);
+        if (wallets.isEmpty()) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Wallet> walletOptional = walletService.getWalletById(wallet_id);
+        if (walletOptional.isPresent() && wallets.contains(walletOptional.get())) {
+            Wallet wallet = walletOptional.get();
+            wallet.setActive(false);
+            walletService.saveWallet(wallet);
+            return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
+        }
+        return new ResponseEntity<String>("Wallet not found", HttpStatus.NOT_FOUND);
+    }
+
 }

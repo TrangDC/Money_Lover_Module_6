@@ -365,4 +365,35 @@ public class TransactionController {
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
     }
 
+    //API xóa một giao dịch theo user
+    @DeleteMapping("/user/{user_id}/transaction/{transaction_id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long user_id, @PathVariable Long transaction_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+        if (transactionOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Transaction transaction = transactionOptional.get();
+        Wallet wallet = transaction.getWallet();
+        Long amount = transaction.getAmount();
+        Type categoryType = transaction.getCategory().getType();
+
+        if (categoryType == Type.EXPENSE || categoryType == Type.DEBT) {
+            wallet.setBalance(wallet.getBalance() + amount);
+        } else if (categoryType == Type.INCOME || categoryType == Type.LOAN) {
+            wallet.setBalance(wallet.getBalance() - amount);
+        }
+
+        userOptional.get().getTransactions().remove(transaction);
+        transactionService.remove(transaction_id);
+        userService.save(userOptional.get());
+
+        return ResponseEntity.ok("Transaction deleted successfully");
+    }
+
 }
