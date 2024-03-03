@@ -49,31 +49,6 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) {
-        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
-        Optional<Transaction> transactionOptional = transactionService.findById(id);
-        if (transactionOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        transaction.setId(transactionOptional.get().getId());
-        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id) {
-        Optional<Transaction> transactionOptional = transactionService.findById(id);
-        if (transactionOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        transactionService.remove(id);
-        return new ResponseEntity<>(transactionOptional.get(), HttpStatus.OK);
-    }
-
     //API hiển thị danh sách giao dịch theo user
     @GetMapping("/user/{user_id}")
     public ResponseEntity<Iterable<Transaction>> findAll(@PathVariable Long user_id) {
@@ -93,7 +68,7 @@ public class TransactionController {
     public ResponseEntity<?> create(@PathVariable Long user_id, @RequestBody CreateTransaction createTransaction) {
         Optional<User> userOptional = userService.findById(user_id);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Transaction transaction = buildTransactionFromRequest(createTransaction);
@@ -103,17 +78,17 @@ public class TransactionController {
 
         Wallet wallet = getWalletFromTransaction(createTransaction);
         if (wallet == null) {
-            return new  ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
         }
 
 
         Category category = getCategoryFromTransaction(createTransaction);
         if (category == null) {
-            return new  ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
 
         if (!isCategoryValidForUser(category, userOptional.get())) {
-            return new  ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
 
         updateWalletBalance(wallet, createTransaction.getAmount(), category.getType());
@@ -165,103 +140,75 @@ public class TransactionController {
                                               @RequestBody CreateTransaction createTransaction) {
         Optional<User> userOptional = userService.findById(user_id);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        ResponseEntity<?> dateValidationResponse = validateDates(createTransaction.getTransactionDate(), createTransaction.getEndDate());
-        if (dateValidationResponse != null) {
-            return dateValidationResponse;
-        }
-
-        ResponseEntity<?> walletResponse = validateWallet(createTransaction);
-        if (walletResponse != null) {
-            return walletResponse;
-        }
-
-        ResponseEntity<?> categoryResponse = validateCategory(userOptional.get(), createTransaction);
-        if (categoryResponse != null) {
-            return categoryResponse;
-        }
-
-        updateWalletAndSaveTransaction(userOptional.get(), createTransaction);
-
-        return ResponseEntity.ok(userOptional.get().getTransactions());
-    }
-
-    private ResponseEntity<?> validateDates(LocalDate transactionDate, LocalDate endDate) {
-        if (endDate.isBefore(transactionDate)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: endDate must be after transactionDate"));
-        }
-        return null;
-    }
-
-    private ResponseEntity<?> validateWallet(CreateTransaction createTransaction) {
-        Long walletId = createTransaction.getWallet_id();
-        Optional<Wallet> walletOptional = walletRepository.findById(walletId);
-        if (walletOptional.isEmpty()) {
-            return new  ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
-        }
-        return null;
-    }
-
-    private ResponseEntity<?> validateCategory(User user, CreateTransaction createTransaction) {
-        Long categoryId = createTransaction.getCategory_id();
-        Optional<Category> categoryOptional = categoryService.findById(categoryId);
-        if (categoryOptional.isEmpty() || !user.getCategories().contains(categoryOptional.get())) {
-            return new  ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
-        }
-
-        Category category = categoryOptional.get();
-        if (category.getType() != Type.LOAN && category.getType() != Type.DEBT) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Category invalid!"));
-        }
-
-        return null;
-    }
-
-    private void updateWalletAndSaveTransaction(User user, CreateTransaction createTransaction) {
-        Wallet wallet = walletRepository.findById(createTransaction.getWallet_id()).orElseThrow();
-        Long amount = createTransaction.getAmount();
-        Category category = categoryService.findById(createTransaction.getCategory_id()).orElseThrow();
-
-        if (category.getType() == Type.DEBT) {
-            wallet.setBalance(wallet.getBalance() + amount);
-        } else {
-            wallet.setBalance(wallet.getBalance() - amount);
-        }
-
-        Transaction transaction = buildTransactionFromRequest(createTransaction, category);
-        transaction.setWallet(wallet);
-        user.getTransactions().add(transaction);
-        userService.save(user);
-    }
-
-    private Transaction buildTransactionFromRequest(CreateTransaction createTransaction, Category category) {
         Transaction transaction = new Transaction();
         transaction.setAmount(createTransaction.getAmount());
         transaction.setNote(createTransaction.getNote());
         transaction.setTransactionDate(createTransaction.getTransactionDate());
         transaction.setEndDate(createTransaction.getEndDate());
-        if (category.getType() == Type.DEBT) {
+        if (createTransaction.getEndDate().isBefore(createTransaction.getTransactionDate())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: endDate must be after transactionDate"));
+        }
+
+        //Tìm và lấy thông tin wallet
+        Long wallet_id = createTransaction.getWallet_id();
+        Optional<Wallet> walletOptional = walletRepository.findById(wallet_id);
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        transaction.setWallet(walletOptional.get());
+
+        //Tìm và lấy thông tin category
+        Long category_id = createTransaction.getCategory_id();
+        Optional<Category> categoryOptional = categoryService.findById(category_id);
+        if (categoryOptional.isEmpty()) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        //Kiểm tra category có thuộc danh mục của user
+        List<Category> categories = userOptional.get().getCategories();
+        if (!categories.contains(categoryOptional.get())) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        //Kiểm tra danh mục có phải EXPENSE và INCOME hay không
+        String type = String.valueOf(categoryOptional.get().getType());
+        if (!type.equals("LOAN") && !type.equals("DEBT")) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Category invalid!"));
+        }
+        Wallet wallet = walletOptional.get();
+        Long amount = createTransaction.getAmount();
+        if (type.equals("DEBT")) {
+            wallet.setBalance(wallet.getBalance() + amount);
             transaction.setLender(createTransaction.getLender());
         } else {
+            wallet.setBalance(wallet.getBalance() - amount);
             transaction.setBorrower(createTransaction.getBorrower());
         }
-        transaction.setCategory(category);
-        return transaction;
+        transaction.setCategory(categoryOptional.get());
+
+        Transaction savedTransaction = transactionService.save(transaction);
+        List<Transaction> transactions = userOptional.get().getTransactions();
+        transactions.add(savedTransaction);
+        userOptional.get().setTransactions(transactions);
+        userService.save(userOptional.get());
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
 
     //API xóa một giao dịch theo user
     @DeleteMapping("/user/{user_id}/transaction/{transaction_id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable Long user_id, @PathVariable Long transaction_id) {
         Optional<User> userOptional = userService.findById(user_id);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
         if (transactionOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Transaction transaction = transactionOptional.get();
@@ -282,6 +229,140 @@ public class TransactionController {
         return ResponseEntity.ok("Transaction deleted successfully");
     }
 
+    @PutMapping("/user/{user_id}/transaction/{transaction_id}")
+    public ResponseEntity<?> redoTransaction(@PathVariable Long user_id, @PathVariable Long transaction_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+        if (transactionOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
+        Transaction transaction = transactionOptional.get();
+        Wallet wallet = transaction.getWallet();
+        Long amount = transaction.getAmount();
+        Type categoryType = transaction.getCategory().getType();
+
+        if (categoryType == Type.EXPENSE || categoryType == Type.DEBT) {
+            wallet.setBalance(wallet.getBalance() + amount);
+        } else if (categoryType == Type.INCOME || categoryType == Type.LOAN) {
+            wallet.setBalance(wallet.getBalance() - amount);
+        }
+
+        // Set transaction fields to null
+        transaction.setWallet(null);
+        transaction.setAmount(null);
+        transaction.setCategory(null);
+
+        // Instead of removing transaction, update it
+        transactionService.save(transaction);
+
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+
+    //API update mới một giao dịch expense hoặc income
+    @PutMapping("/user/{user_id}/expense_income/{transaction_id}")
+    public ResponseEntity<?> updateIncome_Expense(@PathVariable Long user_id,
+                                                  @PathVariable Long transaction_id,
+                                                  @RequestBody CreateTransaction createTransaction) {
+        Optional<User> userOptional = userService.findById(user_id);
+        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+        if (userOptional.isEmpty() || transactionOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Transaction transaction = buildTransactionFromRequest(createTransaction);
+        if (transaction == null) {
+            return ResponseEntity.badRequest().body("Error: Invalid request data!");
+        }
+
+        Wallet wallet = getWalletFromTransaction(createTransaction);
+        if (wallet == null) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+
+
+        Category category = getCategoryFromTransaction(createTransaction);
+        if (category == null) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        if (!isCategoryValidForUser(category, userOptional.get())) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        updateWalletBalance(wallet, createTransaction.getAmount(), category.getType());
+        transaction.setWallet(wallet);
+        transaction.setCategory(category);
+        transaction.setId(transactionOptional.get().getId());
+        Transaction savedTransaction = transactionService.save(transaction);
+        return ResponseEntity.ok(savedTransaction);
+    }
+
+    //API update mới một giao dịch debt hoặc loan
+    @PutMapping("/user/{user_id}/debt_loan/{transaction_id}")
+    public ResponseEntity<?> update_debt_loan(@PathVariable Long user_id,
+                                              @PathVariable Long transaction_id,
+                                              @RequestBody CreateTransaction createTransaction) {
+        Optional<User> userOptional = userService.findById(user_id);
+        Optional<Transaction> transactionOptional = transactionService.findById(transaction_id);
+        if (userOptional.isEmpty() || transactionOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Transaction transaction = new Transaction();
+        transaction.setAmount(createTransaction.getAmount());
+        transaction.setNote(createTransaction.getNote());
+        transaction.setTransactionDate(createTransaction.getTransactionDate());
+        transaction.setEndDate(createTransaction.getEndDate());
+        if (createTransaction.getEndDate().isBefore(createTransaction.getTransactionDate())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: endDate must be after transactionDate"));
+        }
+
+        //Tìm và lấy thông tin wallet
+        Long wallet_id = createTransaction.getWallet_id();
+        Optional<Wallet> walletOptional = walletRepository.findById(wallet_id);
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        transaction.setWallet(walletOptional.get());
+
+        //Tìm và lấy thông tin category
+        Long category_id = createTransaction.getCategory_id();
+        Optional<Category> categoryOptional = categoryService.findById(category_id);
+        if (categoryOptional.isEmpty()) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        //Kiểm tra category có thuộc danh mục của user
+        List<Category> categories = userOptional.get().getCategories();
+        if (!categories.contains(categoryOptional.get())) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+
+        //Kiểm tra danh mục có phải EXPENSE và INCOME hay không
+        String type = String.valueOf(categoryOptional.get().getType());
+        if (!type.equals("LOAN") && !type.equals("DEBT")) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Category invalid!"));
+        }
+        Wallet wallet = walletOptional.get();
+        Long amount = createTransaction.getAmount();
+        if (type.equals("DEBT")) {
+            wallet.setBalance(wallet.getBalance() + amount);
+            transaction.setLender(createTransaction.getLender());
+        } else {
+            wallet.setBalance(wallet.getBalance() - amount);
+            transaction.setBorrower(createTransaction.getBorrower());
+        }
+        transaction.setCategory(categoryOptional.get());
+        transaction.setId(transactionOptional.get().getId());
+
+        Transaction savedTransaction = transactionService.save(transaction);
+        return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
+    }
 
 }
