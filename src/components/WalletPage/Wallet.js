@@ -25,6 +25,25 @@ const Wallet = () => {
         setShowCard2(true)
         setSelectedWallet(true)
     }
+    // dữ liệu giả lập
+    const walletData = [
+        {
+            id: 1,
+            name: "Ví tiêu dùng",
+            blance: 3000000
+        },
+        {
+            id: 2,
+            name: "Ví đầu tư",
+            blance: 45000000
+        },
+        {
+            id: 3,
+            name: "Ví tiết kiệm",
+            blance: 98000000
+        }
+    ]
+
     return (
     <div>
         <div className="container">
@@ -43,44 +62,27 @@ const Wallet = () => {
                             <MDBCardTitle>Wallets</MDBCardTitle>
                         </MDBCardBody>
                     </MDBCard>
-                    <MDBCard className={`card1 ${selectedWallet?'selected' : ''}`} onClick={handleWalletClick}>
-                        <MDBCardBody className="card-body">
-                            <MDBRow className="wallet" >
-                                <MDBCol md='2'>
-                                    <div className="wallet-icon">
-                                        <FaWallet />
-                                    </div>
-                                </MDBCol>
-                                <MDBCol className="content-wallet" md='10'>
-                                    <MDBCardText  >
-                                        Ví sinh hoạt
-                                    </MDBCardText>
-                                    <MDBCardText>
-                                        3.000.000 vnd
-                                    </MDBCardText>
-                                </MDBCol>
-                            </MDBRow>
-                        </MDBCardBody>
-                    </MDBCard>
-                    <MDBCard className={`card1 ${selectedWallet?'selected' : ''}`} onClick={handleWalletClick}>
-                        <MDBCardBody className="card-body">
-                            <MDBRow className="wallet" >
-                                <MDBCol md='2'>
-                                    <div className="wallet-icon">
-                                        <FaWallet />
-                                    </div>
-                                </MDBCol>
-                                <MDBCol className="content-wallet" md='10'>
-                                    <MDBCardText  >
-                                        Ví kinh doanh
-                                    </MDBCardText>
-                                    <MDBCardText>
-                                        90.000.000 vnd
-                                    </MDBCardText>
-                                </MDBCol>
-                            </MDBRow>
-                        </MDBCardBody>
-                    </MDBCard>
+                    {walletData.map(wallet => (
+                        <MDBCard className={`card1 ${selectedWallet?'selected' : ''}`} onClick={handleWalletClick}>
+                            <MDBCardBody className="card-body">
+                                <MDBRow className="wallet" >
+                                    <MDBCol md='2'>
+                                        <div className="wallet-icon">
+                                            <FaWallet />
+                                        </div>
+                                    </MDBCol>
+                                    <MDBCol className="content-wallet" md='10'>
+                                        <MDBCardText  >
+                                            {wallet.name}
+                                        </MDBCardText>
+                                        <MDBCardText>
+                                            {wallet.blance} vnd
+                                        </MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                            </MDBCardBody>
+                        </MDBCard>
+                        ))}
                 </div>
                 <div className={`card2 ${selectedWallet?'selected' : ''}`}>
                     { showCard2 && (
