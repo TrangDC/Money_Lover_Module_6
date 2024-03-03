@@ -15,6 +15,8 @@ import ActiveAccount from "./components/UserPage/ActiveAccount";
 import LoginForm from "./components/LoginPage/LoginForm";
 import CategoriesPage from "./components/UserPage/category/CategoriesPage";
 import Transactions from "./TransactionsPage/Transactions";
+import Wallet from "./components/WalletPage/Wallet";
+
 
 function App() {
     const [isAuth, setIsAuth] = useState(false);
@@ -42,6 +44,7 @@ function App() {
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
                     <Route path='/active' element={<ActiveAccount/>}/>
+                    <Route path='/hihi' element={<Wallet/>}/>
 
                 </Routes>
             </BrowserRouter>

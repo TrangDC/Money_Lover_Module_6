@@ -19,6 +19,7 @@ const Header = () => {
     const handleClose = () => setShowChangePassword(false);
     // ------- get wallets ----
     const [wallets, setWallets] = useState([])
+    const [avatar, setAvatar] = useState('')
     const [wallet, setWallet] = useState({
         name: "",
         balance: ""

@@ -1,0 +1,80 @@
+.container-wallet {
+    text-align: center;
+    /*background-color: #f5ce93;*/
+}
+
+.wallets {
+    max-width: 800px;
+    display: inline-block;
+}
+
+.card1 .card2{
+    max-width: 800px;
+ }
+.card1 {
+    margin-bottom: 10px;
+}
+.card1:hover {
+    background-color: #e7f5ec;
+    opacity: 90%;
+    cursor: pointer;
+}
+.wallet {
+    border-radius: 4px;
+    height: 100%;
+    width: 600px;
+    text-align: left;
+}
+.card-body {
+    text-align: left;
+}
+/* xử lý khi click wallet */
+/*.card1.selected {*/
+/*    background-color: #e7f5ec;*/
+/*    opacity: 90%;*/
+/*}*/
+.container-wallet.selected {
+    display: flex !important;
+}
+.wallets.selected {
+    margin-left: 40px;
+}
+.card2.selected {
+    margin-left: 20px;
+}
+/*--------------*/
+
+.header-wallet {
+    margin-top: 20px;
+    display: flex;
+    height: 50px;
+    /*background-color: #b7f6de;*/
+}
+.icon-back {
+    color: #969494;
+    line-height: 60px;
+    font-size: 30px;
+}
+.icon-back:hover {
+    color: black;
+    cursor: pointer;
+}
+.text-my-wallet {
+    font-size: 20px;
+    margin-left: 30px;
+}
+.content-wallet {
+    text-align: left;
+    /*background-color: bisque;*/
+    display: inline-block;
+}
+.wallet-icon {
+    font-size: 40px;
+}
+.btn-x {
+    font-size: 30px;
+}
+.btn-x:hover {
+    cursor: pointer;
+
+}
