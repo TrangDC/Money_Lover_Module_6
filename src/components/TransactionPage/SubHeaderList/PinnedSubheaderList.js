@@ -62,11 +62,12 @@ export default function PinnedSubheaderList() {
     const groupedTransactions = groupTransactionsByDate();
 
     return (
-        <div className="root flex justify-center mt-28">
-            <div style={{ width: "600px", height: '600px' }}>
+        <div className="root flex justify-center">
+            <div style={{ width: "600px", height: '500px' }}>
                 <nav>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center">
+                            {/* Previous month button */}
                             <Button
                                 variant="outlined"
                                 class="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
@@ -76,11 +77,13 @@ export default function PinnedSubheaderList() {
                                 onClick={() => handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, -1)}>
                                 {currentMonthIndex === 0 ? months[11] : months[currentMonthIndex - 1]} {currentMonthIndex === 0 ? currentYear - 1 : currentYear}
                             </Button>
+                            {/* Current month button */}
                             <Button variant="outlined"
                                     class="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}>{months[currentMonthIndex]} {currentYear}</Button>
+                            {/* Next month button */}
                             <Button
                                 variant="outlined"
                                 class="rounded-none border-b border-blue-gray-50 bg-transparent p-0"
@@ -91,6 +94,7 @@ export default function PinnedSubheaderList() {
                                 {currentMonthIndex === 11 ? months[0] : months[currentMonthIndex + 1]} {currentMonthIndex === 11 ? currentYear + 1 : currentYear}
                             </Button>
                         </div>
+                        {/* Inflow and outflow summary */}
                         <div className="inflow-outflow">
                             <div>
                                 <span>Inflow:</span> <span style={{ color: 'blue' }}>{totalInflow > 0 ? '+' + totalInflow : totalInflow}</span>
@@ -104,9 +108,10 @@ export default function PinnedSubheaderList() {
                         </div>
                     </div>
                     <hr/>
-                    <List className="bg-body-secondary rounded-lg shadow-lg mt-4">
+                    {/* Transaction list */}
+                    <List className="bg-body-secondary rounded-lg shadow-lg mt-4 overflow-auto" style={{ maxHeight: "430px" }}>
                         {groupedTransactions.length === 0 ? (
-                            <div style={{ height: "450px" }}>
+                            <div style={{ height: "430px" }}>
                                 <ListItem>
                                     No transactions for this month
                                 </ListItem>
@@ -116,28 +121,30 @@ export default function PinnedSubheaderList() {
                             <List className="list" class="border-t border-gray-200">
                                 {groupedTransactions.map(({ date, transactions }) => (
                                     <div>
+                                        {/* Date subheader */}
                                         <ListItem className="sticky-top bg-light">{date.toDateString()}</ListItem>
+                                        {/* Transaction items */}
                                         {transactions.map((transaction) => (
                                             <ListItem
                                                 class="flex items-center py-2 px-4 border-t border-gray-200"
                                                 key={transaction.id}
                                                 onClick={() => handleTransactionClick(transaction)}>
+                                                {/* Avatar */}
                                                 <ListItemPrefix>
-                                                    <Avatar variant="circular" alt="candice"
-                                                            src="https://docs.material-tailwind.com/img/face-1.jpg" />
+                                                    <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
                                                 </ListItemPrefix>
+                                                {/* Transaction details */}
                                                 <div className="flex justify-between w-full">
+                                                    {/* Category name */}
                                                     <div>
                                                         <Typography variant="h6" color="blue-gray">
                                                             {transaction.category.name}
                                                         </Typography>
                                                     </div>
+                                                    {/* Amount */}
                                                     <div>
-                                                        <Typography variant="h5"
-                                                                    style={{ color: transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? 'blue' : 'red' }}
-                                                                    class="font-normal">
-                                                            {transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? '+' : '-'}
-                                                            {transaction.amount}
+                                                        <Typography variant="h5" style={{ color: transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? 'blue' : 'red' }} class="font-normal">
+                                                            {transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? '+' : '-'}{transaction.amount}
                                                         </Typography>
                                                     </div>
                                                 </div>
@@ -151,6 +158,7 @@ export default function PinnedSubheaderList() {
                 </nav>
             </div>
         </div>
+
 
     );
 }

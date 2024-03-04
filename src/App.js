@@ -35,7 +35,7 @@ function App() {
                         <Route path="wallets" element={(isAuth || user) ? <Wallet/> : <Error/>}/>
                         <Route path="profile" element={(isAuth || user) ? <InformationUser/> : <Error/>}/>
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
-                        <Route path="transactions" element={(isAuth || user) ? <Transactions/> : <Error/>}/>
+                        <Route path="transactions" element={(isAuth || user) ? <TransactionPage/> : <Error/>}/>
                     </Route>
                     <Route path='/login'
                            element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
