@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Navbar from "react-bootstrap/Navbar";
-import { IoMdCreate } from "react-icons/io";
+import {IoMdCreate} from "react-icons/io";
 import {FaLayerGroup, FaPiggyBank} from "react-icons/fa6";
 import {
     Tabs,
@@ -12,7 +12,8 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Select, useToast
+    Select,
+    useToast
 } from '@chakra-ui/react'
 import {
     Table,
@@ -21,9 +22,9 @@ import {
     Th,
     Td,
     TableCaption,
-    TableContainer,Button
+    TableContainer, Button
 } from '@chakra-ui/react'
-import { Image } from '@chakra-ui/react'
+import {Image} from '@chakra-ui/react'
 import {
     Modal,
     ModalOverlay,
@@ -37,8 +38,8 @@ import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 
 const CategoriesPage = () => {
-    const { isOpen: isOpenModal1, onOpen: onOpenModal1, onClose: onCloseModal1 } = useDisclosure();
-    const { isOpen: isOpenModal2, onOpen: onOpenModal2, onClose: onCloseModal2 } = useDisclosure();
+    const {isOpen: isOpenModal1, onOpen: onOpenModal1, onClose: onCloseModal1} = useDisclosure();
+    const {isOpen: isOpenModal2, onOpen: onOpenModal2, onClose: onCloseModal2} = useDisclosure();
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState([]);
     const [editCate, setEditCate] = useState([]);
@@ -47,7 +48,8 @@ const CategoriesPage = () => {
     const [selectedType, setSelectedType] = useState('');
     const defaultImagePath = "https://static.moneylover.me/img/icon/ic_category_salary.png";
     const navigate = useNavigate();
-    const toast = useToast()
+    const toast = useToast();
+
     const fetchCategories = (userData) => {
         axios.get('http://localhost:8080/api/users/' + userData.id)
             .then((res) => {
@@ -60,18 +62,26 @@ const CategoriesPage = () => {
 
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem("user"));
+        const storedSelectedType = localStorage.getItem("selectedType");
         console.log(userData);
         fetchCategories(userData);
-    }, []);
-
-    const filteredCategories = selectedType ? categories.filter(category => category.type === selectedType) : categories;
-
-    const types = categories.reduce((acc, cur) => {
-        if (!acc.includes(cur.type)) {
-            acc.push(cur.type);
+        if (storedSelectedType) {
+            setSelectedType(storedSelectedType);
         }
-        return acc;
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem("selectedType", selectedType);
+    }, [selectedType]);
+
+    useEffect(() => {
+        // Load all categories when component mounts
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData) {
+            fetchCategories(userData);
+        }
+    }, []);
+
     const createCategory = () => {
         const newCategory = {
             name: category.name,
@@ -131,57 +141,102 @@ const CategoriesPage = () => {
             });
     };
 
+    const uniqueTypes = Array.from(new Set(categories.map(category => category.type)));
 
     return (
         <div>
             <div>
                 <Navbar className="justify-content-between">
                     <div className="d-flex align-items-center">
-                        <FaLayerGroup className="mx-2 mb-2 my-2 text-green-600" style={{ width: '30px', height: '30px' }} />
+                        <FaLayerGroup className="mx-2 mb-2 my-2 text-green-600"
+                                      style={{width: '30px', height: '30px'}}/>
                         <h4 className="mx-2 mb-2 my-2">Categories</h4>
                     </div>
                     <div className="d-flex align-items-center text-green-600">
-                        <IoMdCreate onClick={onOpenModal1} className="mr-3" style={{ width: '30px', height: '30px' }} />
+                        <IoMdCreate onClick={onOpenModal1} className="mr-3" style={{width: '30px', height: '30px'}}/>
                     </div>
                 </Navbar>
             </div>
 
-            <div style={{backgroundColor: 'white',width: '40%',margin: 'auto',marginTop: '3%',borderTopLeftRadius: '10px',borderTopRightRadius: '10px',borderBottomLeftRadius: '10px',borderBottomRightRadius: '10px'}}>
+            <div style={{
+                backgroundColor: 'white',
+                width: '40%',
+                margin: 'auto',
+                marginTop: '3%',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '10px'
+            }}>
                 <Tabs variant='enclosed'>
                     <TabList>
-                        <Tab style={{ fontWeight: 'bold', color: '#32CD32'}}>
+                        <Tab
+                            style={{fontWeight: 'bold', color: '#32CD32'}}
+                            onClick={() => setSelectedType('All')}
+                            isSelected={'All' === selectedType}
+                        >
                             All
                         </Tab>
-                        {types.map((type, index) => (
-                            <Tab style={{ fontWeight: 'bold', color: '#32CD32'}} key={index} onClick={() => setSelectedType(type)}>{type}</Tab>
+                        {uniqueTypes.map((type, index) => (
+                            <Tab
+                                key={index}
+                                style={{fontWeight: 'bold', color: '#32CD32'}}
+                                onClick={() => setSelectedType(type)}
+                                isSelected={type === selectedType}
+                            >
+                                {type}
+                            </Tab>
                         ))}
-
                     </TabList>
-
                     <TabPanels>
-                        {types.map((type, index) => (
+                        <TabPanel>
+                            <Table>
+                                <Tbody>
+                                    {categories.map((category, index) => (
+                                        <Tr key={index}>
+                                            <td onClick={() => {
+                                                onOpenModal2();
+                                                setEditCate(category);
+                                            }}>
+                                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                                    <Image
+                                                        borderRadius='full'
+                                                        boxSize='50px'
+                                                        src={category.image}
+                                                        alt='Category Image'
+                                                    />
+                                                    <span style={{marginLeft: '10px'}}>{category.name}</span>
+                                                </div>
+                                            </td>
+                                        </Tr>
+                                    ))}
+                                </Tbody>
+                            </Table>
+                        </TabPanel>
+                        {uniqueTypes.map((type, index) => (
                             <TabPanel key={index}>
                                 <Table>
-
                                     <Tbody>
-                                        {filteredCategories.map((category, index) => (
-                                            <Tr key={index}>
-                                                <td onClick={() => {
-                                                    onOpenModal2();
-                                                    setEditCate(category);
-                                                }}>
-                                                    <div style={{display: 'flex', alignItems: 'center'}}>
-                                                        <Image
-                                                            borderRadius='full'
-                                                            boxSize='50px'
-                                                            src={category.image}
-                                                            alt='Dan Abramov'
-                                                        />
-                                                        <span style={{marginLeft: '10px'}}>{category.name}</span>
-                                                    </div>
-                                                </td>
-                                            </Tr>
-                                        ))}
+                                        {categories
+                                            .filter(category => category.type === type)
+                                            .map((category, index) => (
+                                                <Tr key={index}>
+                                                    <td onClick={() => {
+                                                        onOpenModal2();
+                                                        setEditCate(category);
+                                                    }}>
+                                                        <div style={{display: 'flex', alignItems: 'center'}}>
+                                                            <Image
+                                                                borderRadius='full'
+                                                                boxSize='50px'
+                                                                src={category.image}
+                                                                alt='Category Image'
+                                                            />
+                                                            <span style={{marginLeft: '10px'}}>{category.name}</span>
+                                                        </div>
+                                                    </td>
+                                                </Tr>
+                                            ))}
                                     </Tbody>
                                 </Table>
                             </TabPanel>
@@ -190,12 +245,11 @@ const CategoriesPage = () => {
                 </Tabs>
             </div>
 
-
             <Modal isOpen={isOpenModal1} onClose={onCloseModal1}>
-                <ModalOverlay />
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>Create Category New</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
 
                     <ModalBody pb={6}>
                         <FormControl>
@@ -211,12 +265,12 @@ const CategoriesPage = () => {
 
                         <FormControl mt={4}>
                             <FormLabel>Select Type</FormLabel>
-                            <Select placeholder="Select a type"
-                                    value={categoryType}
-                                    onChange={(event) => setCategoryType(event.target.value)}
+                            <Select
+                                placeholder="Select a type"
+                                value={categoryType}
+                                onChange={(event) => setCategoryType(event.target.value)}
                             >
-                                <option value=''>All</option> {/* Thêm lựa chọn mặc định */}
-                                {types.map((type, index) => (
+                                {uniqueTypes.map((type, index) => (
                                     <option key={index} value={type}>{type}</option>
                                 ))}
                             </Select>
@@ -233,28 +287,33 @@ const CategoriesPage = () => {
                 </ModalContent>
             </Modal>
 
-{/*edit category here*/}
             <Modal isOpen={isOpenModal2} onClose={onCloseModal2}>
-                <ModalOverlay />
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>Edit Category</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>Category name</FormLabel>
-                            <Input placeholder='Enter name'
-                                   name="name"
-                                   value={editCate.name}
-                                   onChange={(e) => setEditCate({
-                                       ...editCate,
-                                       name: e.target.value
-                                   })} />
+                            <Input
+                                placeholder='Enter name'
+                                name="name"
+                                value={editCate.name}
+                                onChange={(e) => setEditCate({
+                                    ...editCate,
+                                    name: e.target.value
+                                })}
+                            />
                         </FormControl>
 
                         <FormControl mt={4}>
                             <FormLabel>Type</FormLabel>
-                            <Select placeholder="Select a type" value={editCate.type} onChange={(event) => setEditCate({ ...editCate, type: event.target.value })}>
-                                {types.map((type, index) => (
+                            <Select
+                                placeholder="Select a type"
+                                value={editCate.type}
+                                onChange={(event) => setEditCate({...editCate, type: event.target.value})}
+                            >
+                                {uniqueTypes.map((type, index) => (
                                     <option key={index} value={type}>{type}</option>
                                 ))}
                             </Select>
@@ -275,5 +334,3 @@ const CategoriesPage = () => {
 };
 
 export default CategoriesPage;
-
-
