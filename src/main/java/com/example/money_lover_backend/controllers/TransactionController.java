@@ -7,6 +7,7 @@ import com.example.money_lover_backend.models.Wallet;
 import com.example.money_lover_backend.models.category.Category;
 import com.example.money_lover_backend.payload.request.CreateTransaction;
 import com.example.money_lover_backend.payload.response.MessageResponse;
+import com.example.money_lover_backend.repositories.TransactionRepository;
 import com.example.money_lover_backend.repositories.UserRepository;
 import com.example.money_lover_backend.repositories.WalletRepository;
 import com.example.money_lover_backend.services.ICategoryService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +33,9 @@ public class TransactionController {
 
     @Autowired
     private ITransactionService transactionService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private IUserService userService;
@@ -321,7 +327,6 @@ public class TransactionController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: endDate must be after transactionDate"));
         }
 
-        //Tìm và lấy thông tin wallet
         Long wallet_id = createTransaction.getWallet_id();
         Optional<Wallet> walletOptional = walletRepository.findById(wallet_id);
         if (walletOptional.isEmpty()) {
@@ -329,20 +334,17 @@ public class TransactionController {
         }
         transaction.setWallet(walletOptional.get());
 
-        //Tìm và lấy thông tin category
         Long category_id = createTransaction.getCategory_id();
         Optional<Category> categoryOptional = categoryService.findById(category_id);
         if (categoryOptional.isEmpty()) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
 
-        //Kiểm tra category có thuộc danh mục của user
         List<Category> categories = userOptional.get().getCategories();
         if (!categories.contains(categoryOptional.get())) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
 
-        //Kiểm tra danh mục có phải EXPENSE và INCOME hay không
         String type = String.valueOf(categoryOptional.get().getType());
         if (!type.equals("LOAN") && !type.equals("DEBT")) {
             return ResponseEntity
@@ -363,6 +365,80 @@ public class TransactionController {
 
         Transaction savedTransaction = transactionService.save(transaction);
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch dựa theo 1 ví
+    @GetMapping("/user/{user_id}/wallet/{wallet_id}")
+    public ResponseEntity<Iterable<Transaction>> findAllByWallet(@PathVariable Long user_id,
+                                                         @PathVariable Long wallet_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        Optional<Wallet> walletOptional = walletRepository.findById(wallet_id);
+        if (userOptional.isEmpty() && walletOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Transaction> transactions = transactionRepository.findByWallet(walletOptional.get());
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch theo tháng năm hiện tại
+    @GetMapping("/user/{user_id}/current_month_transactions")
+    public ResponseEntity<Iterable<Transaction>> findAllByCurrentMonth(@PathVariable Long user_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+
+        LocalDate startDate = LocalDate.of(currentYear, currentMonth, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch theo tháng năm được chọn
+    @GetMapping("/user/{user_id}/transactions/{year}/{monthIndex}")
+    public ResponseEntity<?> findAllByYearAndMonthIndex(@PathVariable Long user_id,
+                                                        @PathVariable int year,
+                                                        @PathVariable int monthIndex) {
+
+        if (monthIndex < 0 || monthIndex > 11 || year <= 0) {
+            return new ResponseEntity<>("Invalid month index or year", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        int month = monthIndex + 1;
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
