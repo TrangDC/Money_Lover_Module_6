@@ -45,6 +45,32 @@ import {useNavigate} from "react-router-dom";
 
 export default function Transactions() {
 
+    // gia lap du lieu
+    const transactionz = [
+        {
+            amount: "",
+            note: "",
+            transactionDate: "",
+            endDate: "",
+            lender: "",
+            borrower: "",
+            wallet_id: "",
+            category_id: ""
+        },
+        {
+            amount: "",
+            note: "",
+            transactionDate: "",
+            endDate: "",
+            lender: "",
+            borrower: "",
+            wallet_id: "",
+            category_id: ""
+        }
+    ];
+
+
+
     const toast = useToast()
 
     const navigate = useNavigate();
@@ -244,7 +270,7 @@ export default function Transactions() {
 
 
                 <MDBTableBody>
-                    {transactions.map((transaction, index) => (
+                    {transactionz.map((transaction, index) => (
                         <tr key={index}>
                             <td>
                                 <div className='d-flex align-items-center'>
@@ -262,26 +288,26 @@ export default function Transactions() {
                             </td>
                             <td>
                                 <MDBBadge color='success' pill>
-                                    {transaction.category.name}
+
                                 </MDBBadge>
                             </td>
-                            <td>{transaction.wallet.name}</td>
+                            <td></td>
                             <td>{transaction.transactionDate}</td>
-                            <td>{transaction.category.type}</td>
+                            <td>{transaction.lender}</td>
                             <td>{transaction.lender}</td>
                             <td>{transaction.borrower}</td>
                             <td>{transaction.note}</td>
                             <td>
-                                {transaction.category.type === 'INCOME' && (
+                                {'INCOME'=== 'INCOME' && (
                                     <MDBBtn color='success' onClick={openAddTransactionIncome}>Edit</MDBBtn>
                                 )}
-                                {transaction.category.type === 'EXPENSE' && (
+                                {transaction.lender === 'EXPENSE' && (
                                     <MDBBtn color='primary' onClick={openAddTransactionExpense}>Edit</MDBBtn>
                                 )}
-                                {transaction.category.type === 'DEBT' && (
+                                {transaction.lender === 'DEBT' && (
                                     <MDBBtn color='secondary' onClick={openAddTransactionDebt}>Edit</MDBBtn>
                                 )}
-                                {transaction.category.type === 'LOAN' && (
+                                {transaction.lender === 'LOAN' && (
                                     <MDBBtn color='info' onClick={openAddTransactionLoan}>Edit</MDBBtn>
                                 )}
                             </td>
@@ -621,8 +647,6 @@ export default function Transactions() {
                     </MDBModalContent>
                 </MDBModalDialog>
             </MDBModal>
-
-
 
         </div>
 

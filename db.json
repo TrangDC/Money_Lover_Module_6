@@ -1,0 +1,586 @@
+{
+  "transactions" : [
+    {
+      "id": 26,
+      "amount": 70000,
+      "note": "Tiền thưởng",
+      "transactionDate": "2024-03-02",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 64,
+        "name": "Collect Interest",
+        "type": "INCOME"
+      }
+    },
+    {
+      "id": 27,
+      "amount": 30000,
+      "note": "Tiền thưởng",
+      "transactionDate": "2024-03-01",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 5,
+        "name": "Account bank",
+        "balance": 500000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 64,
+        "name": "Collect Interest",
+        "type": "INCOME"
+      }
+    },
+    {
+      "id": 28,
+      "amount": 5000,
+      "note": "Tiền xe",
+      "transactionDate": "2024-02-21",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 29,
+      "amount": 30000,
+      "note": "Tiền thưởng",
+      "transactionDate": "2024-02-29",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 64,
+        "name": "Collect Interest",
+        "type": "INCOME"
+      }
+    },
+    {
+      "id": 30,
+      "amount": 30000,
+      "note": "Tiền thưởng",
+      "transactionDate": "2024-02-29",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 5,
+        "name": "Account bank",
+        "balance": 500000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 64,
+        "name": "Collect Interest",
+        "type": "INCOME"
+      }
+    },
+    {
+      "id": 32,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-28",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 33,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-20",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 34,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-28",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 35,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-27",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 36,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-27",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 37,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-26",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 38,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-25",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 39,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-24",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 40,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-23",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 41,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-22",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 42,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-21",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 43,
+      "amount": 30000,
+      "note": "Tiền ăn",
+      "transactionDate": "2024-02-20",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 5,
+        "name": "Account bank",
+        "balance": 500000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 50,
+        "name": "Food & Beverage",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 44,
+      "amount": 5000,
+      "note": "Tiền xe",
+      "transactionDate": "2024-02-26",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 57,
+        "name": "Transportation",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 45,
+      "amount": 5000,
+      "note": "Tiền xe",
+      "transactionDate": "2024-02-19",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 57,
+        "name": "Transportation",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 46,
+      "amount": 5000,
+      "note": "Tiền xe",
+      "transactionDate": "2024-02-27",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 5,
+        "name": "Account bank",
+        "balance": 500000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 57,
+        "name": "Transportation",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 47,
+      "amount": 5000,
+      "note": "Tiền xe",
+      "transactionDate": "2024-02-19",
+      "endDate": null,
+      "lender": null,
+      "borrower": null,
+      "wallet": {
+        "id": 5,
+        "name": "Account bank",
+        "balance": 500000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 57,
+        "name": "Transportation",
+        "type": "EXPENSE"
+      }
+    },
+    {
+      "id": 48,
+      "amount": 15000,
+      "note": "Vay tien an",
+      "transactionDate": "2024-03-01",
+      "endDate": "2024-03-03",
+      "lender": "Son",
+      "borrower": null,
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 61,
+        "name": "Debt",
+        "type": "DEBT"
+      }
+    },
+    {
+      "id": 49,
+      "amount": 5000,
+      "note": "Cho vay tien xe",
+      "transactionDate": "2024-03-01",
+      "endDate": "2024-03-03",
+      "lender": "",
+      "borrower": "DucAnh",
+      "wallet": {
+        "id": 6,
+        "name": "Wallet recent",
+        "balance": 800000,
+        "activeCategories": []
+      },
+      "category": {
+        "id": 62,
+        "name": "Loan",
+        "type": "LOAN"
+      }
+    }
+  ],
+
+  "wallets": [
+    {
+      "id": 5,
+      "name": "Account bank",
+      "balance": 500000,
+      "activeCategories": []
+    },
+    {
+      "id": 6,
+      "name": "Wallet recent",
+      "balance": 800000,
+      "activeCategories": []
+    }
+  ],
+  "categories": [
+    {
+      "id": 47,
+      "name": "Education",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 48,
+      "name": "Electricity Bill",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 49,
+      "name": "Fitness",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 50,
+      "name": "Food & Beverage",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 51,
+      "name": "Home Services",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 52,
+      "name": "Internet Bill",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 53,
+      "name": "Medical Check Up",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 54,
+      "name": "Personal Items",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 55,
+      "name": "Phone Bill",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 56,
+      "name": "Rentals",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 57,
+      "name": "Transportation",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 58,
+      "name": "Vehicle Maintenance",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 59,
+      "name": "Water Bill",
+      "type": "EXPENSE"
+    },
+    {
+      "id": 60,
+      "name": "Debt Collection",
+      "type": "DEBT"
+    },
+    {
+      "id": 61,
+      "name": "Debt",
+      "type": "DEBT"
+    },
+    {
+      "id": 62,
+      "name": "Loan",
+      "type": "LOAN"
+    },
+    {
+      "id": 63,
+      "name": "Repayment",
+      "type": "LOAN"
+    },
+    {
+      "id": 64,
+      "name": "Collect Interest",
+      "type": "INCOME"
+    },
+    {
+      "id": 65,
+      "name": "Incoming Transfer",
+      "type": "INCOME"
+    },
+    {
+      "id": 66,
+      "name": "Salary",
+      "type": "INCOME"
+    },
+    {
+      "id": 67,
+      "name": "Other Income",
+      "type": "INCOME"
+    }
+  ]
+}

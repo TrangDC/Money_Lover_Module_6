@@ -4,7 +4,6 @@ import RegisterPage from "./components/RegisterPage/RegisterPage";
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import LoginPage from "./components/LoginPage/LoginPage";
-import Dashboard from "./components/HomePage/Dashboard";
 import InformationUser from "./components/UserPage/InformationUser";
 import UploadImage from "./components/FireBase/Upimage";
 import Error from "./components/Error";
@@ -14,6 +13,7 @@ import CategoriesPage from "./components/UserPage/category/CategoriesPage";
 import Transactions from "./TransactionsPage/Transactions";
 import Wallet from "./components/WalletPage/Wallet";
 import SideBar from "./layout/SideBar/SideBar";
+import TransactionPage from "./components/TransactionPage/TransactionPage";
 
 
 function App() {
@@ -42,6 +42,9 @@ function App() {
                     <Route path='/register' element={<RegisterPage/>}/>
                     <Route path='/upload' element={<UploadImage/>}/>
                     <Route path='/active' element={<ActiveAccount/>}/>
+                    <Route path='/trans' element={<Transactions/>}/>
+                    <Route path='/tranz' element={<TransactionPage/>}/>
+
                 </Routes>
             </BrowserRouter>
         </div>
