@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     List<Transaction> findByNoteContainingIgnoreCase (String text);
+
+    List<Transaction> findByWallet(Wallet wallet);
 }

@@ -37,7 +37,6 @@ public class WalletController {
                 activeWallets.add(wallet);
             }
         }
-
         if (wallets.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
