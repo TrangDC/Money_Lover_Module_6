@@ -124,9 +124,8 @@ public class AuthController {
         default_wallet.setBalance(0L);
         List<Category> active_categories = new ArrayList<>();
         default_wallet.setActiveCategories(active_categories);
-
+        wallets.add(default_wallet);
         Iterable<Category> categories = categoryService.createDefaultCategories();
-
         User user = new User(
                 username,
                 signUpRequest.getEmail(),
@@ -135,6 +134,7 @@ public class AuthController {
                 (List<Category>) categories,
                 wallets
         );
+        user.setWallets(wallets);
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -194,7 +194,6 @@ public class AuthController {
         return new ResponseEntity<>("Email has been sent", HttpStatus.OK);
 
     }
-
 
     @GetMapping("/active_account/{email}")
     public ResponseEntity<?> processActiveAccount(@PathVariable String email) {
