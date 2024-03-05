@@ -297,8 +297,10 @@ const SideBar = () => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}>
-                            <MdAccountBalanceWallet className="ml-2.5"
-                                                    style={{width: '25px', height: '25px', color: '#228B22'}}/>
+                            <Link to= "/auth/transactions">
+                                <MdAccountBalanceWallet className="ml-2.5"
+                                                        style={{width: '25px', height: '25px', color: '#228B22'}}/>
+                            </Link>
                             <span className="ml-2.5"
                                   style={{marginTop: '5px', textAlign: 'center', color: '#228B22'}}>Transactions</span>
                         </div>

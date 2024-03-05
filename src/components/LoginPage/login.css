@@ -17,3 +17,9 @@
     width: 20px;
     height: 20px;
 }
+.login-wrapper {
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

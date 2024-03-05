@@ -76,13 +76,6 @@ const RegisterForm = ({setIsLoading }) => {
                 email: email,
                 password: password
             });
-            toast({
-                title: 'Register Successful',
-                description: 'Registered successfully, Log In now !',
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-            });
 
             console.log('Signup response:', response.data);
 
@@ -97,13 +90,6 @@ const RegisterForm = ({setIsLoading }) => {
             }, 3000);
         } catch (error) {
             console.error('Error:', error);
-            toast({
-                title: 'Register Failed',
-                description: 'Registration failed, register again !',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            })
         }
     };
 
@@ -145,11 +131,13 @@ const RegisterForm = ({setIsLoading }) => {
                         }}
                     >
                         <MDBCardBody className='p-5 text-center'>
-                            <h2 className='fw-bold text-black mb-5 text-center' style={{ marginTop: '-30px' }}>
-                                Register
-                            </h2>
+                            <div className="register-wrapper">
+                                <h2 className='fw-bold text-black mb-5 text-center'>
+                                    Register
+                                </h2>
+                            </div>
                             <MDBRow>
-                                <MDBCol col='10' md='6'>
+                                <MDBCol col='10' md='6' style={{marginTop: '5%'}}>
                                     <p className='text-black-50 mb-3'>Using social networking accounts</p>
                                     <MDBBtn outline rounded className='mb-3 w-100' size='lg' color='danger'>
                                         <GoogleLogin
@@ -170,7 +158,7 @@ const RegisterForm = ({setIsLoading }) => {
                                         <span className="social-text">Sign in with Apple</span>
                                     </MDBBtn>
                                 </MDBCol>
-                                <MDBCol col='6' md='6'>
+                                <MDBCol col='6' md='6' style={{marginTop: '5%'}}>
                                     <p className='text-black-50 mb-3'>Create Money Lover account</p>
                                     <div>
                                         <Field

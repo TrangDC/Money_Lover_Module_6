@@ -20,9 +20,11 @@ export default function PinnedSubheaderList() {
     const [totalInflow, setTotalInflow] = useState(0);
     const [totalOutflow, setTotalOutflow] = useState(0);
 
+    const user = JSON.parse(localStorage.getItem('user'));
+
     useEffect(() => {
         const fetchData = async () => {
-            const data = await TransactionService.fetchTransactions();
+            const data = await TransactionService.fetchTransactions(user);
             setTransactions(data);
             localStorage.setItem("transactions", JSON.stringify(data))
         };
@@ -126,6 +128,7 @@ export default function PinnedSubheaderList() {
                             <List className="list" class="border-t border-gray-200">
                                 {groupedTransactions.map(({ date, transactions }) => (
                                     <div>
+                                        <hr className='my-0.5'/>
                                         <ListItem className="sticky-top bg-light px-4 py-2 ml-0 flex justify-between items-center" style={{ height: '5rem' }}>
                                             <div className="flex items-center">
                                                 <div className="text-5xl font-bold mr-2">{date.getDate()}</div> {/* Largest font size for the day number */}
@@ -136,6 +139,8 @@ export default function PinnedSubheaderList() {
                                                 </div>
                                             </div>
                                         </ListItem>
+                                        <hr className='my-0.5'/>
+
                                         {transactions.map((transaction) => (
                                             <ListItem
                                                 class={`flex items-center py-2 px-4 border-t border-gray-200`}
