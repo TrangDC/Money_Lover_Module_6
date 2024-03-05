@@ -1,77 +1,64 @@
-/*.sticky-subheader {*/
-/*    position: sticky;*/
-/*    top: 0;*/
-/*    background-color: #f5f5f5;*/
-/*    z-index: 1;*/
-/*    padding: 8px 16px;*/
-/*    font-weight: bold;*/
-/*}*/
+/*button*/
+.button {
+    position: relative;
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #34974d;
+    background-color: #3aa856;
+}
 
-/*.root {*/
-/*    display: flex;*/
-/*    justify-content: space-around;*/
-/*    align-items: flex-start;*/
-/*    height: fit-content;*/
-/*    padding: 0 30px;*/
-/*}*/
+.button, .button__icon, .button__text {
+    transition: all 0.3s;
+}
 
-/*.box {*/
-/*    width: 40%;*/
-/*    height: 90vh;*/
-/*    max-width: calc(60% - 80px);*/
-/*    border: 2px solid #ccc;*/
-/*    border-radius: 8px;*/
-/*    overflow: hidden;*/
-/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-/*    transition: transform 0.3s ease;*/
-/*}*/
+.button .button__text {
+    transform: translateX(30px);
+    color: #fff;
+    font-weight: 400;
+}
 
-/*.list {*/
-/*    position: relative;*/
-/*    overflow-y: auto;*/
-/*    height: calc(90vh - 40px);*/
-/*    width: 100%;*/
-/*    font-size: 14px; !* Adjust font size *!*/
-/*    margin: 0; !* Remove margin *!*/
-/*    padding: 0; !* Remove padding *!*/
-/*}*/
+.button .button__icon {
+    position: absolute;
+    transform: translateX(160px);
+    height: 100%;
+    width: 39px;
+    background-color: #34974d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-/*.list > div {*/
-/*    margin: 0; !* Remove margin for list items *!*/
-/*}*/
+.button .svg {
+    width: 24px;
+    stroke: #fff;
+}
 
-/*.detail-card {*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    right: -100%;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    background-color: white;*/
-/*    border-left: 1px solid #ccc;*/
-/*    padding: 20px;*/
-/*    transition: right 0.3s ease;*/
-/*    z-index: 2;*/
-/*}*/
+.button:hover {
+    background: #34974d;
+}
 
-/*.detail-card.active {*/
-/*    right: 0;*/
-/*}*/
+.button:hover .button__text {
+    color: transparent;
+}
 
-/*.subheader-buttons {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: center;*/
-/*    width: 100%;*/
-/*    padding: 8px 16px;*/
-/*}*/
+.button:hover .button__icon {
+    width: 148px;
+    transform: translateX(0);
+}
 
-/*.subheader-buttons > div {*/
-/*    flex-grow: 1;*/
-/*}*/
+.button:active .button__icon {
+    background-color: #2e8644;
+}
 
-/*.button-container {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    margin-top: 20px;*/
-/*}*/
+.button:active {
+    border: 1px solid #2e8644;
+}
+.button__text {
+    text-align: left;
+    font-size: 16px !important;
+}
 
+/*header*/

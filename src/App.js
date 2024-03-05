@@ -14,6 +14,7 @@ import Transactions from "./TransactionsPage/Transactions";
 import Wallet from "./components/WalletPage/Wallet";
 import SideBar from "./layout/SideBar/SideBar";
 import TransactionPage from "./components/TransactionPage/TransactionPage";
+import CreateTransaction from "./components/TransactionPage/CreateTransaction";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                         <Route path="profile" element={(isAuth || user) ? <InformationUser/> : <Error/>}/>
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                         <Route path="transactions" element={(isAuth || user) ? <TransactionPage/> : <Error/>}/>
+                        <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
                     </Route>
                     <Route path='/login'
                            element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>

@@ -12,6 +12,9 @@ import {
     Card,
     Typography,
 } from "@material-tailwind/react";
+import "./PinnedSubheaderList.css"
+import {MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle} from "mdb-react-ui-kit";
+import {Link} from "react-router-dom";
 export default function PinnedSubheaderList() {
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -65,10 +68,17 @@ export default function PinnedSubheaderList() {
 
     return (
         <div className="root flex justify-center">
-            <div style={{ width: "600px", height: '500px' }} className="bg-white rounded-lg shadow-lg">
+            <div style={{ width: "600px", height: '550px' }} className="bg-white rounded-lg shadow-lg">
                 <nav>
-                    <div>
+                    <div className="header">
+                        <Link to={"/auth/create_transaction"}>
+                            <button type="button" className="button">
+                                <span className="button__text">Add Transaction</span>
+                                <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                            </button>
+                        </Link>
                         <div className="flex justify-content-center mt-0.5">
+
                             <Button
                                 variant="text"
                                 class="rounded-none border-b border-blue-gray-50 bg-transparent p-2"
@@ -98,13 +108,13 @@ export default function PinnedSubheaderList() {
                             <div className="flex justify-between">
                                 <p className="pl-5">Inflow:</p>
                                 <p style={{ color: 'blue' }} className="pr-5">
-                                    {totalInflow.toLocaleString()} VNĐ
+                                    +{totalInflow.toLocaleString()} VNĐ
                                 </p>
                             </div>
                             <div className="flex justify-between">
                                 <p className="pl-5">Outflow:</p>
                                 <p style={{ color: 'red' }} className="pr-5">
-                                    {totalOutflow.toLocaleString()} VNĐ
+                                    -{totalOutflow.toLocaleString()} VNĐ
                                 </p>
                             </div>
                             <div className="flex justify-between">
@@ -116,7 +126,7 @@ export default function PinnedSubheaderList() {
                         </div>
                     </div>
                     <hr className='my-0.5'/>
-                    <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{ maxHeight: "600px" }}>
+                    <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{ maxHeight: "550px" }}>
                         {groupedTransactions.length === 0 ? (
                             <div style={{ height: "430px" }}>
                                 <ListItem>

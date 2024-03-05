@@ -1,0 +1,10 @@
+.form-body {
+    background-color: white;
+    padding: 60px;
+    border-radius: 8px;
+    width: 1200px;
+    margin: auto;
+}
+.text-muted {
+    margin-top: 20px;
+}
