@@ -13,8 +13,12 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import "./PinnedSubheaderList.css"
-import {MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle} from "mdb-react-ui-kit";
+
 import {Link} from "react-router-dom";
+import {MDBCardFooter, MDBCardHeader, MDBCardText} from "mdbreact";
+import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle} from "mdb-react-ui-kit";
+import {MdOutlineClose} from "react-icons/md";
+
 export default function PinnedSubheaderList() {
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -24,6 +28,13 @@ export default function PinnedSubheaderList() {
     const [totalOutflow, setTotalOutflow] = useState(0);
 
     const user = JSON.parse(localStorage.getItem('user'));
+
+    // display detail
+    const [showDetail, setShowDetail] = useState(false)
+    const handleClickX = () => {
+        setShowDetail(false)
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -58,6 +69,7 @@ export default function PinnedSubheaderList() {
 
     const handleTransactionClick = (transaction) => {
         setSelectedTransaction(transaction);
+        setShowDetail(true)
     };
 
     const handleCloseClick = () => {
@@ -67,9 +79,9 @@ export default function PinnedSubheaderList() {
     const groupedTransactions = groupTransactionsByDate();
 
     return (
-        <div className="root flex justify-center">
-            <div style={{ width: "600px", height: '550px' }} className="bg-white rounded-lg shadow-lg">
-                <nav>
+        <div className={`root flex justify-center container_full ${showDetail ? 'selected' : ''}`}>
+            <div className={`bg-white rounded-lg shadow-lg container-left ${showDetail ? 'selected' : ''}`}>
+                <div>
                     <div className="header">
                         <Link to={"/auth/create_transaction"}>
                             <button type="button" className="button">
@@ -179,7 +191,24 @@ export default function PinnedSubheaderList() {
                             </List>
                         )}
                     </List>
-                </nav>
+                </div>
+            </div>
+            <div className={`container-right ${showDetail ? 'selected' : ''}`}>
+                {
+                    showDetail && (
+                        <MDBCard alignment='center'>
+                            <div className="btn-x" onClick={handleClickX}>
+                                <MdOutlineClose/>
+                            </div>
+                            <MDBCardHeader>Featured</MDBCardHeader>
+                            <MDBCardBody>
+                                <MDBCardTitle>Special title treatment</MDBCardTitle>
+                                <MDBCardText>With supporting text below as a natural lead-in to additional content.</MDBCardText>
+                                <MDBBtn href='#'>Button</MDBBtn>
+                            </MDBCardBody>
+                        </MDBCard>
+                    )
+                }
             </div>
         </div>
 

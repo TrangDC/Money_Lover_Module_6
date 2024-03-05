@@ -190,55 +190,63 @@ const CategoriesPage = () => {
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <Table>
-                                <Tbody>
-                                    {categories.map((category, index) => (
-                                        <Tr key={index}>
-                                            <td onClick={() => {
-                                                onOpenModal2();
-                                                setEditCate(category);
-                                            }}>
-                                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                                    <Image
-                                                        borderRadius='full'
-                                                        boxSize='50px'
-                                                        src={category.image}
-                                                        alt='Category Image'
-                                                    />
-                                                    <span style={{marginLeft: '10px'}}>{category.name}</span>
-                                                </div>
-                                            </td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>
-                            </Table>
+                            <div style={{overflowY: 'auto', maxHeight: '600px'}}>
+                                <Table>
+                                    <Tbody>
+
+                                        {categories.map((category, index) => (
+                                            <Tr key={index}>
+                                                <td onClick={() => {
+                                                    onOpenModal2();
+                                                    setEditCate(category);
+                                                }}>
+                                                    <div style={{display: 'flex', alignItems: 'center',}}>
+                                                        <Image
+                                                            borderRadius='full'
+                                                            boxSize='50px'
+                                                            src={category.image}
+                                                            alt='Category Image'
+                                                        />
+                                                        <span style={{marginLeft: '10px'}}>{category.name}</span>
+                                                    </div>
+                                                </td>
+                                            </Tr>
+                                        ))}
+
+
+                                    </Tbody>
+                                </Table>
+                            </div>
                         </TabPanel>
                         {uniqueTypes.map((type, index) => (
                             <TabPanel key={index}>
-                                <Table>
-                                    <Tbody>
-                                        {categories
-                                            .filter(category => category.type === type)
-                                            .map((category, index) => (
-                                                <Tr key={index}>
-                                                    <td onClick={() => {
-                                                        onOpenModal2();
-                                                        setEditCate(category);
-                                                    }}>
-                                                        <div style={{display: 'flex', alignItems: 'center'}}>
-                                                            <Image
-                                                                borderRadius='full'
-                                                                boxSize='50px'
-                                                                src={category.image}
-                                                                alt='Category Image'
-                                                            />
-                                                            <span style={{marginLeft: '10px'}}>{category.name}</span>
-                                                        </div>
-                                                    </td>
-                                                </Tr>
-                                            ))}
-                                    </Tbody>
-                                </Table>
+                                <div style={{overflowY: 'auto', maxHeight: '600px'}}>
+                                    <Table>
+                                        <Tbody>
+                                            {categories
+                                                .filter(category => category.type === type)
+                                                .map((category, index) => (
+                                                    <Tr key={index}>
+                                                        <td onClick={() => {
+                                                            onOpenModal2();
+                                                            setEditCate(category);
+                                                        }}>
+                                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                                                <Image
+                                                                    borderRadius='full'
+                                                                    boxSize='50px'
+                                                                    src={category.image}
+                                                                    alt='Category Image'
+                                                                />
+                                                                <span
+                                                                    style={{marginLeft: '10px'}}>{category.name}</span>
+                                                            </div>
+                                                        </td>
+                                                    </Tr>
+                                                ))}
+                                        </Tbody>
+                                    </Table>
+                                </div>
                             </TabPanel>
                         ))}
                     </TabPanels>
@@ -328,9 +336,7 @@ const CategoriesPage = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-
         </div>
     );
 };
-
 export default CategoriesPage;

@@ -17,8 +17,6 @@ const CreateTransaction = () => {
                                 <MDBCol className="mb-4" sm="1" style={{fontSize: "35px", color: "#14A44D"}}><MdOutlineAttachMoney/></MDBCol>
                                 <MDBCol><MDBInput id='form6Example1' label='Money number' sm="11"/></MDBCol>
                             </MDBRow>
-
-
                             <MDBCardText className="text-muted">Category</MDBCardText>
                             <Select name='category_id' className="form-select" aria-label="Default select example">
                                 <option>Select category</option>
@@ -76,9 +74,7 @@ const CreateTransaction = () => {
                         <MDBCol></MDBCol>
                     </MDBRow>
                 </form>
-
             </div>
-
         </div>
     );
 };
