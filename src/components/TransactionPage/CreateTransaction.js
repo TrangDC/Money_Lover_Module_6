@@ -71,7 +71,11 @@ const CreateTransaction = () => {
                                 </MDBCol>
                             </MDBRow>
                         </MDBCol>
-                        <MDBCol></MDBCol>
+                        <MDBCol className="btn_submit">
+                            <MDBBtn type="submit" className='me-1' color='success'>
+                                Submit
+                            </MDBBtn>
+                        </MDBCol>
                     </MDBRow>
                 </form>
             </div>

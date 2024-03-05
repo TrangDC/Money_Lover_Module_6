@@ -14,6 +14,9 @@ class TransactionService {
 
     groupTransactionsByDate = (transactions, currentMonthIndex, currentYear) => {
         const groupedTransactions = {};
+        if (transactions.length === 0) {
+            return [];
+        }
 
         transactions.forEach(transaction => {
             const date = new Date(transaction.transactionDate);
@@ -55,6 +58,9 @@ class TransactionService {
     };
 
     calculateTotalInflow = (transactions) => {
+        if (transactions.length === 0) {
+            return [];
+        }
         return transactions.reduce((total, transaction) => {
             if (transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT') {
                 return total + transaction.amount;
@@ -64,6 +70,9 @@ class TransactionService {
     };
 
     calculateTotalOutflow = (transactions) => {
+        if (transactions.length === 0) {
+            return [];
+        }
         return transactions.reduce((total, transaction) => {
             if (transaction.category.type === 'EXPENSE' || transaction.category.type === 'LOAN') {
                 return total + transaction.amount;

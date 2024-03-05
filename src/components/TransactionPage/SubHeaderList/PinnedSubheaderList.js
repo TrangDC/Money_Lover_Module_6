@@ -93,7 +93,7 @@ export default function PinnedSubheaderList() {
 
                             <Button
                                 variant="text"
-                                class="rounded-none border-b border-blue-gray-50 bg-transparent p-2"
+                                className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                 indicatorProps={{
                                     className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                 }}
@@ -101,13 +101,13 @@ export default function PinnedSubheaderList() {
                                 {currentMonthIndex === 0 ? months[11] : months[currentMonthIndex - 1]} {currentMonthIndex === 0 ? currentYear - 1 : currentYear}
                             </Button>
                             <Button variant="text"
-                                    class="rounded-none border-b border-blue-gray-50 bg-transparent p-2"
+                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month btn-color"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}>{months[currentMonthIndex]} {currentYear}</Button>
                             <Button
                                 variant="text"
-                                class="rounded-none border-b border-blue-gray-50 bg-transparent p-2"
+                                className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                 indicatorProps={{
                                     className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                 }}
@@ -169,7 +169,7 @@ export default function PinnedSubheaderList() {
                                                 key={transaction.id}
                                                 onClick={() => handleTransactionClick(transaction)}>
                                                 <ListItemPrefix className="pl-0">
-                                                    <Avatar variant="circular" alt="candice" src="https://docs.material-tailwind.com/img/face-1.jpg" />
+                                                    <Avatar variant="circular" alt="candice" src={transaction.category.image} />
                                                 </ListItemPrefix>
                                                 <div className="flex justify-between w-full">
                                                     {/* Category name */}
