@@ -211,25 +211,29 @@ export default function PinnedSubheaderList({wallet_id}) {
                                             <div className="flex">
                                                 <div className="transaction-footer ml-7">
                                                     <img
-                                                        src="https://docs.material-tailwind.com/img/face-2.jpg"
+                                                        src={selectedTransaction.image}
                                                         alt="avatar"
                                                         className="relative inline-block h-12 w-13 !rounded-full object-cover object-center"
                                                     />
                                                 </div>
                                                 <div className="ml-7">
-                                                    <h1>Tên ví</h1>
+                                                    <h3>{selectedTransaction.category.name}</h3>
                                                     <div className="transaction-footer">
-                                                        <h5>Tiền ví</h5>
+                                                        <h6>{selectedTransaction.note}</h6>
                                                         <cite title="Source Title"></cite>
                                                     </div>
                                                     <footer className="transaction-footer text-gray-500">
-                                                        <p className='text-sm'>Friday_11/11/1111</p>
+                                                        <p className='text-sm'>{selectedTransaction.transactionDate}</p>
                                                         <cite title="Source Title"></cite>
                                                     </footer>
                                                 </div>
                                             </div>
                                             <hr className="mt-1 mb-2" style={{ width: '250px', borderColor: 'black', borderWidth: '1px' }} />
-                                            <div className={'ml-20'} style={{ color: 'red' }}><h1>-15,000.00</h1></div>
+                                            <div className={'ml-20'} style={{ color: 'red' }}>
+                                                <Typography variant="h2" style={{ color: selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? 'blue' : 'red' }} class="font-normal">
+                                                    {selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? '+' : '-'}{selectedTransaction.amount.toLocaleString()} VNĐ
+                                                </Typography>
+                                            </div>
                                         </blockquote>
                                     </div>
                                 </div>
