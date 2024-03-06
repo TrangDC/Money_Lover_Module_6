@@ -98,6 +98,29 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
+    //API list of transactions by user and wallet
+    @GetMapping("/user/{user_id}/wallet/{wallet_id}")
+    public ResponseEntity<?> findAllTransactionsByWallet(@PathVariable String user_id,
+                                                       @PathVariable String wallet_id){
+        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        // nếu wallet_id là all thì lấy tất cả giao dich
+        if (wallet_id.equals("all")) {
+            List<Transaction> userTransaction = userOptional.get().getTransactions();
+            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+        }
+        //tìm ví theo id
+        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        //tìm danh sach giao dịch theo ví
+        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+        return new ResponseEntity<>(transactionList, HttpStatus.OK);
+    }
+
     //API tạo mới một giao dịch expense hoặc income
     @PostMapping("/user/{user_id}/expense_income")
     public ResponseEntity<?> create(@PathVariable Long user_id, @RequestBody CreateTransaction createTransaction) {
@@ -398,6 +421,114 @@ public class TransactionController {
 
         Transaction savedTransaction = transactionService.save(transaction);
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch theo tháng năm hiện tại
+    @GetMapping("/user/{user_id}/current_month_transactions")
+    public ResponseEntity<Iterable<Transaction>> findAllByCurrentMonth(@PathVariable Long user_id) {
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+
+        LocalDate startDate = LocalDate.of(currentYear, currentMonth, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch theo tháng năm được chọn
+    @GetMapping("/user/{user_id}/transactions/{year}/{monthIndex}")
+    public ResponseEntity<?> findAllByYearAndMonthIndex(@PathVariable Long user_id,
+                                                        @PathVariable int year,
+                                                        @PathVariable int monthIndex) {
+
+        if (monthIndex < 0 || monthIndex > 11 || year <= 0) {
+            return new ResponseEntity<>("Invalid month index or year", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<User> userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        int month = monthIndex + 1;
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //Lấy danh sách giao dịch income theo tháng năm hiện tại và ví
+    @GetMapping("/user/{user_id}/income_transaction/{wallet_id}/date/{year}/{monthIndex}")
+    public ResponseEntity<?> findIncomeTransactionsByWalletAndDate(@PathVariable String user_id,
+                                                                   @PathVariable String wallet_id,
+                                                                   @PathVariable String year,
+                                                                   @PathVariable String monthIndex){
+        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        // nếu wallet_id là all thì lấy tất cả giao dich
+        if (wallet_id.equals("all")) {
+            List<Transaction> userTransaction = userOptional.get().getTransactions();
+            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+        }
+        //tìm ví theo id
+        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        //tìm danh sach giao dịch theo ví
+        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+        List<Transaction> incomeTransactionList = new ArrayList<>();
+        for (Transaction transaction:transactionList) {
+            String type = String.valueOf(transaction.getCategory().getType());
+            if (type.equals("INCOME")) {
+                incomeTransactionList.add(transaction);
+            }
+        }
+        int month = Integer.parseInt(monthIndex) + 1;
+        LocalDate startDate = LocalDate.of(Integer.parseInt(year), month, 1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction) && incomeTransactionList.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
