@@ -14,10 +14,12 @@ import {
 } from "@material-tailwind/react";
 import "./PinnedSubheaderList.css"
 
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {MDBCardFooter, MDBCardHeader, MDBCardText} from "mdbreact";
 import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle} from "mdb-react-ui-kit";
 import {MdOutlineClose} from "react-icons/md";
+import axios from "axios";
+import {useToast} from "@chakra-ui/react";
 
 export default function PinnedSubheaderList({wallet_id}) {
 
@@ -36,6 +38,10 @@ export default function PinnedSubheaderList({wallet_id}) {
     const handleClickX = () => {
         setShowDetail(false)
     }
+
+    const toast = useToast()
+
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -77,6 +83,27 @@ export default function PinnedSubheaderList({wallet_id}) {
     const handleCloseClick = () => {
         setSelectedTransaction(null);
     };
+
+    const handleDelete = (id) => {
+        const confirm = window.confirm('Are you sủa?');
+        if (confirm) {
+            axios.delete(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${id}`)
+                .then(res => {
+                    toast({
+                        title: 'Delete success!',
+                        description: 'You successfully deleted a transaction!',
+                        status: 'success',
+                        duration: 1500,
+                        isClosable: true,
+                    });
+                    navigate("/auth/transactions");
+
+                })
+                .catch(err => console.log(err))
+        }
+    }
+
+
 
     const groupedTransactions = groupTransactionsByDate();
 
@@ -237,6 +264,14 @@ export default function PinnedSubheaderList({wallet_id}) {
                                         </blockquote>
                                     </div>
                                 </div>
+                                <MDBBtn className='me-1' color='warning'>
+                                    Success
+                                </MDBBtn>
+                                <MDBBtn className='me-1' onClick={() => {
+                                    handleDelete(selectedTransaction.id);
+                                }} color='danger'>
+                                    Delete
+                                </MDBBtn>
                             </MDBCardBody>
                         )
                     }
