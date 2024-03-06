@@ -241,6 +241,23 @@ const SideBar = ({onWalletSelect}) => {
                                     </Link>
                                 </Td>
                             </Tr>
+                            <Tr className="hover-div">
+                                <Td>
+                                    <Link to={"/auth/piechart"}>
+                                        <PiIntersectThreeBold className="icon"/>
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <Link to={"/auth/piechart"} className="text-reset">
+                                        Chart
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <Link to={"/auth/piechart"}>
+                                        <FaGreaterThan style={{marginLeft: 'auto'}} className="icon-1"/>
+                                    </Link>
+                                </Td>
+                            </Tr>
                         </Table>
                     </TableContainer>
                 </Offcanvas.Body>

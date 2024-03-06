@@ -42,7 +42,7 @@ function App() {
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                         <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList wallet_id = {wallet_id}/> : <Error/>}/>
                         <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
-                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart/> : <Error/>}/>
+                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart wallet_id = {wallet_id}/> : <Error/>}/>
                     </Route>
                     <Route path='/login'
                            element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
