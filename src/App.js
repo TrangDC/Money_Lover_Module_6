@@ -15,6 +15,7 @@ import TransactionPage from "./components/TransactionPage/TransactionPage";
 import CreateTransaction from "./components/TransactionPage/CreateTransaction";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import PinnedSubheaderList from "./components/TransactionPage/SubHeaderList/PinnedSubheaderList";
+import EditTransaction from "./components/TransactionPage/EditTransaction";
 
 
 
@@ -57,6 +58,7 @@ function App() {
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                         <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList wallet_id = {wallet_id}/> : <Error/>}/>
                         <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
+                        <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/> : <Error/>}/>
                         <Route path='piechart' element={(isAuth || user) ? <IncomePiechart wallet_id = {wallet_id}
                                                                                            monthIndex = {monthIndex}
                                                                                            year = {year}

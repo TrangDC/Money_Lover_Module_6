@@ -96,8 +96,7 @@ export default function PinnedSubheaderList({wallet_id}) {
                         duration: 1500,
                         isClosable: true,
                     });
-                    navigate("/auth/transactions");
-
+                        navigate("/auth/wallets");
                 })
                 .catch(err => console.log(err))
         }
@@ -106,6 +105,11 @@ export default function PinnedSubheaderList({wallet_id}) {
 
 
     const groupedTransactions = groupTransactionsByDate();
+
+    function handleEditTransaction(transaction) {
+        localStorage.setItem("transaction_edit", JSON.stringify(transaction));
+        navigate("/auth/edit_transaction");
+    }
 
     return (
         <div className={`root flex justify-center container_full ${showDetail ? 'selected' : ''}`}>
@@ -264,8 +268,8 @@ export default function PinnedSubheaderList({wallet_id}) {
                                         </blockquote>
                                     </div>
                                 </div>
-                                <MDBBtn className='me-1' color='warning'>
-                                    Success
+                                <MDBBtn className='me-1' color='warning' onClick={()=> handleEditTransaction(selectedTransaction)}>
+                                    Edit
                                 </MDBBtn>
                                 <MDBBtn className='me-1' onClick={() => {
                                     handleDelete(selectedTransaction.id);
