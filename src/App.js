@@ -21,6 +21,8 @@ import PinnedSubheaderList from "./components/TransactionPage/SubHeaderList/Pinn
 function App() {
     const [isAuth, setIsAuth] = useState(false);
     const [wallet_id, setWallet_id] = useState("");
+    const [monthIndex, setMonthIndex] = useState("");
+    const [year, setYear] = useState("");
 
     const user = window.localStorage.getItem('user')
 
@@ -32,17 +34,33 @@ function App() {
         setWallet_id(wallet_id);
     }
 
+    const handleMonthIndex = (monthIndex) => {
+        setMonthIndex(monthIndex);
+    }
+
+    const handleYear = (year) => {
+        setYear(year);
+    }
+
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<Error/>}></Route>
-                    <Route path='/auth/*' element={(isAuth || user) ? <SideBar onWalletSelect = {handleWalletSelect}/> : <Error/>}>
+                    <Route path='/auth/*' element={(isAuth || user) ? <SideBar
+                                                                                onWalletSelect = {handleWalletSelect}
+                                                                                onMonthIndexSelect = {handleMonthIndex}
+                                                                                onYearSelect = {handleYear}
+                                                                        /> : <Error/>}
+                    >
                         <Route path="wallets" element={(isAuth || user) ? <Wallet/> : <Error/>}/>
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                         <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList wallet_id = {wallet_id}/> : <Error/>}/>
                         <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
-                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart wallet_id = {wallet_id}/> : <Error/>}/>
+                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart wallet_id = {wallet_id}
+                                                                                           monthIndex = {monthIndex}
+                                                                                           year = {year}
+                        /> : <Error/>}/>
                     </Route>
                     <Route path='/login'
                            element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>

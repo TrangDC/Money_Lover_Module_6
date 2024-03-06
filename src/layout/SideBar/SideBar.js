@@ -171,6 +171,9 @@ const SideBar = ({onWalletSelect}) => {
     }, []);
 
     function handleSelectAll() {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonthIndex = currentDate.getMonth();
         handleWalletSelect("all");
         onWalletSelect("all");
     }
