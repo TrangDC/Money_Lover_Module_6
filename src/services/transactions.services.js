@@ -46,7 +46,6 @@ class TransactionService {
             newMonthIndex = 0; // January
             newYear++;
         }
-
         setCurrentMonthIndex(newMonthIndex);
         setCurrentYear(newYear);
     };

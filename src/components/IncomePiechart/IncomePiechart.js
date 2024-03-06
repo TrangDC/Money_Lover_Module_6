@@ -24,6 +24,7 @@ import { BsCalendar2Week } from "react-icons/bs";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import {MDBCard, MDBCardBody} from "mdb-react-ui-kit";
 import "./IncomePiechart.css"
+import TransactionService from "../../services/transactions.services";
 const IncomePiechart = ({wallet_id}) => {
 
     const [show, setShow] = useState(false);
@@ -37,6 +38,8 @@ const IncomePiechart = ({wallet_id}) => {
     const [listTransaction, setListTransaction] = useState([]);
     const [incomeCategory, setIncomeCategory] = useState([])
     const [incomeAmount, setIncomeAmount] = useState([])
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
         if (wallet_id) {
@@ -45,8 +48,17 @@ const IncomePiechart = ({wallet_id}) => {
             };
             fetchData();
         }
-    }, [userdata, wallet_id]);
+    }, [wallet_id]);
 
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const handlePrevNextMonths = (currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment) => {
+        TransactionService.handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment)
+    };
+
+    const handleCurrentMonth = (setCurrentMonthIndex, setCurrentYear) => {
+        TransactionService.handleCurrentMonth(setCurrentMonthIndex, setCurrentYear);
+    };
     const getTransactionIncome = (userdata, wallet_id) => {
         if (wallet_id) {
             axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}`)
@@ -102,17 +114,39 @@ const IncomePiechart = ({wallet_id}) => {
                 <MDBCardBody >
                     <div style={{width: '50%',height: '50%',margin: 'auto'}}>
 
+                        <div className="flex justify-content-center mt-0.5">
+
+                            <Button
+                                variant="text"
+                                className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                indicatorProps={{
+                                    className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                }}
+                                onClick={() => handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, -1)}>
+                                {currentMonthIndex === 0 ? months[11] : months[currentMonthIndex - 1]} {currentMonthIndex === 0 ? currentYear - 1 : currentYear}
+                            </Button>
+                            <Button variant="text"
+                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month btn-color"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}>{months[currentMonthIndex]} {currentYear}</Button>
+                            <Button
+                                variant="text"
+                                className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                indicatorProps={{
+                                    className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                }}
+                                onClick={() => handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, 1)}>
+                                {currentMonthIndex === 11 ? months[0] : months[currentMonthIndex + 1]} {currentMonthIndex === 11 ? currentYear + 1 : currentYear}
+                            </Button>
+                        </div>
                         <Tabs isFitted variant='enclosed'>
                             <CgCalendarDates style={{width: '30px',height: '30px',marginLeft: '100%'}} onClick={handleShow} />
-                            <TabList mb='1em'>
-                                <Tab>One</Tab>
-                                <Tab>Two</Tab>
-                                <Tab>Three</Tab>
-                            </TabList>
                             <TabPanels>
                                 <TabPanel>
                                     <Doughnut  data={data} />
-                                    <div style={{height: '50%',margin: 'auto'}}>
+                                    <div style={{maxHeight: '300px',margin: 'auto',overflowY: 'auto'}}>
+
                                         <TableContainer>
                                             <Table variant='simple'>
                                                 <Tbody>
