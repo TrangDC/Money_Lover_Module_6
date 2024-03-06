@@ -367,18 +367,24 @@ public class TransactionController {
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
     }
 
-    //Lấy danh sách giao dịch dựa theo 1 ví
+    //Lấy danh sách giao dịch dựa theo 1 ví hoặc tất cả
     @GetMapping("/user/{user_id}/wallet/{wallet_id}")
     public ResponseEntity<Iterable<Transaction>> findAllByWallet(@PathVariable Long user_id,
-                                                         @PathVariable Long wallet_id) {
+                                                         @PathVariable String wallet_id) {
         Optional<User> userOptional = userService.findById(user_id);
-        Optional<Wallet> walletOptional = walletRepository.findById(wallet_id);
+        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
         if (userOptional.isEmpty() && walletOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (wallet_id.isEmpty() || wallet_id.equals("all")) {
+            List<Transaction> transactions = userOptional.get().getTransactions();
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
         }
         List<Transaction> transactions = transactionRepository.findByWallet(walletOptional.get());
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+
 
     //Lấy danh sách giao dịch theo tháng năm hiện tại
     @GetMapping("/user/{user_id}/current_month_transactions")

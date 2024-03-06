@@ -19,4 +19,6 @@ public class DefaultCategory {
 
     @Enumerated(EnumType.STRING)
     private Type type;
+
+    private String image;
 }
