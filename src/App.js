@@ -15,6 +15,9 @@ import Wallet from "./components/WalletPage/Wallet";
 import SideBar from "./layout/SideBar/SideBar";
 import TransactionPage from "./components/TransactionPage/TransactionPage";
 import CreateTransaction from "./components/TransactionPage/CreateTransaction";
+import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
+import ChartPie from "./components/IncomePiechart/ChartPie";
+
 
 
 function App() {
@@ -46,7 +49,7 @@ function App() {
                     <Route path='/active' element={<ActiveAccount/>}/>
                     <Route path='/trans' element={<Transactions/>}/>
                     <Route path='/tranz' element={<TransactionPage/>}/>
-
+                    <Route path='/piechart' element={<IncomePiechart/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
