@@ -105,42 +105,20 @@ const IncomePiechart = () => {
                                 <TableContainer>
                                     <Table variant='simple'>
                                         <Tbody>
-                                            <Tr>
-                                                <Td style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Image
-                                                        borderRadius='full'
-                                                        boxSize='50px'
-                                                        src='https://static.moneylover.me/img/icon/icon_139.png'
-                                                        alt=""
-                                                    />
-                                                    <span style={{ marginLeft: '5px' }}>Gas Bill</span>
-                                                </Td>
-                                                <Td style={{ textAlign: 'right' }}>-1000000000 vnd</Td>
-                                            </Tr>
-                                            <Tr>
-                                                <Td style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Image
-                                                        borderRadius='full'
-                                                        boxSize='50px'
-                                                        src='https://static.moneylover.me/img/icon/icon_139.png'
-                                                        alt=""
-                                                    />
-                                                    <span style={{ marginLeft: '10px' }}>Gas Bill</span>
-                                                </Td>
-                                                <Td style={{ textAlign: 'right' }}>-1000000000 vnd</Td>
-                                            </Tr>
-                                            <Tr>
-                                                <Td style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Image
-                                                        borderRadius='full'
-                                                        boxSize='50px'
-                                                        src='https://static.moneylover.me/img/icon/icon_139.png'
-                                                        alt=""
-                                                    />
-                                                    <span style={{ marginLeft: '10px' }}>Gas Bill</span>
-                                                </Td>
-                                                <Td style={{ textAlign: 'right' }}>-1000000000 vnd</Td>
-                                            </Tr>
+                                            {listTransaction.map((transaction) => (
+                                                <Tr>
+                                                    <Td style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Image
+                                                            borderRadius='full'
+                                                            boxSize='50px'
+                                                            src={transaction.category.image}
+                                                            alt=""
+                                                        />
+                                                        <span style={{ marginLeft: '5px' }}>{transaction.category.name}</span>
+                                                    </Td>
+                                                    <Td style={{ textAlign: 'right' }}>{transaction.amount} vnd</Td>
+                                                </Tr>
+                                            ))}
                                         </Tbody>
                                     </Table>
                                 </TableContainer>

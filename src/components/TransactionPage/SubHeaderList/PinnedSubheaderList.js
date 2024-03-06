@@ -19,7 +19,9 @@ import {MDBCardFooter, MDBCardHeader, MDBCardText} from "mdbreact";
 import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle} from "mdb-react-ui-kit";
 import {MdOutlineClose} from "react-icons/md";
 
-export default function PinnedSubheaderList() {
+export default function PinnedSubheaderList({wallet_id}) {
+
+
     const [transactions, setTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
@@ -38,13 +40,13 @@ export default function PinnedSubheaderList() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await TransactionService.fetchTransactions(user);
+            const data = await TransactionService.fetchTransactions(user, wallet_id);
             setTransactions(data);
             localStorage.setItem("transactions", JSON.stringify(data))
         };
 
         fetchData();
-    }, [currentMonthIndex]);
+    }, [wallet_id]);
 
     useEffect(() => {
         const inflow = TransactionService.calculateTotalInflow(transactions);

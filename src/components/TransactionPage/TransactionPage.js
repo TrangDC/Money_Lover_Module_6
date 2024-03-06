@@ -25,5 +25,4 @@ const TransactionPage = () => {
         </div>
     );
 };
-
 export default TransactionPage;

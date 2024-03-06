@@ -2,9 +2,9 @@ import axios from "axios";
 
 
 class TransactionService {
-    fetchTransactions = async (user) => {
+    fetchTransactions = async (user, wallet_id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/transactions/user/${user.id}`);
+            const response = await axios.get(`http://localhost:8080/api/transactions/user/${user.id}/wallet/${wallet_id}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching data:', error);

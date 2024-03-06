@@ -31,9 +31,15 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import {Link} from "react-router-dom";
-import CategoriesPage from "../../components/UserPage/category/CategoriesPage";
-import Wallet from "../../components/WalletPage/Wallet";
+import {
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
+    Input
+} from "@material-tailwind/react";
 import axios from "axios";
+import wallet from "../../components/WalletPage/Wallet";
 
 function MydModalWithGrid(props) {
     const navigate = useNavigate();
@@ -44,9 +50,10 @@ function MydModalWithGrid(props) {
     const user = JSON.parse(localStorage.getItem('user'));
     const [userLocal, setUserLocal] = useState([]);
 
+
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
-            .then(res => {
+            .then( res => {
                 console.log(res.data);
                 setUserLocal(res.data);
                 setImage(res.data.image);
@@ -123,7 +130,9 @@ function MydModalWithGrid(props) {
     );
 }
 
-const SideBar = () => {
+const SideBar = ({onWalletSelect}) => {
+
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -132,6 +141,23 @@ const SideBar = () => {
     const [image, setImage] = useState("");
     const user = JSON.parse(localStorage.getItem('user'));
     const [userLocal, setUserLocal] = useState([]);
+    const [wallet_list, setWallet] = useState([])
+    const [selectedWallet, setSelectedWallet] = useState("all");
+
+    function fetchWallets() {
+        axios.get('http://localhost:8080/api/wallets/user/' + user.id)
+            .then((response) => {
+                setWallet(response.data);
+            })
+    }
+
+    const handleWalletSelect = (id) => {
+        setSelectedWallet(id);
+        onWalletSelect(id);
+    };
+
+    const totalAmount = wallet_list.reduce((total, wallet) => total + Number(wallet.balance), 0);
+
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
@@ -139,12 +165,17 @@ const SideBar = () => {
                 console.log(res.data);
                 setUserLocal(res.data);
                 setImage(res.data.image);
+                fetchWallets();
             })
             .catch(err => console.error(err))
     }, []);
 
-    return (
+    function handleSelectAll() {
+        handleWalletSelect("all");
+        onWalletSelect("all");
+    }
 
+    return (
         <div>
             <MydModalWithGrid show={modalShow} onHide={() => setModalShow(false)}/>
             <Offcanvas show={show} onHide={handleClose} style={{width: '27.5%'}}>
@@ -220,37 +251,60 @@ const SideBar = () => {
                     <Navbar className="bg-body-tertiary">
                         <Container>
                             <Navbar.Brand>
+                                <Menu className="bg-white">
+                                    <MenuHandler>
+                                        <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'200px' }}>
 
-                                <MDBDropdown group  style={{height: "40px"}}>
-                                    <Image src="https://static.moneylover.me/img/icon/icon.png"
-                                           style={{width: '40px', height: '40px'}} roundedCircle/>
-
-                                    <MDBDropdownToggle style={{backgroundColor: "white"}}>
-                                        <div>
-                                            <p style={{
-                                                marginTop: '10px',
-                                                fontSize: "13px",
-                                                color: 'black'
-                                            }}>
-                                                Your Wallets
-                                            </p>
-                                            <p className="text-black"
-                                               style={{
-                                                   marginTop: '-15px',
-                                                   fontSize: "13px"
-                                               }}>
-                                                10000000
-                                            </p>
-                                        </div>
-                                    </MDBDropdownToggle>
-                                    <MDBDropdownMenu>
-                                        <MDBDropdownItem link>1</MDBDropdownItem>
-                                        <MDBDropdownItem link>2</MDBDropdownItem>
-                                        <MDBDropdownItem link>3</MDBDropdownItem>
-                                        <MDBDropdownItem link>See More</MDBDropdownItem>
-                                    </MDBDropdownMenu>
-                                </MDBDropdown>
-
+                                            {
+                                                selectedWallet !== "all" ? (
+                                                    <>
+                                                        <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                             alt="Wallet Icon"
+                                                             style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                                                        <div>
+                                                            <div className='text-black'>{selectedWallet.name}</div>
+                                                            <div className='text-black'>{selectedWallet.balance}</div>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <img src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="Wallet Icon"
+                                                             style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                                                        <div>
+                                                            <div className='text-black'>Total</div>
+                                                            <div className='text-black'>{totalAmount}</div>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                        </Button>
+                                    </MenuHandler>
+                                    <MenuList className="max-h-72" style={{ marginTop: '10px', width: '100px' }}>
+                                        <MenuItem
+                                            onClick={() => handleSelectAll()}
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <img src="https://static.moneylover.me/img/icon/ic_category_all.png"
+                                                     alt="Wallet Icon"
+                                                     style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                                                <div>Total</div>
+                                            </div>
+                                            <div>{totalAmount}</div>
+                                        </MenuItem>
+                                        <hr className='my-3'/>
+                                        {wallet_list.map((data) => (
+                                            <MenuItem key={data.id} onClick={() => handleWalletSelect(data.id)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                         alt="Wallet Icon"
+                                                         style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                                                    <div>{data.name}</div>
+                                                </div>
+                                                <div>{data.balance}</div>
+                                            </MenuItem>
+                                        ))}
+                                    </MenuList>
+                                </Menu>
                             </Navbar.Brand>
                             <Navbar.Toggle/>
                             <Navbar.Collapse className="justify-content-end">
