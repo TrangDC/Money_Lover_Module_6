@@ -142,7 +142,7 @@ const SideBar = ({onWalletSelect}) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const [userLocal, setUserLocal] = useState([]);
     const [wallet_list, setWallet] = useState([])
-    const [selectedWallet, setSelectedWallet] = useState("all");
+    const [selectedWallet, setSelectedWallet] = useState([]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
@@ -151,8 +151,8 @@ const SideBar = ({onWalletSelect}) => {
             })
     }
 
-    const handleWalletSelect = (id) => {
-        setSelectedWallet(id);
+    const handleWalletSelect = (id, data) => {
+        setSelectedWallet(data);
         onWalletSelect(id);
     };
 
@@ -174,7 +174,7 @@ const SideBar = ({onWalletSelect}) => {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         const currentMonthIndex = currentDate.getMonth();
-        handleWalletSelect("all");
+        setSelectedWallet(null);
         onWalletSelect("all");
     }
 
@@ -276,7 +276,7 @@ const SideBar = ({onWalletSelect}) => {
                                         <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'200px' }}>
 
                                             {
-                                                selectedWallet !== "all" ? (
+                                                selectedWallet ? (
                                                     <>
                                                         <img src="https://static.moneylover.me/img/icon/icon.png"
                                                              alt="Wallet Icon"
@@ -313,7 +313,7 @@ const SideBar = ({onWalletSelect}) => {
                                         </MenuItem>
                                         <hr className='my-3'/>
                                         {wallet_list.map((data) => (
-                                            <MenuItem key={data.id} onClick={() => handleWalletSelect(data.id)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <MenuItem key={data.id} onClick={() => handleWalletSelect(data.id, data)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                     <img src="https://static.moneylover.me/img/icon/icon.png"
                                                          alt="Wallet Icon"
