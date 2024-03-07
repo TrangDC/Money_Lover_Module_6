@@ -50,14 +50,15 @@ const IncomePiechart = ({wallet_id, monthIndex, year}) => {
                 getTransactionIncome(userdata, wallet_id);
             };
             fetchData();
-
         }
-    }, [wallet_id]);
+    }, [wallet_id, select_month_index, select_year]);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const handlePrevNextMonths = (currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment) => {
         TransactionService.handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment);
+        setSelect_month_index(currentMonthIndex+1);
+        setSelect_year(currentYear)
     };
 
     const handleCurrentMonth = (setCurrentMonthIndex, setCurrentYear) => {
@@ -65,11 +66,9 @@ const IncomePiechart = ({wallet_id, monthIndex, year}) => {
     };
     const getTransactionIncome = (userdata, wallet_id) => {
         if (wallet_id) {
-            axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${year}/${monthIndex}`)
+            axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${select_year}/${select_month_index}`)
                 .then((res) => {
                     console.log(res);
-                    setCurrentMonthIndex(new Date().getMonth());
-                    setCurrentYear(new Date().getFullYear())
                     setListTransaction(res.data);
                     getlist(res.data);
                 })
