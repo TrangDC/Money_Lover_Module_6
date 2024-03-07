@@ -1,0 +1,20 @@
+.form-body {
+    background-color: white;
+    padding: 60px;
+    border-radius: 8px;
+    width: 1200px;
+    margin: auto;
+}
+.text-muted {
+    margin-top: 20px;
+}
+.me-1 {
+
+
+}
+.btn_submit {
+    text-align: center;
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}

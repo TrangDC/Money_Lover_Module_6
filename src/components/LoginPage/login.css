@@ -1,0 +1,25 @@
+.text-red-500{
+    color: red;
+    /*margin-bottom: 10px;*/
+    /*margin-top: 10px;*/
+}
+.social-text {
+    margin-left: 10px;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn .fa {
+    width: 20px;
+    height: 20px;
+}
+.login-wrapper {
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -1,0 +1,227 @@
+.container-wallet {
+    text-align: center;
+    /*background-color: #f5ce93;*/
+}
+
+.wallets {
+    max-width: 800px;
+    display: inline-block;
+}
+
+.card1 .card2{
+    max-width: 800px;
+}
+.card1 {
+    margin-bottom: 10px;
+}
+.card1:hover {
+    background-color: #e7f5ec;
+    opacity: 90%;
+    cursor: pointer;
+}
+.wallet {
+    border-radius: 4px;
+    height: 100%;
+    width: 600px;
+    text-align: left;
+}
+.card-body {
+    text-align: left;
+    display: flex;
+}
+/* xử lý khi click wallet */
+.container-wallet.selected {
+    display: flex !important;
+}
+.wallets.selected {
+    margin-left: 40px;
+}
+.card2.selected {
+    margin-left: 20px;
+    margin-top: 70px;
+}
+/*--------------*/
+
+.header-wallet {
+    margin-top: 20px;
+    display: flex;
+    height: 50px;
+    /*background-color: #b7f6de;*/
+    font-size: 16px;
+}
+
+.icon-back {
+    color: #969494;
+    line-height: 60px;
+    font-size: 24px;
+}
+.icon-back:hover {
+    color: black;
+    cursor: pointer;
+}
+.text-my-wallet {
+    font-size: 20px;
+    margin-left: 30px;
+}
+.content-wallet {
+    text-align: left;
+    /*background-color: bisque;*/
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.wallet-icon {
+    font-size: 40px;
+}
+.btn-x {
+    font-size: 30px;
+}
+.btn-x:hover {
+    cursor: pointer;
+
+}
+
+/*button add*/
+.button {
+    position: relative;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #34974d;
+    background-color: #3aa856;
+}
+
+.button, .button__icon, .button__text {
+    transition: all 0.3s;
+}
+
+.button .button__text {
+    transform: translateX(30px);
+    color: #fff;
+    font-weight: 400;
+}
+
+.button .button__icon {
+    position: absolute;
+    transform: translateX(109px);
+    height: 100%;
+    width: 39px;
+    background-color: #34974d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button .svg {
+    width: 24px;
+    stroke: #fff;
+}
+
+.button:hover {
+    background: #34974d;
+}
+
+.button:hover .button__text {
+    color: transparent;
+}
+
+.button:hover .button__icon {
+    width: 148px;
+    transform: translateX(0);
+}
+
+.button:active .button__icon {
+    background-color: #2e8644;
+}
+
+.button:active {
+    border: 1px solid #2e8644;
+}
+.button__text {
+    text-align: left;
+    font-size: 16px !important;
+}
+/*button update*/
+.btn-update {
+    padding: 1.3em 3em;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-update:hover {
+    background-color: #23c483;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+}
+
+.btn-update:active {
+    transform: translateY(-1px);
+}
+/*button delete*/
+.btn-delete {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(20, 20, 20);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: .3s;
+    overflow: hidden;
+    position: relative;
+}
+
+.svgIcon {
+    width: 12px;
+    transition-duration: .3s;
+}
+
+.svgIcon path {
+    fill: white;
+}
+
+.btn-delete:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: .3s;
+    background-color: rgb(255, 69, 69);
+    align-items: center;
+}
+
+.btn-delete:hover .svgIcon {
+    width: 50px;
+    transition-duration: .3s;
+    transform: translateY(60%);
+}
+
+.btn-delete::before {
+    position: absolute;
+    top: -20px;
+    content: "Delete";
+    color: white;
+    transition-duration: .3s;
+    font-size: 2px;
+}
+
+.btn-delete:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(30px);
+    transition-duration: .3s;
+}
