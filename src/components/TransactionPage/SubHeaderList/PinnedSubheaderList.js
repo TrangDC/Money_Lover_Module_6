@@ -48,6 +48,8 @@ export default function PinnedSubheaderList({wallet_id}) {
         const fetchData = async () => {
             const data = await TransactionService.fetchTransactions(user, wallet_id);
             setTransactions(data);
+            setCurrentMonthIndex(new Date().getMonth());
+            setCurrentYear(new Date().getFullYear())
             localStorage.setItem("transactions", JSON.stringify(data))
         };
 

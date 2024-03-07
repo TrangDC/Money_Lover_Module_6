@@ -1,6 +1,6 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import axios from "axios";
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Doughnut} from 'react-chartjs-3';
 import {
     Table,
@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { Image } from '@chakra-ui/react';
 import { CgCalendarDates } from "react-icons/cg";
-import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { CiCalendarDate } from "react-icons/ci";
@@ -25,7 +24,8 @@ import { LiaCalendarWeekSolid } from "react-icons/lia";
 import {MDBCard, MDBCardBody} from "mdb-react-ui-kit";
 import "./IncomePiechart.css"
 import TransactionService from "../../services/transactions.services";
-const IncomePiechart = ({wallet_id}) => {
+import {ListItem} from "@material-tailwind/react";
+const IncomePiechart = ({wallet_id, monthIndex, year}) => {
 
     const [show, setShow] = useState(false);
 
@@ -41,19 +41,23 @@ const IncomePiechart = ({wallet_id}) => {
     const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
+    const [select_month_index, setSelect_month_index] = useState(monthIndex);
+    const [select_year, setSelect_year] = useState(year);
+
     useEffect(() => {
         if (wallet_id) {
             const fetchData = async () => {
                 getTransactionIncome(userdata, wallet_id);
             };
             fetchData();
+
         }
     }, [wallet_id]);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const handlePrevNextMonths = (currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment) => {
-        TransactionService.handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment)
+        TransactionService.handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment);
     };
 
     const handleCurrentMonth = (setCurrentMonthIndex, setCurrentYear) => {
@@ -61,9 +65,11 @@ const IncomePiechart = ({wallet_id}) => {
     };
     const getTransactionIncome = (userdata, wallet_id) => {
         if (wallet_id) {
-            axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}`)
+            axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${year}/${monthIndex}`)
                 .then((res) => {
                     console.log(res);
+                    setCurrentMonthIndex(new Date().getMonth());
+                    setCurrentYear(new Date().getFullYear())
                     setListTransaction(res.data);
                     getlist(res.data);
                 })
@@ -144,30 +150,43 @@ const IncomePiechart = ({wallet_id}) => {
                             <CgCalendarDates style={{width: '30px',height: '30px',marginLeft: '100%'}} onClick={handleShow} />
                             <TabPanels>
                                 <TabPanel>
-                                    <Doughnut  data={data} />
-                                    <div style={{maxHeight: '300px',margin: 'auto',overflowY: 'auto'}}>
+                                    {listTransaction.length === 0 ? (
+                                        <div style={{ height: "430px" }}>
+                                            <ListItem>
+                                                No transactions for this month
+                                            </ListItem>
+                                            <Button variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <Doughnut  data={data} />
+                                            <div style={{maxHeight: '300px',margin: 'auto',overflowY: 'auto'}}>
 
-                                        <TableContainer>
-                                            <Table variant='simple'>
-                                                <Tbody>
-                                                    {listTransaction.map((transaction) => (
-                                                        <Tr>
-                                                            <Td style={{ display: 'flex', alignItems: 'center' }}>
-                                                                <Image
-                                                                    borderRadius='full'
-                                                                    boxSize='50px'
-                                                                    src={transaction.category.image}
-                                                                    alt=""
-                                                                />
-                                                                <span style={{ marginLeft: '5px' }}>{transaction.category.name}</span>
-                                                            </Td>
-                                                            <Td style={{ textAlign: 'right' }}>{transaction.amount} vnd</Td>
-                                                        </Tr>
-                                                    ))}
-                                                </Tbody>
-                                            </Table>
-                                        </TableContainer>
-                                    </div>
+                                                <TableContainer>
+                                                    <Table variant='simple'>
+                                                        <Tbody>
+                                                            {listTransaction.map((transaction) => (
+                                                                <Tr>
+                                                                    <Td style={{ display: 'flex', alignItems: 'center' }}>
+                                                                        <Image
+                                                                            borderRadius='full'
+                                                                            boxSize='50px'
+                                                                            src={transaction.category.image}
+                                                                            alt=""
+                                                                        />
+                                                                        <span style={{ marginLeft: '5px' }}>{transaction.category.name}</span>
+                                                                    </Td>
+                                                                    <Td style={{ textAlign: 'right' }}>{transaction.amount} vnd</Td>
+                                                                </Tr>
+                                                            ))}
+                                                        </Tbody>
+                                                    </Table>
+                                                </TableContainer>
+                                            </div>
+                                        </div>
+                                    )
+                                    }
+
                                 </TabPanel>
                                 <TabPanel>
                                     <p>two!</p>

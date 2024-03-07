@@ -12,6 +12,8 @@ class TransactionService {
         }
     };
 
+
+
     groupTransactionsByDate = (transactions, currentMonthIndex, currentYear) => {
         const groupedTransactions = {};
         if (transactions.length === 0) {

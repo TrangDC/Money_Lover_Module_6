@@ -130,7 +130,7 @@ function MydModalWithGrid(props) {
     );
 }
 
-const SideBar = ({onWalletSelect}) => {
+const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
 
 
     const [show, setShow] = useState(false);
@@ -154,6 +154,11 @@ const SideBar = ({onWalletSelect}) => {
     const handleWalletSelect = (id, data) => {
         setSelectedWallet(data);
         onWalletSelect(id);
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonthIndex = currentDate.getMonth();
+        onMonthIndexSelect(currentMonthIndex);
+        onYearSelect(currentYear)
     };
 
     const totalAmount = wallet_list.reduce((total, wallet) => total + Number(wallet.balance), 0);
@@ -176,6 +181,8 @@ const SideBar = ({onWalletSelect}) => {
         const currentMonthIndex = currentDate.getMonth();
         setSelectedWallet(null);
         onWalletSelect("all");
+        onMonthIndexSelect(currentMonthIndex);
+        onYearSelect(currentYear)
     }
 
     return (
