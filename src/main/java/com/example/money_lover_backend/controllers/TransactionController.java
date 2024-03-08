@@ -14,6 +14,7 @@ import com.example.money_lover_backend.services.ICategoryService;
 import com.example.money_lover_backend.services.ITransactionService;
 import com.example.money_lover_backend.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +65,15 @@ public class TransactionController {
         // nếu wallet_id là all thì lấy tất cả giao dich
         if (wallet_id.equals("all")) {
             List<Transaction> userTransaction = userOptional.get().getTransactions();
-            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+            List<Transaction> incomeTransactionLists = new ArrayList<>();
+            for (Transaction transaction:userTransaction) {
+                String type = String.valueOf(transaction.getCategory().getType());
+                if (type.equals("INCOME")) {
+                    incomeTransactionLists.add(transaction);
+                }
+            }
+
+            return new ResponseEntity<>(incomeTransactionLists, HttpStatus.OK);
         }
         //tìm ví theo id
         Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
@@ -497,7 +506,29 @@ public class TransactionController {
         // nếu wallet_id là all thì lấy tất cả giao dich
         if (wallet_id.equals("all")) {
             List<Transaction> userTransaction = userOptional.get().getTransactions();
-            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+            List<Transaction> incomeTransactions = new ArrayList<>();
+            for (Transaction transaction: userTransaction) {
+                String type = String.valueOf(transaction.getCategory().getType());
+                if (type.equals("INCOME")) {
+                    incomeTransactions.add(transaction);
+                }
+            }
+            int month = Integer.parseInt(monthIndex) + 1;
+            LocalDate startDate = LocalDate.of(Integer.parseInt(year), month, 1);
+            LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+            List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+            List<Transaction> result = new ArrayList<>();
+
+            for (Transaction transaction : transactions) {
+                if (userTransaction.contains(transaction) && incomeTransactions.contains(transaction)) {
+                    result.add(transaction);
+                }
+            }
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
         //tìm ví theo id
         Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
@@ -520,15 +551,120 @@ public class TransactionController {
         List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
         List<Transaction> userTransactions = userOptional.get().getTransactions();
         List<Transaction> result = new ArrayList<>();
+
         for (Transaction transaction : transactions) {
             if (userTransactions.contains(transaction) && incomeTransactionList.contains(transaction)) {
                 result.add(transaction);
             }
         }
         if (result.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    // lấy danh sách giao dịch income theo khoảng thời gian
+//    @GetMapping("/user/{user_id}/income_transaction/{wallet_id}/date/{startDate}/{endDate}")
+//    public ResponseEntity<?> findIncomeTransactionsByWalletAndDate(
+//            @PathVariable String user_id,
+//            @PathVariable String wallet_id,
+//            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//
+//        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+//        if (userOptional.isEmpty()) {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
+//
+//        // nếu wallet_id là all thì lấy tất cả giao dich
+//        if (wallet_id.equals("all")) {
+//            List<Transaction> userTransaction = userOptional.get().getTransactions();
+//            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+//        }
+//
+//        //tìm ví theo id
+//        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+//        if (walletOptional.isEmpty()) {
+//            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+//        }
+//
+//        //tìm danh sach giao dịch theo ví
+//        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+//
+//        List<Transaction> incomeTransactionList = new ArrayList<>();
+//        for (Transaction transaction:transactionList) {
+//            String type = String.valueOf(transaction.getCategory().getType());
+//            if (type.equals("INCOME")) {
+//                incomeTransactionList.add(transaction);
+//            }
+//        }
+//
+//        // Lọc danh sách giao dịch thu nhập trong khoảng thời gian đã xác định
+//        List<Transaction> result = new ArrayList<>();
+//        for (Transaction transaction : incomeTransactionList) {
+//            LocalDate transactionDate = transaction.getTransactionDate();
+//            if (!transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate)) {
+//                result.add(transaction);
+//            }
+//        }
+//
+//        if (result.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
+
+
+//    @GetMapping("/user/{user_id}/income_transaction/{wallet_id}/date/{startDate}/{endDate}")
+//    public ResponseEntity<?> findIncomeTransactionsByWalletAndDate(
+//            @PathVariable String user_id,
+//            @PathVariable String wallet_id,
+//            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+//            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+//
+//        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+//        if (userOptional.isEmpty()) {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
+//
+//        // nếu wallet_id là all thì lấy tất cả giao dịch
+//        if (wallet_id.equals("all")) {
+//            List<Transaction> userTransaction = userOptional.get().getTransactions();
+//            return new ResponseEntity<>(userTransaction, HttpStatus.OK);
+//        }
+//
+//        //tìm ví theo id
+//        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+//        if (walletOptional.isEmpty()) {
+//            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+//        }
+//
+//        //tìm danh sách giao dịch theo ví
+//        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+//        List<Transaction> incomeTransactionList = new ArrayList<>();
+//        for (Transaction transaction:transactionList) {
+//            String type = String.valueOf(transaction.getCategory().getType());
+//            if (type.equals("INCOME")) {
+//                incomeTransactionList.add(transaction);
+//            }
+//        }
+//
+//
+//        // Lọc danh sách giao dịch thu nhập trong khoảng thời gian đã xác định
+//        List<Transaction> result = new ArrayList<>();
+//        for (Transaction transaction : incomeTransactionList) {
+//            LocalDate transactionDate = transaction.getTransactionDate();
+//            if (!transactionDate.isBefore(startDate) && !transactionDate.isAfter(endDate)) {
+//                result.add(transaction);
+//            }
+//        }
+//
+//        if (result.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 
 }
