@@ -27,4 +27,5 @@ public class Wallet {
     )
     private List<Category> activeCategories;
 
+
 }

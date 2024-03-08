@@ -77,8 +77,6 @@ public class User {
 
     private boolean isActive;
 
-
-
     public boolean isActive() {
         return isActive;
     }
