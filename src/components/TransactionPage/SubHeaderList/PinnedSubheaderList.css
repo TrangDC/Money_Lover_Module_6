@@ -63,7 +63,7 @@
 
 /*showDetail*/
 .container-left{
-    width: 700px;
+    width: 750px;
 }
 .container_full.selected {
     display: flex !important;
@@ -91,4 +91,16 @@
 .btn-nav-right:hover {
     cursor: pointer;
 }
-
+.fix-button {
+    margin: 20px 30px 0 30px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 250;
+}
+.fix-button:hover {
+    border-bottom-color: #05af6a;
+}
+.btn-mid {
+    border-bottom-color: #05af6a;
+    color: chocolate;
+}

@@ -246,11 +246,15 @@ const IncomePiechart = () => {
                                 <TabPanels>
                                     <TabPanel>
                                         {listTransaction.length === 0 ? (
-                                            <div style={{ height: "430px" }}>
-                                                <ListItem>
-                                                    No transactions for this month
-                                                </ListItem>
-                                                <Button variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
+                                            <div style={{ height: "430px"}}>
+                                                <Image
+                                                    style={{ margin: "auto"}}
+                                                    borderRadius='full'
+                                                    boxSize='300px'
+                                                    src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
+                                                    alt=''
+                                                />
+                                                <Button style={{ margin: "auto"}} variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
                                             </div>
                                         ) : (
                                             <div>

@@ -17,6 +17,7 @@ import ExpensePage from "./components/PageExpense/ExpensePage";
 import ChartPage from "./components/ChartPage/ChartPage";
 import {WalletProvider} from "./components/WalletContext";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
+import EditTransaction from "./components/TransactionPage/EditTransaction";
 
 
 
@@ -40,6 +41,7 @@ function App() {
                         <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
                         <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
                         <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
+                        <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/> : <Error/>}/>
                         <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
                         /> : <Error/>}/>
                         <Route path='exchart' element={(isAuth || user) ? <ExpensePage

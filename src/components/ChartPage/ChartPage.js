@@ -15,12 +15,12 @@ import {useWallet} from "../WalletContext";
 
 const ChartPage = () => {
     const userdata = JSON.parse(localStorage.getItem("user"));
+    const {selectedWalletId} = useWallet();
 
-    // Income transactions
     const [listTransactionIncome, setListTransactionIncome] = useState([]);
     const [incomeCategory, setIncomeCategory] = useState([]);
     const [incomeAmount, setIncomeAmount] = useState([]);
-    const {selectedWalletId} = useWallet();
+
     useEffect(() => {
         if (selectedWalletId) {
             const fetchData = async () => {
@@ -31,13 +31,14 @@ const ChartPage = () => {
         }
     }, [selectedWalletId]);
 
-    const getTransactionIncome = (userdata, wallet_id) => {
-        if (wallet_id) {
+    // Income transactions
+    const getTransactionIncome = (userdata, selectedWalletId) => {
+        if (selectedWalletId) {
             axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${selectedWalletId}`)
                 .then((res) => {
                     console.log(res);
                     setListTransactionIncome(res.data);
-                    getlist(res.data, setIncomeCategory, setIncomeAmount);
+                    getlistIncome(res.data, setIncomeCategory, setIncomeAmount);
                 })
                 .catch((error) => {
                     console.error("Error fetching income transaction data:", error);
@@ -45,20 +46,27 @@ const ChartPage = () => {
         }
     };
 
+    function getlistIncome(transactions, setCategory, setAmount) {
+        const category = [];
+        const amount = [];
+        transactions.forEach(transaction => {
+            if (transaction.category.type === "INCOME") {
+                const index = category.indexOf(transaction.category.name)
+                if (index === -1) {
+                    category.push(transaction.category.name);
+                    amount.push(transaction.amount);
+                }
+                else amount[index] += transaction.amount
+            }
+        })
+        setCategory(category);
+        setAmount(amount)
+    }
+
     // Expense transactions
     const [listTransactionEx, setListTransactionEx] = useState([]);
     const [exCategory, setExCategory] = useState([]);
     const [exAmount, setExAmount] = useState([]);
-
-    useEffect(() => {
-        if (selectedWalletId) {
-            const fetchData = async () => {
-                getTransactionEx(userdata, selectedWalletId);
-                getTransactionIncome(userdata,selectedWalletId);
-            };
-            fetchData();
-        }
-    }, [selectedWalletId]);
 
     const getTransactionEx = (userdata, selectedWalletId) => {
         if (selectedWalletId) {
@@ -66,7 +74,7 @@ const ChartPage = () => {
                 .then((res) => {
                     console.log(res);
                     setListTransactionEx(res.data);
-                    getlist(res.data, setExCategory, setExAmount);
+                    getlistExpesen(res.data, setExCategory, setExAmount);
                 })
                 .catch((error) => {
                     console.error("Error fetching expense transaction data:", error);
@@ -74,11 +82,11 @@ const ChartPage = () => {
         }
     };
 
-    function getlist(transactions, setCategory, setAmount) {
+    function getlistExpesen(transactions, setCategory, setAmount) {
         const category = [];
         const amount = [];
         transactions.forEach(transaction => {
-            if (transaction.category.type === "INCOME" || transaction.category.type === "EXPENSE") {
+            if (transaction.category.type === "EXPENSE") {
                 const index = category.indexOf(transaction.category.name)
                 if (index === -1) {
                     category.push(transaction.category.name);
@@ -144,7 +152,7 @@ const ChartPage = () => {
                             <Doughnut data={dataIncome} position='top' />
                             <MDBCardBody>
                                 <MDBCardText>
-                                    <div style={{ maxHeight: '250px', margin: 'auto', overflowY: 'auto' }}>
+                                    <div style={{ maxHeight: '250px', marginLeft: '30px', overflowY: 'auto' }}>
                                         <TableContainer>
                                             <Table variant='simple'>
                                                 <Tbody>
@@ -170,7 +178,7 @@ const ChartPage = () => {
                             </MDBCardBody>
                             <MDBCardFooter>
                                 <Link to= "/auth/piechart" className='text-dark' >
-                                    <span>See Detail</span>
+                                    <span>See Income Detail</span>
                                 </Link>
                             </MDBCardFooter>
                         </MDBCard>
@@ -180,7 +188,7 @@ const ChartPage = () => {
                             <Doughnut data={dataEx} position='top' />
                             <MDBCardBody>
                                 <MDBCardText>
-                                    <div style={{ maxHeight: '250px', margin: 'auto', overflowY: 'auto' }}>
+                                    <div style={{ maxHeight: '250px', marginLeft: '30px', overflowY: 'auto' }}>
                                         <TableContainer>
                                             <Table variant='simple'>
                                                 <Tbody>
@@ -206,7 +214,7 @@ const ChartPage = () => {
                             </MDBCardBody>
                             <MDBCardFooter>
                                 <Link to= "/auth/exchart" className='text-dark' >
-                                    <span>See Detail</span>
+                                    <span>See Expense Detail</span>
                                 </Link>
                             </MDBCardFooter>
                         </MDBCard>

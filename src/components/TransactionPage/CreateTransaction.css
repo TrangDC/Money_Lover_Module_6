@@ -18,3 +18,6 @@
     justify-content: center; /* Căn giữa theo chiều ngang */
     align-items: center; /* Căn giữa theo chiều dọc */
 }
+.form-select{
+    margin-bottom: 20px ;
+}
