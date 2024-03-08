@@ -15,5 +15,4 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     List<Transaction> findByWallet(Wallet wallet);
 
     List<Transaction> findAllByTransactionDateBetween(LocalDate start, LocalDate end);
-
 }

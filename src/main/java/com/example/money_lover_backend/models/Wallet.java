@@ -16,6 +16,8 @@ public class Wallet {
     private String name;
     private Long balance;
 
+    private boolean isActive;
+
 
     @ManyToMany
     @JoinTable(
@@ -24,5 +26,6 @@ public class Wallet {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> activeCategories;
+
 
 }
