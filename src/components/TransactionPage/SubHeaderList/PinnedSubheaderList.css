@@ -88,4 +88,7 @@
 .btn-color {
     color: chocolate;
 }
+.btn-nav-right:hover {
+    cursor: pointer;
+}
 

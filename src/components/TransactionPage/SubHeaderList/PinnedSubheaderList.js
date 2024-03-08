@@ -288,9 +288,6 @@ export default function PinnedSubheaderList() {
                         </Link>
                         <CgCalendarDates style={{width: '40px', height: '40px', marginLeft: '100%'}}
                                          onClick={handleShow}/>
-                        <Button style={{width: '40px', height: '40px', marginLeft: '100%'}} onClick={handleShow} variant="contained" color="primary">
-                            Select Time Range
-                        </Button>
                         {navigation === 'month' && (
                             <div className="flex justify-content-center mt-0.5">
                                 <Button
@@ -451,7 +448,7 @@ export default function PinnedSubheaderList() {
                                     <Button variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
                                 </div>
                             ) : (
-                                <List className="list" class="border-t border-gray-200">
+                                <List className="list" class="border-t border-gray-200" style={{height: "450px"}}>
                                     {groupedTransactions.map(({ date, transactions }) => (
                                         <div>
                                             <hr className='my-0.5'/>
@@ -497,7 +494,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "day" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="btn-nav-right bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
                             {groupTransactionsByDay.length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -535,7 +532,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "week" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="btn-nav-right bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
                             {Object.keys(groupedTransactionsArray).length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -575,7 +572,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "year" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="btn-nav-right bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
                             {Object.keys(groupedTransactionsArrayYear).length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -615,7 +612,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "range" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="btn-nav-right bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
                             {transactions.length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -740,32 +737,6 @@ export default function PinnedSubheaderList() {
                     <div style={{display: 'flex', alignItems: 'center', marginTop: '20px'}} onClick={onOpen}>
                         <FaPen style={{height: '20px', width: '20px', marginLeft: '10px'}}/> <span
                         style={{marginLeft: '15px'}}>Custom</span>
-                    </div>
-                    <div>
-                        {/* Calendar or Date Picker component for selecting start date */}
-                        <Input
-                            type={'date'}
-                            label="Start Date"
-                            value={startDateRange}
-                            onChange={(date) => setStartDateRange(date)}
-                            placeholderText="Start Date"
-                        />
-                        {/* Calendar or Date Picker component for selecting end date */}
-                        <Input
-                            type={'date'}
-                            label="End Date"
-                            value={endDateRange}
-                            onChange={(date) => setEndDateRange(date)}
-                            placeholderText="End Date"
-                        />
-                        {/* Button to clear selected dates */}
-                        <Button onClick={clearSelectedDates} variant="outlined" color="secondary">
-                            Clear Dates
-                        </Button>
-                        {/* Button to apply selected dates */}
-                        <Button onClick={handleApply} variant="contained" color="primary">
-                            Apply Dates
-                        </Button>
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>

@@ -455,18 +455,10 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
     const [isUserFetched, setIsUserFetched] = useState(false);
 
     const { setSelectedWalletId } = useWallet();
+    const { WalletList } = useWallet();
 
 
     useEffect(() => {
-        // if (!isUserFetched) {
-        //     axios.get('http://localhost:8080/api/users/' + user.id)
-        //         .then(res => {
-        //             setUserLocal(res.data);
-        //             setImage(res.data.image);
-        //             setIsUserFetched(true);
-        //         })
-        //         .catch(err => console.error(err))
-        // }
         axios.get('http://localhost:8080/api/users/' + user.id)
             .then(res => {
                            setUserLocal(res.data);
@@ -475,12 +467,6 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                  })
                      .catch(err => console.error(err))
     }, [modalShow]);
-
-    // useEffect(() => {
-    //     if (isUserFetched) {
-    //         fetchWallets();
-    //     }
-    // }, [isUserFetched,  modalShow]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
