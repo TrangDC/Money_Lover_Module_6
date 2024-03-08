@@ -256,7 +256,6 @@ public class TransactionController {
         } else if (categoryType == Type.INCOME || categoryType == Type.LOAN) {
             wallet.setBalance(wallet.getBalance() - amount);
         }
-
         // Set transaction fields to null
         transaction.setWallet(null);
         transaction.setAmount(null);
@@ -268,7 +267,6 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-
     //API update mới một giao dịch expense hoặc income
     @PutMapping("/user/{user_id}/expense_income/{transaction_id}")
     public ResponseEntity<?> updateIncome_Expense(@PathVariable Long user_id,
@@ -279,7 +277,6 @@ public class TransactionController {
         if (userOptional.isEmpty() || transactionOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         Transaction transaction = buildTransactionFromRequest(createTransaction);
         if (transaction == null) {
             return ResponseEntity.badRequest().body("Error: Invalid request data!");
@@ -289,8 +286,6 @@ public class TransactionController {
         if (wallet == null) {
             return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
         }
-
-
         Category category = getCategoryFromTransaction(createTransaction);
         if (category == null) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
@@ -446,5 +441,6 @@ public class TransactionController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 
 }
