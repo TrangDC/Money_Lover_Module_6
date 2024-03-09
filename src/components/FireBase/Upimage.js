@@ -100,7 +100,7 @@ function UploadImage() {
             <Modal.Footer>
                 <Button onClick={uploadImage}
                         type="button"
-                        className="btn btn-primary"
+                        className="btn-outline-success"
                         data-mdb-ripple-init>Upload Image</Button>
 
             </Modal.Footer>

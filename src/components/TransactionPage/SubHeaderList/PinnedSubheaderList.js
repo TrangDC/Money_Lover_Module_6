@@ -34,7 +34,7 @@ import {CiCalendarDate} from "react-icons/ci";
 import {BsCalendar2Week} from "react-icons/bs";
 import {IoCalendarNumberOutline} from "react-icons/io5";
 import {LiaCalendarWeekSolid} from "react-icons/lia";
-import {useWallet} from "../../../WalletContext";
+import {useWallet} from "../../WalletContext";
 import {
     addDays,
     addWeeks,
@@ -287,14 +287,14 @@ export default function PinnedSubheaderList() {
                                 <span className="button__text">Add Transaction</span>
                                 <span className="button__icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    viewBox="0 0 24 24" stroke-width="2"
-                                                                    stroke-linejoin="round" stroke-linecap="round"
-                                                                    stroke="currentColor" height="24" fill="none"
-                                                                    className="svg"><line y2="19" y1="5" x2="12"
-                                                                                          x1="12"></line><line y2="12"
-                                                                                                               y1="12"
-                                                                                                               x2="19"
-                                                                                                               x1="5"></line>
+                                         viewBox="0 0 24 24" stroke-width="2"
+                                         stroke-linejoin="round" stroke-linecap="round"
+                                         stroke="currentColor" height="24" fill="none"
+                                         className="svg"><line y2="19" y1="5" x2="12"
+                                                               x1="12"></line><line y2="12"
+                                                                                    y1="12"
+                                                                                    x2="19"
+                                                                                    x1="5"></line>
                                     </svg>
                                 </span>
                             </button>
@@ -305,7 +305,7 @@ export default function PinnedSubheaderList() {
                             <div className="flex justify-content-center mt-0.5">
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -313,13 +313,13 @@ export default function PinnedSubheaderList() {
                                     {currentMonthIndex === 0 ? months[11] : months[currentMonthIndex - 1]} {currentMonthIndex === 0 ? currentYear - 1 : currentYear}
                                 </Button>
                                 <Button variant="text"
-                                        className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month btn-color"
+                                        className="fix-button btn-mid rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month btn-color"
                                         indicatorProps={{
                                             className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                         }}>{months[currentMonthIndex]} {currentYear}</Button>
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -360,7 +360,7 @@ export default function PinnedSubheaderList() {
                             <div className="flex justify-content-center mt-0.5">
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -369,7 +369,7 @@ export default function PinnedSubheaderList() {
                                 </Button>
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    className="fix-button btn-mid rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -378,7 +378,7 @@ export default function PinnedSubheaderList() {
                                 </Button>
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -391,7 +391,7 @@ export default function PinnedSubheaderList() {
                             <div className="flex justify-content-center mt-0.5">
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -401,7 +401,7 @@ export default function PinnedSubheaderList() {
                                 </Button>
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year btn-color"
+                                    className="fix-button btn-mid rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year btn-color"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -411,7 +411,7 @@ export default function PinnedSubheaderList() {
                                 </Button>
                                 <Button
                                     variant="text"
-                                    className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
                                     indicatorProps={{
                                         className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
                                     }}
@@ -452,7 +452,7 @@ export default function PinnedSubheaderList() {
                     </div>
                     <hr className='my-0.5'/>
                     {navigation === "month" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {groupedTransactions.length === 0 ? (
                                 <div style={{height: "430px"}}>
                                     <ListItem>
@@ -476,28 +476,28 @@ export default function PinnedSubheaderList() {
                                             return total + transaction.amount;
                                         }, 0);
                                         const netAmount = totalIncomeAndDebt - totalExpenseAndLoan;
-                                       return ( <div>
+                                        return ( <div>
                                             <hr className='my-0.5'/>
-                                           <ListItem
-                                               className="sticky-top bg-light px-4 py-2 ml-0 flex justify-between items-center"
-                                               style={{height: '5rem'}}>
-                                               <div className="flex items-center">
-                                                   <div className="text-5xl font-bold mr-2">{date.getDate()}</div>
-                                                   {/* Largest font size for the day number */}
-                                                   <div className="text-lg flex flex-col">
-                                                       <div
-                                                           className='text-sm'>{date.toLocaleString('en-US', {weekday: 'long'})}</div>
-                                                       {/* Day name */}
-                                                       <div
-                                                           className='text-sm'>{date.toLocaleString('en-US', {month: 'long'})}</div>
-                                                       {/* Month name */}
-                                                       <div className='text-sm'>{date.getFullYear()}</div>
-                                                       {/* Year */}
-                                                   </div>
-                                               </div>
-                                               <h5>{netAmount.toLocaleString()} VNĐ</h5>
-                                           </ListItem>
-                                           <hr className='my-0.5'/>
+                                            <ListItem
+                                                className="sticky-top bg-light px-4 py-2 ml-0 flex justify-between items-center"
+                                                style={{height: '5rem'}}>
+                                                <div className="flex items-center">
+                                                    <div className="text-5xl font-bold mr-2">{date.getDate()}</div>
+                                                    {/* Largest font size for the day number */}
+                                                    <div className="text-lg flex flex-col">
+                                                        <div
+                                                            className='text-sm'>{date.toLocaleString('en-US', {weekday: 'long'})}</div>
+                                                        {/* Day name */}
+                                                        <div
+                                                            className='text-sm'>{date.toLocaleString('en-US', {month: 'long'})}</div>
+                                                        {/* Month name */}
+                                                        <div className='text-sm'>{date.getFullYear()}</div>
+                                                        {/* Year */}
+                                                    </div>
+                                                </div>
+                                                <h5>{netAmount.toLocaleString()} VNĐ</h5>
+                                            </ListItem>
+                                            <hr className='my-0.5'/>
 
                                             {transactions.map((transaction) => (
                                                 <ListItem
@@ -537,8 +537,8 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "day" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
-                        {groupTransactionsByDay.length === 0 ? (
+                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
+                            {groupTransactionsByDay.length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
                                         No transactions for this day
@@ -575,7 +575,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "week" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {Object.keys(groupedTransactionsArray).length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -609,7 +609,7 @@ export default function PinnedSubheaderList() {
                                                         <Typography variant="h5"
                                                                     style={{color: transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? 'blue' : 'red'}}
                                                                     class="font-normal">
-                                                        {transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? '+' : '-'}{transaction.amount.toLocaleString()} VNĐ
+                                                            {transaction.category.type === 'INCOME' || transaction.category.type === 'DEBT' ? '+' : '-'}{transaction.amount.toLocaleString()} VNĐ
                                                         </Typography>
                                                     </div>
                                                 </div>
@@ -621,7 +621,7 @@ export default function PinnedSubheaderList() {
                         </List>
                     )}
                     {navigation === "year" && (
-                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
+                        <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {Object.keys(groupedTransactionsArrayYear).length === 0 ? (
                                 <div style={{height: "300px"}}>
                                     <ListItem>
@@ -712,53 +712,53 @@ export default function PinnedSubheaderList() {
                         <MDBCardBody>
                             <div className="card ml-5" style={{width: '90vh', height: '300px'}}>
                                 <div className="btn-x" onClick={handleClickX}>
-                                        <MdOutlineClose/>
-                                    </div>
-                                    <div className="card-header ml-11">
-                                        <h4>Transaction Details</h4>
-                                    </div>
-                                    <div className="card-body">
-                                        <blockquote className="blockquote mb-0">
-                                            <div className="flex">
-                                                <div className="transaction-footer ml-7">
-                                                    <img
-                                                        src={selectedTransaction.category.image}
-                                                        alt="avatar"
-                                                        className="relative inline-block h-12 w-13 !rounded-full object-cover object-center"
-                                                    />
-                                                </div>
-                                                <div className="ml-7">
-                                                    <h3>{selectedTransaction.category.name}</h3>
-                                                    <div className="transaction-footer">
-                                                        <h6>{selectedTransaction.note}</h6>
-                                                        <cite title="Source Title"></cite>
-                                                    </div>
-                                                    <footer className="transaction-footer text-gray-500">
-                                                        <p className='text-sm'>{selectedTransaction.transactionDate}</p>
-                                                        <cite title="Source Title"></cite>
-                                                    </footer>
-                                                </div>
-                                            </div>
-                                            <hr className="mt-1 mb-2" style={{ width: '250px', borderColor: 'black', borderWidth: '1px' }} />
-                                            <div className={'ml-20'} style={{ color: 'red' }}>
-                                                <Typography variant="h2" style={{ color: selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? 'blue' : 'red' }} class="font-normal">
-                                                    {selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? '+' : '-'}{selectedTransaction.amount.toLocaleString()} VNĐ
-                                                </Typography>
-                                            </div>
-                                        </blockquote>
-                                    </div>
+                                    <MdOutlineClose/>
                                 </div>
-                                <MDBBtn className='me-1' color='warning' onClick={()=> handleEditTransaction(selectedTransaction)}>
-                                    Edit
-                                </MDBBtn>
-                                <MDBBtn className='me-1' onClick={() => {
-                                    handleDelete(selectedTransaction.id);
-                                }} color='danger'>
-                                    Delete
-                                </MDBBtn>
-                            </MDBCardBody>
-                        )
-                    }
+                                <div className="card-header ml-11">
+                                    <h4>Transaction Details</h4>
+                                </div>
+                                <div className="card-body">
+                                    <blockquote className="blockquote mb-0">
+                                        <div className="flex">
+                                            <div className="transaction-footer ml-7">
+                                                <img
+                                                    src={selectedTransaction.category.image}
+                                                    alt="avatar"
+                                                    className="relative inline-block h-12 w-13 !rounded-full object-cover object-center"
+                                                />
+                                            </div>
+                                            <div className="ml-7">
+                                                <h3>{selectedTransaction.category.name}</h3>
+                                                <div className="transaction-footer">
+                                                    <h6>{selectedTransaction.note}</h6>
+                                                    <cite title="Source Title"></cite>
+                                                </div>
+                                                <footer className="transaction-footer text-gray-500">
+                                                    <p className='text-sm'>{selectedTransaction.transactionDate}</p>
+                                                    <cite title="Source Title"></cite>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                        <hr className="mt-1 mb-2" style={{ width: '250px', borderColor: 'black', borderWidth: '1px' }} />
+                                        <div className={'ml-20'} style={{ color: 'red' }}>
+                                            <Typography variant="h2" style={{ color: selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? 'blue' : 'red' }} class="font-normal">
+                                                {selectedTransaction.category.type === 'INCOME' || selectedTransaction.category.type === 'DEBT' ? '+' : '-'}{selectedTransaction.amount.toLocaleString()} VNĐ
+                                            </Typography>
+                                        </div>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            <MDBBtn className='me-1' color='warning' onClick={()=> handleEditTransaction(selectedTransaction)}>
+                                Edit
+                            </MDBBtn>
+                            <MDBBtn className='me-1' onClick={() => {
+                                handleDelete(selectedTransaction.id);
+                            }} color='danger'>
+                                Delete
+                            </MDBBtn>
+                        </MDBCardBody>
+                    )
+                }
             </div>
             <Offcanvas style={{width: '20%'}} show={show} onHide={handleClose} placement="end">
                 <Offcanvas.Header closeButton>
@@ -795,34 +795,34 @@ export default function PinnedSubheaderList() {
                 </Offcanvas.Body>
             </Offcanvas>
 
-                {/*modal custom*/}
-                <Modal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                >
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Select Date Range</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody pb={6}>
-                            <FormControl>
-                                <FormLabel>From</FormLabel>
-                                <Input type={"date"} value={startDateRange} onChange={(e) => setStartDateRange(e.target.value)} />
-                            </FormControl>
+            {/*modal custom*/}
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Select Date Range</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <FormControl>
+                            <FormLabel>From</FormLabel>
+                            <Input type={"date"} value={startDateRange} onChange={(e) => setStartDateRange(e.target.value)} />
+                        </FormControl>
 
-                            <FormControl mt={4}>
-                                <FormLabel>To</FormLabel>
-                                <Input type={"date"} value={endDateRange} onChange={(e) => setEndDateRange(e.target.value)} />
-                            </FormControl>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button onClick={onClose} colorScheme='green' variant='outline'>Cancel</Button>
-                            <Button colorScheme='greengreen' variant='outline'>
-                                Select Time
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
+                        <FormControl mt={4}>
+                            <FormLabel>To</FormLabel>
+                            <Input type={"date"} value={endDateRange} onChange={(e) => setEndDateRange(e.target.value)} />
+                        </FormControl>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose} colorScheme='green' variant='outline'>Cancel</Button>
+                        <Button colorScheme='greengreen' variant='outline'>
+                            Select Time
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
 
         </div>
     );

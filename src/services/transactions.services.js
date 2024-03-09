@@ -12,6 +12,8 @@ class TransactionService {
         }
     };
 
+
+
     groupTransactionsByDate = (transactions, currentMonthIndex, currentYear) => {
         const groupedTransactions = {};
         if (transactions.length === 0) {
@@ -49,7 +51,16 @@ class TransactionService {
         setCurrentMonthIndex(newMonthIndex);
         setCurrentYear(newYear);
     };
+    handlePrevNextDays = (currentDate, setCurrentDate, increment) => {
+        // Tạo một bản sao của ngày hiện tại để không làm thay đổi ngày gốc
+        let newDate = new Date(currentDate.getTime());
 
+        // Tăng/giảm số ngày
+        newDate.setDate(newDate.getDate() + increment);
+
+        // Cập nhật state với ngày mới
+        setCurrentDate(newDate);
+    };
 
     handleCurrentMonth = (setCurrentMonthIndex, setCurrentYear) => {
         setCurrentMonthIndex(new Date().getMonth());

@@ -203,7 +203,7 @@ const CreateTransaction = () => {
                                         <MDBCol sm="10"><Input required type={'date'} name='endDate' value={transaction.endDate} onChange={handleChange}></Input></MDBCol>
                                     </MDBRow>
                                 </>
-                                )}
+                            )}
                         </MDBCol>
                     </MDBRow>
                     <MDBRow>

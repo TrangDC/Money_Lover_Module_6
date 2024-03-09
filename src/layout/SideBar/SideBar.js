@@ -41,7 +41,8 @@ import {
 import axios from "axios";
 import wallet from "../../components/WalletPage/Wallet";
 import Upimage from "../../components/FireBase/Upimage";
-import {useWallet} from "../../WalletContext";
+import {useWallet} from "../../components/WalletContext";
+import {show} from "react-modal/lib/helpers/ariaAppHider";
 
 function MydModalWithGrid(props) {
     const navigate = useNavigate();
@@ -53,8 +54,14 @@ function MydModalWithGrid(props) {
 
 
     useEffect(() => {
+        const userdata = JSON.parse(localStorage.getItem("user"));
+        fetchData(userdata);
+
+    }, []);
+
+    const fetchData = (userdata) => {
         axios.get('http://localhost:8080/api/users/' + user.id)
-            .then(res => {
+            .then((res) => {
                 console.log(res.data);
                 const userData = res.data;
                 setEditUser({
@@ -65,8 +72,9 @@ function MydModalWithGrid(props) {
                 });
                 setImage(userData.image);
             })
-            .catch(err => console.error(err))
-    }, [user.id]);
+            .catch((err) => console.error(err));
+    };
+
     const handleLogout = async () => {
         try {
             const user = JSON.parse(localStorage.getItem('user'));
@@ -140,6 +148,7 @@ function MydModalWithGrid(props) {
                     duration: 1500,
                     isClosable: true,
                 });
+                fetchData(user);
                 setTimeout(() => {
                     handleCloseEdit();
                     navigate("/auth/transactions");
@@ -157,7 +166,10 @@ function MydModalWithGrid(props) {
     //update image
     const [showImg, setShowImg] = useState(false);
     const handleShowImg = () => setShowImg(true);
-    const showImgClose = () => setShowImg(false);
+    const showImgClose = () => {
+        fetchData();
+        setShowImg(false);
+    }
 
     return (
         <>
@@ -443,25 +455,18 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
     const [isUserFetched, setIsUserFetched] = useState(false);
 
     const { setSelectedWalletId } = useWallet();
+    const { WalletList } = useWallet();
 
 
     useEffect(() => {
-        if (!isUserFetched) {
-            axios.get('http://localhost:8080/api/users/' + user.id)
-                .then(res => {
-                    setUserLocal(res.data);
-                    setImage(res.data.image);
-                    setIsUserFetched(true);
-                })
-                .catch(err => console.error(err))
-        }
+        axios.get('http://localhost:8080/api/users/' + user.id)
+            .then(res => {
+                setUserLocal(res.data);
+                setImage(res.data.image);
+                fetchWallets();
+            })
+            .catch(err => console.error(err))
     }, [modalShow]);
-
-    useEffect(() => {
-        if (isUserFetched) {
-            fetchWallets();
-        }
-    }, [isUserFetched]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
@@ -565,17 +570,17 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                             </Tr>
                             <Tr className="hover-div">
                                 <Td>
-                                    <Link to={"/auth/piechart"}>
+                                    <Link to={"/auth/chart"}>
                                         <PiIntersectThreeBold className="icon"/>
                                     </Link>
                                 </Td>
                                 <Td>
-                                    <Link to={"/auth/piechart"} className="text-reset">
+                                    <Link to={"/auth/chart"} className="text-reset">
                                         Chart
                                     </Link>
                                 </Td>
                                 <Td>
-                                    <Link to={"/auth/piechart"}>
+                                    <Link to={"/auth/chart"}>
                                         <FaGreaterThan style={{marginLeft: 'auto'}} className="icon-1"/>
                                     </Link>
                                 </Td>

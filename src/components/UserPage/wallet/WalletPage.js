@@ -102,7 +102,7 @@ const WalletPage = () => {
     const handleDelete = (id) => {
         const confirm = window.confirm('Are You Sure ?');
         if (confirm) {
-            axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${selectedWalletId}`)
+            axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${id}`)
                 .then(res => {
                     localStorage.setItem("wallets", JSON.stringify(res.data))
                     navigate("/auth/wallets")
