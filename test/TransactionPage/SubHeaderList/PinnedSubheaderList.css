@@ -1,0 +1,91 @@
+/*button*/
+.button {
+    position: relative;
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #34974d;
+    background-color: #3aa856;
+}
+
+.button, .button__icon, .button__text {
+    transition: all 0.3s;
+}
+
+.button .button__text {
+    transform: translateX(30px);
+    color: #fff;
+    font-weight: 400;
+}
+
+.button .button__icon {
+    position: absolute;
+    transform: translateX(160px);
+    height: 100%;
+    width: 39px;
+    background-color: #34974d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button .svg {
+    width: 24px;
+    stroke: #fff;
+}
+
+.button:hover {
+    background: #34974d;
+}
+
+.button:hover .button__text {
+    color: transparent;
+}
+
+.button:hover .button__icon {
+    width: 148px;
+    transform: translateX(0);
+}
+
+.button:active .button__icon {
+    background-color: #2e8644;
+}
+
+.button:active {
+    border: 1px solid #2e8644;
+}
+.button__text {
+    text-align: left;
+    font-size: 16px !important;
+}
+
+/*showDetail*/
+.container-left{
+    width: 700px;
+}
+.container_full.selected {
+    display: flex !important;
+}
+.container-right.selected {
+    margin-left: 30px;
+    width: 700px;
+}
+.container-left.selected {
+    width: 700px;
+}
+.btn-month {
+    margin: 20px 30px 0 30px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 250;
+}
+.btn-month:hover {
+    color: chocolate;
+    background-color: #23c483;
+}
+.btn-color {
+    color: chocolate;
+}
+

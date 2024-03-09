@@ -1,0 +1,47 @@
+.icon {
+    width: 23px;
+    height: 23px;
+    color: #696969;
+}
+.icon-1 {
+    width: 15px;
+    height: 15px;
+    color: #696969;
+}
+.hover-div {
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.hover-div:hover {
+    background-color: darkgrey;
+}
+.modal-title {
+    display: flex;
+    align-items: center;
+}
+
+.close-icon {
+    margin-right: 25px;
+    color: #696969;
+}
+
+.title-text {
+    flex-grow: 1;
+}
+.btn-sign-out {
+    border-color: white;
+    color: green;
+}
+
+.btn-sign-out:hover {
+    background-color: transparent;
+    border-color: #28a745;
+    color: #28a745;
+}
+.central-content {
+    background-color: #DCDCDC;
+    padding: 20px;
+    /*border-radius: 10px;*/
+    margin: 20px auto;
+}

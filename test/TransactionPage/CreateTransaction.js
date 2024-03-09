@@ -27,9 +27,8 @@ const CreateTransaction = () => {
     });
 
     const [categories, setCategories] = useState([]);
-    const [type, setType] = useState([])
     const [wallets, setWallets] = useState([])
-    const [select_category, setCategory] = useState('all');
+    const [select_category, setCategory] = useState('');
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
@@ -136,7 +135,7 @@ const CreateTransaction = () => {
                     <MDBRow className='mb-4'>
                         <MDBCol>
                             <MDBRow>
-                                <MDBCol className="mb-4" sm="1" style={{ fontSize: "35px", color: select_category === 'INCOME' || select_category === 'DEBT' ? "blue" : "red" }}>
+                                <MDBCol className="mb-4" sm="1" style={{ fontSize: "35px", color: select_category === 'INCOME' || select_category === 'LOAN' ? "blue" : "red" }}>
                                     <MdOutlineAttachMoney />
                                 </MDBCol>
                                 <MDBCol>
@@ -145,57 +144,42 @@ const CreateTransaction = () => {
                             </MDBRow>
                             <MDBCardText className="text-muted">Category</MDBCardText>
                             <Select name='category_type' className="form-select" aria-label="Default select example" value={select_category} onChange={handleCategoryChange}>
-                                <option value='all'>---Select category---</option>
+                                <option disabled>---Select category---</option>
                                 <option value='INCOME'>INCOME</option>
                                 <option value='EXPENSE'>EXPENSE</option>
                                 <option value='DEBT'>DEBT</option>
                                 <option value='LOAN'>LOAN</option>
                             </Select>
-                            {
-                                select_category !== 'all' && (
-                                    <>
-                                        <MDBCardText className="text-muted">Sub Category</MDBCardText>
-                                        <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
-                                            <option>Select category</option>
-                                            {categories.filter(category => category.type === select_category) // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
-                                                .map((category) => (
-                                                    <option key={category.id} value={category.id} >
-                                                        <img src={category.image} alt={"image"}/>  <span>{category.name}</span>
-                                                    </option>
-                                                ))}
-                                        </Select>
-                                    </>
-                                )
-                            }
+                                <MDBCardText className="text-muted">Sub Category</MDBCardText>
+                                <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
+                                    <option>Select category</option>
+                                    {categories.filter(category => category.type === select_category) // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                        .map((category) => (
+                                            <option key={category.id} value={category.id} >
+                                                   <img src={category.image} alt={"image"}/>  <span>{category.name}</span>
+                                            </option>
+                                        ))}
+                                </Select>
 
-                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' && select_category !== 'LOAN' && select_category !== 'all' && (
+                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' && select_category !== 'LOAN' && (
                                 <MDBInput onChange={handleChange} wrapperClass='mb-4' id='form6Example3' label='Lender' name='lender'/>
                             )}
-                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' && select_category !== 'DEBT' && select_category !== 'all' && (
+                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' && select_category !== 'DEBT' && (
                                 <MDBInput onChange={handleChange} wrapperClass='mb-4' id='form6Example4' label='Borrower' name='borrower' />
                             )}
-                            {
-                                select_category !== 'all' && (
-                                    <>
-                                        <MDBInput onChange={handleChange} name="note" wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Note' style={{ height: "100px" }} />
-                                    </>
-                                )
-                            }
+
+                                <MDBInput onChange={handleChange} name="note" wrapperClass='mb-4' textarea id='form6Example7' rows={4} label='Note' style={{ height: "100px" }} />
+
                         </MDBCol>
                         <MDBCol>
-                            {
-                                select_category !== 'all' && (
-                                    <>
-                                        <MDBCardText className="text-muted">Start Date</MDBCardText>
-                                        <MDBRow>
-                                            <MDBCol sm="2" style={{ fontSize: "30px" }}><FaRegCalendarAlt /></MDBCol>
-                                            <MDBCol sm="10"><Input required type={'date'} name='transactionDate' value={transaction.transactionDate} onChange={handleChange}></Input></MDBCol>
-                                        </MDBRow>
-                                    </>
-                                )
-                            }
-
-                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' &&  select_category !== 'all' && (
+                                <>
+                                    <MDBCardText className="text-muted">Start Date</MDBCardText>
+                                    <MDBRow>
+                                        <MDBCol sm="2" style={{ fontSize: "30px" }}><FaRegCalendarAlt /></MDBCol>
+                                        <MDBCol sm="10"><Input required type={'date'} name='transactionDate' value={transaction.transactionDate} onChange={handleChange}></Input></MDBCol>
+                                    </MDBRow>
+                                </>
+                            {select_category !== 'EXPENSE' && select_category !== 'INCOME' && (
                                 <>
                                     <MDBCardText className="text-muted">End Date</MDBCardText>
                                     <MDBRow>
@@ -208,7 +192,6 @@ const CreateTransaction = () => {
                     </MDBRow>
                     <MDBRow>
                         <MDBCol>
-                            {select_category !== 'all' && (
                                 <>
                                     <MDBCardText className="text-muted">Wallets</MDBCardText>
                                     <MDBRow>
@@ -225,17 +208,12 @@ const CreateTransaction = () => {
                                         </MDBCol>
                                     </MDBRow>
                                 </>
-                            )}
                         </MDBCol>
-                        {
-                            select_category !== 'all' && (
-                                <MDBCol className="btn_submit">
-                                    <MDBBtn type="submit" className='me-1' color='success'>
-                                        Submit
-                                    </MDBBtn>
-                                </MDBCol>
-                            )
-                        }
+                        <MDBCol className="btn_submit">
+                            <MDBBtn type="submit" className='me-1' color='success'>
+                                Submit
+                            </MDBBtn>
+                        </MDBCol>
                     </MDBRow>
                 </form>
             </div>

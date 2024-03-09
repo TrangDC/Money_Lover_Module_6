@@ -52,12 +52,13 @@ const IncomePiechart = () => {
             fetchData();
     }, [selectedWalletId, currentYear, currentMonthIndex]);
 
-
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     const handlePrevNextMonths = (currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment) => {
         TransactionService.handlePrevNextMonths(currentMonthIndex, setCurrentMonthIndex, currentYear, setCurrentYear, increment);
 
     };
+
     const handleCurrentMonth = (setCurrentMonthIndex, setCurrentYear) => {
         TransactionService.handleCurrentMonth(setCurrentMonthIndex, setCurrentYear);
     };
@@ -76,13 +77,8 @@ const IncomePiechart = () => {
         }
     };
     function getlist(transactions) {
-
         const incomeCategory = [];
         const incomeAmount = [];
-        if (transactions.length === 0) {
-            setIncomeCategory(['No infor']);
-            setIncomeAmount([100])
-        }
         transactions.forEach(transaction => {
             // nếu transaction thuộc type income
             if (transaction.category.type === "INCOME") {

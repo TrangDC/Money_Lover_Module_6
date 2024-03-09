@@ -98,7 +98,7 @@ const Wallet = () => {
     const handleDelete = (id) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this wallet?');
         if (confirmDelete) {
-            axios.delete(`http://localhost:8080/api/wallets/user/${user.id}/delete/${id}`)
+            axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${id}`)
                 .then(res => {
                     navigate("/auth/wallets");
                     fetchWallets(user);
