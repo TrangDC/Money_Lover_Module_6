@@ -18,14 +18,4 @@ public class Wallet {
 
     private boolean isActive;
 
-
-    @ManyToMany
-    @JoinTable(
-            name = "Wallet_Category",
-            joinColumns = @JoinColumn(name = "wallet_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> activeCategories;
-
-
 }

@@ -4,20 +4,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class User_Wallet_Share {
+@AllArgsConstructor
+public class Notification {
 
-    private String user_id;
-    private String wallet_id;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    private String message;
+
+    @NotNull
+    private LocalDate createdAt;
+
+    private Boolean isMarked;
 }

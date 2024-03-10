@@ -186,7 +186,6 @@ public class TransactionController {
             return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
         }
 
-
         Category category = getCategoryFromTransaction(createTransaction);
         if (category == null) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
@@ -204,6 +203,13 @@ public class TransactionController {
         transactions.add(savedTransaction);
         userOptional.get().setTransactions(transactions);
         userService.save(userOptional.get());
+
+        if (category.getType().equals(Type.EXPENSE)) {
+            Long amount = createTransaction.getAmount();
+            List<Transaction> transactionslist = userOptional.get().getTransactions();
+
+        }
+
         return ResponseEntity.ok(transactions);
     }
 
@@ -459,23 +465,6 @@ public class TransactionController {
 
         Transaction savedTransaction = transactionService.save(transaction);
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
-    }
-
-    //Lấy danh sách giao dịch dựa theo 1 ví hoặc tất cả
-    @GetMapping("/user/{user_id}/wallet/{wallet_id}")
-    public ResponseEntity<Iterable<Transaction>> findAllByWallet(@PathVariable Long user_id,
-                                                         @PathVariable String wallet_id) {
-        Optional<User> userOptional = userService.findById(user_id);
-        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
-        if (userOptional.isEmpty() && walletOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        if (wallet_id.isEmpty() || wallet_id.equals("all")) {
-            List<Transaction> transactions = userOptional.get().getTransactions();
-            return new ResponseEntity<>(transactions, HttpStatus.OK);
-        }
-        List<Transaction> transactions = transactionRepository.findByWallet(walletOptional.get());
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
     //Lấy danh sách giao dịch theo tháng năm hiện tại

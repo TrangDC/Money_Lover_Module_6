@@ -153,8 +153,6 @@ public class AuthController {
         Wallet default_wallet = new Wallet();
         default_wallet.setName("Default Wallet");
         default_wallet.setBalance(0L);
-        List<Category> active_categories = new ArrayList<>();
-        default_wallet.setActiveCategories(active_categories);
         wallets.add(default_wallet);
         Iterable<Category> categories = categoryService.createDefaultCategories();
         User user = new User(
