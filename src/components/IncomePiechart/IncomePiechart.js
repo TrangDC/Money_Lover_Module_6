@@ -37,33 +37,37 @@ import TransactionService from "../../services/transactions.services";
 import {ListItem} from "@material-tailwind/react";
 import {useWallet} from "../WalletContext";
 import {setNestedObjectValues} from "formik";
+import {addWeeks, addYears, endOfWeek, format, startOfWeek, subWeeks, subYears} from "date-fns";
 const IncomePiechart = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDateRange, setStartDateRange] = useState('');
+    const [endDateRange, setEndDateRange] = useState('');
     const [show, setShow] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [listTransaction, setListTransaction] = useState([]);
+    const [incomeCategory, setIncomeCategory] = useState([])
+    const [incomeAmount, setIncomeAmount] = useState([])
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [navigator, setNavigator] = useState('month');
+    const { selectedWalletId } = useWallet();
+    const [transactionDate, setTransactionDate] = useState('')
+    const [startWeek, setStartWeek] = useState('');
+    const [endWeek, setEndWeek] = useState('')
+    const formattedYear = format(currentDate, 'yyyy');
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const userdata = JSON.parse(localStorage.getItem("user"));
     console.log(userdata)
 
-    const [listTransaction, setListTransaction] = useState([]);
-    const [incomeCategory, setIncomeCategory] = useState([])
-    const [incomeAmount, setIncomeAmount] = useState([])
-    const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-    const [wallet_id, setWallet_id] = useState('all');
-    const [navigator, setNavigator] = useState('month');
-    const { selectedWalletId } = useWallet();
-
     useEffect(() => {
         const fetchData = async () => {
-            getTransactionIncome(userdata, selectedWalletId);
+            getTransactionIncome(userdata, selectedWalletId, navigator);
         };
         fetchData();
-    }, [selectedWalletId, currentYear, currentMonthIndex]);
+    }, [selectedWalletId, currentYear, currentMonthIndex, transactionDate, formattedYear, startWeek, endWeek, startDateRange, endDateRange]);
 
     //handle month filter
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -78,18 +82,18 @@ const IncomePiechart = () => {
     };
 
     // display select transaction by day
-
-
     const goToPreviousDay = () => {
         const previousDate = new Date(currentDate);
         previousDate.setDate(previousDate.getDate() - 1);
         setCurrentDate(previousDate);
+        setTransactionDate(format(previousDate, 'yyyy-MM-dd'));
     };
 
     const goToNextDay = () => {
         const nextDate = new Date(currentDate);
         nextDate.setDate(nextDate.getDate() + 1);
         setCurrentDate(nextDate);
+        setTransactionDate(format(nextDate, 'yyyy-MM-dd'));
     };
 
     const formatDateString = (date) => {
@@ -102,35 +106,121 @@ const IncomePiechart = () => {
     const nextDate = new Date(currentDate);
     nextDate.setDate(nextDate.getDate() + 1);
 
+
     // display select transaction by year
-
     const goToPreviousYear = () => {
-        const previousYear = new Date(currentDate);
-        previousYear.setFullYear(previousYear.getFullYear() - 1);
-        setCurrentDate(previousYear);
+        setCurrentDate((prevDate) => subYears(prevDate, 1));
     };
-
+    const goToPresentYear = () => {
+        setCurrentDate(new Date());
+    };
     const goToNextYear = () => {
-        const nextYear = new Date(currentDate);
-        nextYear.setFullYear(nextYear.getFullYear() + 1);
-        setCurrentDate(nextYear);
+        setCurrentDate((prevDate) => addYears(prevDate, 1));
     };
 
+    //handle filter week
+    const goToPreviousWeek = () => {
+        const prevWeekStart = startOfWeek(subWeeks(currentDate, 1));
+        const prevWeekEnd = endOfWeek(subWeeks(currentDate, 1));
+        setStartWeek(format(prevWeekStart, 'yyyy-MM-dd'));
+        setEndWeek(format(prevWeekEnd, 'yyyy-MM-dd'));
+        setCurrentDate((prevDate) => subWeeks(prevDate, 1));
+    };
+
+    const goToPresentWeek = () => {
+        const presentWeekStart = startOfWeek(new Date());
+        const presentWeekEnd = endOfWeek(new Date());
+        setStartWeek(format(presentWeekStart, 'yyyy-MM-dd'));
+        setEndWeek(format(presentWeekEnd, 'yyyy-MM-dd'));
+        setCurrentDate(new Date());
+    };
+
+    const goToNextWeek = () => {
+        const nextWeekStart = startOfWeek(addWeeks(currentDate, 1));
+        const nextWeekEnd = endOfWeek(addWeeks(currentDate, 1));
+        setStartWeek(format(nextWeekStart, 'yyyy-MM-dd'));
+        setEndWeek(format(nextWeekEnd, 'yyyy-MM-dd'));
+        setCurrentDate((prevDate) => addWeeks(prevDate, 1));
+    };
+    const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Monday
+    const endDate = endOfWeek(currentDate, { weekStartsOn: 1 }); // Sunday
 
 
+    const handleSearch = () => {
+        axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${selectedWalletId}/time_range`, {
+            startWeek: startDateRange,
+            endWeek: endDateRange
+        })
+            .then((res) => {
+                console.log(res);
+                setListTransaction(res.data);
+                getlist(res.data);
+                setShow(false);
+                setNavigator("range");
+            })
+            .catch((error) => {
+                console.error("Error fetching transaction data:", error);
+                // Handle error, such as setting appropriate state to indicate error
+            });
+    }
 
-    const getTransactionIncome = (userdata, wallet_id) => {
+    const getTransactionIncome = (userdata, wallet_id, navigator) => {
         if (wallet_id) {
-            axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
-                .then((res) => {
-                    console.log(res);
-                    setListTransaction(res.data);
-                    getlist(res.data);
+            if (navigator === 'month') {
+                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
+                    .then((res) => {
+                        console.log(res);
+                        setListTransaction(res.data);
+                        getlist(res.data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching transaction data:", error);
+                        // Handle error, such as setting appropriate state to indicate error
+                    });
+            }
+            if (navigator === 'day') {
+                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/day`, {
+                    transactionDate: transactionDate
                 })
-                .catch((error) => {
-                    console.error("Error fetching transaction data:", error);
-                    // Handle error, such as setting appropriate state to indicate error
-                });
+                    .then((res) => {
+                        console.log(res);
+                        setListTransaction(res.data);
+                        getlist(res.data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching transaction data:", error);
+                        // Handle error, such as setting appropriate state to indicate error
+                    });
+            }
+
+            if (navigator === 'week') {
+                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/week`, {
+                    startWeek: startWeek,
+                    endWeek: endWeek
+                })
+                    .then((res) => {
+                        console.log(res);
+                        setListTransaction(res.data);
+                        getlist(res.data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching transaction data:", error);
+                        // Handle error, such as setting appropriate state to indicate error
+                    });
+            }
+            if (navigator === 'year') {
+                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/year/${formattedYear}`)
+                    .then((res) => {
+                        console.log(res);
+                        setListTransaction(res.data);
+                        getlist(res.data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching transaction data:", error);
+                        // Handle error, such as setting appropriate state to indicate error
+                    });
+            }
+
         }
     };
     function getlist(transactions) {
@@ -173,15 +263,14 @@ const IncomePiechart = () => {
             <MDBCard className="card-chart">
                 <MDBCardBody >
                     <div style={{width: '50%',height: '50%',margin: 'auto'}}>
-                        {startDate && endDate && (
+                        {startDateRange && endDateRange && navigator === 'range' && (
                             <div>
-                                <p>From: {startDate}</p>
-                                <p>To: {endDate}</p>
+                                <p>From: {startDateRange}</p>
+                                <p>To: {endDateRange}</p>
                             </div>
                         )}
                         { navigator === 'month' && (
                             <div className="flex justify-content-center mt-0.5">
-
                                 <Button
                                     variant="text"
                                     className="rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
@@ -239,34 +328,101 @@ const IncomePiechart = () => {
                                 </Button>
                             </div>
                         )}
+                        {navigator === 'week' && (
+                            <div className="flex justify-content-center mt-0.5">
+                                <Button
+                                    variant="text"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToPreviousWeek}>
+                                    {`${format(subWeeks(startDate, 1), 'yyyy-MM-dd')} to ${format(subWeeks(endDate, 1), 'yyyy-MM-dd')}`}
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    className="fix-button btn-mid rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToPresentWeek}>
+                                    {`${format(startDate, 'yyyy-MM-dd')} to ${format(endDate, 'yyyy-MM-dd')}`}
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-month"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToNextWeek}>
+                                    {`${format(addWeeks(startDate, 1), 'yyyy-MM-dd')} to ${format(addWeeks(endDate, 1), 'yyyy-MM-dd')}`}
+                                </Button>
+                            </div>
+                        )}
+                        {navigator === 'year' && (
+                            <div className="flex justify-content-center mt-0.5">
+                                <Button
+                                    variant="text"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToPreviousYear}
+                                >
+                                    {parseInt(formattedYear) - 1} {/* Previous year */}
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    className="fix-button btn-mid rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year btn-color"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToPresentYear}
+                                >
+                                    {formattedYear} {/* Current year */}
+                                </Button>
+                                <Button
+                                    variant="text"
+                                    className="fix-button rounded-none border-b border-blue-gray-50 bg-transparent p-2 btn-year"
+                                    indicatorProps={{
+                                        className: "bg-transparent border-b-2 border-gray-900 shadow-none rounded-none",
+                                    }}
+                                    onClick={goToNextYear}
+                                >
+                                    {parseInt(formattedYear) + 1} {/* Next year */}
+                                </Button>
 
+                            </div>
+                        )}
                         <Tabs isFitted variant='enclosed'>
-                            <CgCalendarDates style={{width: '30px',height: '30px',marginLeft: '100%'}} onClick={handleShow} />
-                            {navigator === 'month' && (
-                                <TabPanels>
-                                    <TabPanel>
-                                        {listTransaction.length === 0 ? (
-                                            <div style={{ height: "430px"}}>
-                                                <Image
-                                                    style={{ margin: "auto"}}
-                                                    borderRadius='full'
-                                                    boxSize='300px'
-                                                    src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
-                                                    alt=''
-                                                />
-                                                <Button style={{ margin: "auto"}} variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <Doughnut  data={data} />
-                                                <div style={{maxHeight: '300px',margin: 'auto',overflowY: 'auto'}}>
+                            <CgCalendarDates style={{width: '30px', height: '30px', marginLeft: '100%'}}
+                                             onClick={handleShow}/>
+                            <TabPanels>
+                                <TabPanel>
+                                    {listTransaction.length === 0 ? (
+                                        <div style={{height: "430px"}}>
+                                            <Image
+                                                style={{margin: "auto"}}
+                                                borderRadius='full'
+                                                boxSize='300px'
+                                                src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
+                                                alt=''
+                                            />
+                                            <Button style={{margin: "auto"}} variant="outlined"
+                                                    onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back
+                                                to Current Month</Button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <Doughnut data={data}/>
+                                            <div style={{maxHeight: '300px', margin: 'auto', overflowY: 'auto'}}>
 
-                                                    <TableContainer>
-                                                        <Table variant='simple'>
-                                                            <Tbody>
-                                                                {listTransaction.map((transaction) => (
-                                                                    <Tr>
-                                                                        <Td style={{ display: 'flex', alignItems: 'center' }}>
+                                                <TableContainer>
+                                                    <Table variant='simple'>
+                                                        <Tbody>
+                                                            {listTransaction.map((transaction) => (
+                                                                <Tr>
+                                                                    <Td style={{display: 'flex', alignItems: 'center' }}>
                                                                             <Image
                                                                                 borderRadius='full'
                                                                                 boxSize='50px'
@@ -283,9 +439,7 @@ const IncomePiechart = () => {
                                                     </TableContainer>
                                                 </div>
                                             </div>
-                                        )
-                                        }
-
+                                        )}
                                     </TabPanel>
                                     <TabPanel>
                                         <p>two!</p>
@@ -294,8 +448,6 @@ const IncomePiechart = () => {
                                         <p>three!</p>
                                     </TabPanel>
                                 </TabPanels>
-                            )}
-
                         </Tabs>
                     </div>
                     <Offcanvas style={{width: '20%'}} show={show} onHide={handleClose} placement="end">
@@ -306,13 +458,13 @@ const IncomePiechart = () => {
                             <div style={{ display: 'flex', alignItems: 'center',marginTop: '-10px' }} onClick={() => setNavigator("day")}>
                                 <CiCalendarDate style={{ height: '40px', width: '40px' }} /> <span style={{ marginLeft: '5px' }}>Day</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }} onClick={() => setNavigator("week")}>
                                 <BsCalendar2Week style={{ height: '30px', width: '30px',marginLeft: '5px' }} /> <span style={{ marginLeft: '10px' }}>Week</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }} onClick={() => setNavigator("month")}>
                                 <IoCalendarNumberOutline style={{ height: '30px', width: '30px',marginLeft: '5px'  }} /> <span style={{ marginLeft: '10px' }}>Month</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }} onClick={() => setNavigator("year")}>
                                 <LiaCalendarWeekSolid style={{ height: '40px', width: '40px' }} /> <span style={{ marginLeft: '5px' }}>Year</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }} onClick={onOpen}>
@@ -335,17 +487,17 @@ const IncomePiechart = () => {
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>From</FormLabel>
-                            <Input type={"date"} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                            <Input type={"date"} value={startDateRange} onChange={(e) => setStartDateRange(e.target.value)} />
                         </FormControl>
 
                         <FormControl mt={4}>
                             <FormLabel>To</FormLabel>
-                            <Input type={"date"} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                            <Input type={"date"} value={endDateRange} onChange={(e) => setEndDateRange(e.target.value)} />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} colorScheme='green' variant='outline'>Cancel</Button>
-                        <Button colorScheme='greengreen' variant='outline'>
+                        <Button colorScheme='greengreen' variant='outline' onClick={handleSearch}>
                             Select Time
                         </Button>
                     </ModalFooter>

@@ -438,7 +438,7 @@ function MydModalWithGrid(props) {
     );
 }
 
-const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
+const SideBar = () => {
 
 
     const [show, setShow] = useState(false);
@@ -454,9 +454,7 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
     const [selectedWallet_id, setSelectedWallet_id] = useState("all");
     const [isUserFetched, setIsUserFetched] = useState(false);
 
-    const { setSelectedWalletId } = useWallet();
-    const { WalletList } = useWallet();
-
+    const { setSelectedWalletId} = useWallet();
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)

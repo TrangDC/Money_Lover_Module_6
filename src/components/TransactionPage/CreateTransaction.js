@@ -9,6 +9,7 @@ import {MdOutlineAttachMoney} from "react-icons/md";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {useWallet} from "../WalletContext";
 const CreateTransaction = () => {
 
     const toast = useToast();
@@ -30,6 +31,7 @@ const CreateTransaction = () => {
     const [type, setType] = useState([])
     const [wallets, setWallets] = useState([])
     const [select_category, setCategory] = useState('all');
+    const {setAmount_change} = useWallet();
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
