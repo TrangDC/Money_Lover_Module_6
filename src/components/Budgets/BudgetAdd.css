@@ -1,0 +1,22 @@
+.form-body {
+    background-color: white;
+    padding: 60px;
+    border-radius: 8px;
+    width: 800px;
+    margin: auto;
+}
+.btn-x {
+    text-align: right;
+    position: relative;
+}
+.sub-btn-x {
+    position: absolute;
+    right: 0px;
+}
+.add-money {
+    font-size: 36px;
+}
+.title {
+    margin-bottom: 40px;
+}
+

@@ -18,6 +18,10 @@ import ChartPage from "./components/ChartPage/ChartPage";
 import {WalletProvider} from "./components/WalletContext";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import EditTransaction from "./components/TransactionPage/EditTransaction";
+import BudgetAdd from "./components/Budgets/BudgetAdd";
+import BudgetEdit from "./components/Budgets/BudgetEdit";
+
+
 
 
 
@@ -57,6 +61,8 @@ function App() {
                     <Route path='/chart' element={<ChartPage/>}/>
                     <Route path='/piechart' element={<IncomePiechart/>}/>
                     <Route path='/exchart' element={<ExpensePage/>}/>
+                    <Route path='/budgetadd' element={<BudgetAdd/>}/>
+                    <Route path='/budgetedit' element={<BudgetEdit/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
