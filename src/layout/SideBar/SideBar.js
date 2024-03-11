@@ -455,8 +455,8 @@ const SideBar = () => {
     const [wallet_list, setWallet] = useState([])
     const [selected_Wallet, setSelected_Wallet] = useState([]);
     const [selectedWallet_id, setSelectedWallet_id] = useState("all");
-    const [isUserFetched, setIsUserFetched] = useState(false);
 
+    const [walletBalance, setWalletBalance] = useState(null);
     const { setSelectedWalletId} = useWallet();
 
     useEffect(() => {
@@ -464,6 +464,7 @@ const SideBar = () => {
             .then(res => {
                 setUserLocal(res.data);
                 setImage(res.data.image);
+                setWallet(res.data.wallets)
                 setShouldRerender(prev => !prev);
                 fetchWallets();
             })
@@ -477,11 +478,21 @@ const SideBar = () => {
             })
     }
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/wallets/user/' + user.id + '/details/' + selected_Wallet.id)
+            .then(response => setWalletBalance(response.data.balance))
+            .catch(error => {
+                console.error('Error fetching wallet balance from API:', error);
+                setWalletBalance(null); // Handle error case
+            });
+    }, [selectedWallet_id, transactionChanged, walletChanged]);
+
 
     const handleWalletSelect = (wallet_id, wallet) => {
         setSelected_Wallet(wallet)
         setSelectedWalletId(wallet_id);
         setSelectedWallet_id(wallet_id);
+        fetchWallets();
     };
 
     const totalAmount = wallet_list.reduce((total, wallet) => total + Number(wallet.balance), 0);
@@ -609,7 +620,7 @@ const SideBar = () => {
                                                              style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                         <div>
                                                             <div className='text-black'>{selected_Wallet.name}</div>
-                                                            <div className='text-black'>{selected_Wallet.balance}</div>
+                                                            <div className='text-black'>{walletBalance !== null ? walletBalance : 'Loading...'}</div>
                                                         </div>
                                                     </>
                                                 ) : (
