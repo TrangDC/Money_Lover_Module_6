@@ -16,11 +16,13 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useToast} from "@chakra-ui/react";
 import {GiPiggyBank} from "react-icons/gi";
+import {useChangeNotification} from "../../ChangeNotificationContext";
 
 const Wallet = () => {
     const [showCard2, setShowCard2] = useState(false)
     const [selectedWallet, setSelectedWallet] = useState(false);
     const navigate = useNavigate()
+    const { notifyWalletChange } = useChangeNotification();
     const handleClickX = () => {
         setShowCard2(false)
         setSelectedWallet(false)
@@ -37,6 +39,7 @@ const Wallet = () => {
         const userdata = JSON.parse(localStorage.getItem("user"));
         console.log(userdata);
         setUser(userdata)
+        notifyWalletChange();
         fetchWallets(userdata);
     }, []);
 
@@ -44,7 +47,7 @@ const Wallet = () => {
         axios.get('http://localhost:8080/api/wallets/user/' + userdata.id)
             .then((res) => {
                 console.log(res.data);
-
+                notifyWalletChange();
                 window.localStorage.setItem("wallets", JSON.stringify(res.data));
                 const wallets = JSON.parse(localStorage.getItem("wallets"));
                 setWallets(wallets);
@@ -65,6 +68,7 @@ const Wallet = () => {
         event.preventDefault();
         axios.post(`http://localhost:8080/api/wallets/user/${user.id}/create`, wallet)
             .then(res => {
+                notifyWalletChange();
                 console.log(res);
                 navigate("/auth/wallets")
                 handleCloseC();
@@ -100,6 +104,7 @@ const Wallet = () => {
         if (confirmDelete) {
             axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${id}`)
                 .then(res => {
+                    notifyWalletChange();
                     navigate("/auth/wallets");
                     fetchWallets(user);
                     toast({
@@ -137,6 +142,7 @@ const Wallet = () => {
             .put(`http://localhost:8080/api/wallets/user/${user.id}/edit/${selectedWalletId}`, editWallet)
             .then((res) => {
                 console.log(res.data);
+                notifyWalletChange();
                 navigate("/auth/wallets")
                 fetchWallets(user);
                 handleClose();
@@ -178,6 +184,7 @@ const Wallet = () => {
             .then((res) => {
                 console.log(res.data);
                 handleCloseM();
+                notifyWalletChange();
                 fetchWallets(user);
                 toast({
                     title: 'Money added successfully',

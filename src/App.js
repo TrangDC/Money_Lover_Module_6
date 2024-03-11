@@ -18,6 +18,7 @@ import ChartPage from "./components/ChartPage/ChartPage";
 import {WalletProvider} from "./components/WalletContext";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import EditTransaction from "./components/TransactionPage/EditTransaction";
+import {ChangeNotificationProvider} from "./ChangeNotificationContext";
 
 
 
@@ -33,6 +34,7 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
+                <ChangeNotificationProvider>
                 <Routes>
                     <Route path='/' element={<Error/>}></Route>
                     <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
@@ -55,6 +57,7 @@ function App() {
                     <Route path='/upload' element={<UploadImage/>}/>
                     <Route path='/active' element={<ActiveAccount/>}/>
                 </Routes>
+                </ChangeNotificationProvider>
             </BrowserRouter>
         </div>
     );

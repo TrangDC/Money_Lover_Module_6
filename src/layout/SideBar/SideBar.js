@@ -43,6 +43,7 @@ import wallet from "../../components/WalletPage/Wallet";
 import Upimage from "../../components/FireBase/Upimage";
 import {useWallet} from "../../components/WalletContext";
 import {show} from "react-modal/lib/helpers/ariaAppHider";
+import {useChangeNotification} from "../../ChangeNotificationContext";
 
 function MydModalWithGrid(props) {
     const navigate = useNavigate();
@@ -440,6 +441,8 @@ function MydModalWithGrid(props) {
 
 const SideBar = () => {
 
+    const { transactionChanged, walletChanged } = useChangeNotification();
+    const [shouldRerender, setShouldRerender] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -461,10 +464,11 @@ const SideBar = () => {
             .then(res => {
                 setUserLocal(res.data);
                 setImage(res.data.image);
+                setShouldRerender(prev => !prev);
                 fetchWallets();
             })
             .catch(err => console.error(err))
-    }, [modalShow]);
+    }, [modalShow, transactionChanged, walletChanged]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
