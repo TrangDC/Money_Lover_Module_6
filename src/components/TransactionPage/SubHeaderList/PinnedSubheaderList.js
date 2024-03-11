@@ -16,7 +16,7 @@ import "./PinnedSubheaderList.css"
 
 import {Link, useNavigate} from "react-router-dom";
 import {MDBCardFooter, MDBCardHeader, MDBCardText} from "mdbreact";
-import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle} from "mdb-react-ui-kit";
+import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow} from "mdb-react-ui-kit";
 import {MdOutlineClose} from "react-icons/md";
 import axios from "axios";
 import {
@@ -282,10 +282,12 @@ export default function PinnedSubheaderList() {
             <div className={`bg-white rounded-lg shadow-lg container-left ${showDetail ? 'selected' : ''}`}>
                 <div>
                     <div className="header">
-                        <Link to={"/auth/create_transaction"}>
-                            <button type="button" className="button">
-                                <span className="button__text">Add Transaction</span>
-                                <span className="button__icon">
+                        <MDBRow>
+                            <MDBCol>
+                                <Link to={"/auth/create_transaction"}>
+                                    <button type="button" className="button">
+                                        <span className="button__text">Add Transaction</span>
+                                        <span className="button__icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                          viewBox="0 0 24 24" stroke-width="2"
                                          stroke-linejoin="round" stroke-linecap="round"
@@ -297,10 +299,15 @@ export default function PinnedSubheaderList() {
                                                                                     x1="5"></line>
                                     </svg>
                                 </span>
-                            </button>
-                        </Link>
-                        <CgCalendarDates style={{width: '40px', height: '40px', marginLeft: '100%'}}
-                                         onClick={handleShow}/>
+                                    </button>
+                                </Link>
+                            </MDBCol>
+                            <MDBCol>
+                                <CgCalendarDates className='btn-show-range' onClick={handleShow}/>
+                            </MDBCol>
+                        </MDBRow>
+
+
                         {navigation === 'month' && (
                             <div className="flex justify-content-center mt-0.5">
                                 <Button

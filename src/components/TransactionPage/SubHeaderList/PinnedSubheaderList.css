@@ -104,3 +104,8 @@
     border-bottom-color: #05af6a;
     color: chocolate;
 }
+.btn-show-range {
+    font-size: 38px;
+    margin-left: 300px;
+    margin-top: 20px;
+}
