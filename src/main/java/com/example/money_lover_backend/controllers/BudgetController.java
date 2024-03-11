@@ -1,12 +1,14 @@
 package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.models.Budget;
+import com.example.money_lover_backend.models.Transaction;
 import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.Wallet;
 import com.example.money_lover_backend.models.category.Category;
 import com.example.money_lover_backend.payload.request.BudgetTimeRange;
 import com.example.money_lover_backend.payload.request.CreateBudget;
 import com.example.money_lover_backend.repositories.BudgetRepository;
+import com.example.money_lover_backend.repositories.TransactionRepository;
 import com.example.money_lover_backend.services.impl.BudgetService;
 import com.example.money_lover_backend.services.impl.CategoryService;
 import com.example.money_lover_backend.services.impl.UserService;
@@ -42,6 +44,9 @@ public class BudgetController {
     @Autowired
     private BudgetRepository budgetRepository;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     //API tạo mới một budget
     @PostMapping("/")
     public ResponseEntity<?> createBudget(@RequestBody CreateBudget createBudget) {
@@ -61,8 +66,8 @@ public class BudgetController {
         budget.setEndDate(createBudget.getEndDate());
 
         List<Budget> budgetList = userOptional.get().getBudgets();
-        // Check for overlapping time ranges
-        if (isTimeRangeOverlapping(userOptional.get(), categoryOptional.get(), createBudget.getStartDate(), createBudget.getEndDate())) {
+
+        if (isTimeRangeOverlapping(userOptional.get(), walletOptional.get(), categoryOptional.get(), createBudget.getStartDate(), createBudget.getEndDate())) {
             return ResponseEntity.badRequest().body("Unaccepted time range!");
         }
 
@@ -74,18 +79,18 @@ public class BudgetController {
         return new ResponseEntity<String>("Create budget successfully", HttpStatus.OK);
     }
 
-    private boolean isTimeRangeOverlapping(User user, Category category, LocalDate newStartDate, LocalDate newEndDate) {
+    private boolean isTimeRangeOverlapping(User user, Wallet wallet, Category category, LocalDate newStartDate, LocalDate newEndDate) {
         for (Budget oldBudget : user.getBudgets()) {
-            if (oldBudget.getCategory().equals(category)) {
+            if (oldBudget.getCategory().equals(category) && oldBudget.getWallet().equals(wallet)) {
                 LocalDate oldStartDate = oldBudget.getStartDate();
                 LocalDate oldEndDate = oldBudget.getEndDate();
 
-                if ((newStartDate.isBefore(oldEndDate) || newStartDate.equals(oldEndDate)) && newEndDate.isAfter(oldStartDate)) {
-                    return true; // Overlapping time range found
+                if (!newStartDate.isBefore(oldEndDate) && !newEndDate.isAfter(oldStartDate)) {
+                    return true;
                 }
             }
         }
-        return false; // No overlapping time range found
+        return false;
     }
 
 
@@ -99,10 +104,10 @@ public class BudgetController {
         return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
     }
 
-
-    //Kiểm tra budget dưới 20%
     @PostMapping("/check")
     public ResponseEntity<?> checkBudgetWithinTimeRange(@RequestBody BudgetTimeRange request) {
+
+        //Lấy category và wallet
         Optional<Category> categoryOptional = categoryService.findById(request.getCategory_id());
         Optional<Wallet> walletOptional = walletService.getWalletById(request.getWallet_id());
 
@@ -112,20 +117,36 @@ public class BudgetController {
 
         Category category = categoryOptional.get();
         Wallet wallet = walletOptional.get();
+        LocalDate startDateToCheck = request.getStartDate();
 
-        List<Budget> budgets = budgetRepository.findAll();
-        for (Budget budget : budgets) {
-            LocalDate startDate = budget.getStartDate();
-            LocalDate endDate = budget.getEndDate();
-            if((request.getStartDate().equals(startDate) || request.getStartDate().isAfter(startDate))
-                && (request.getStartDate().equals(endDate) || request.getStartDate().isBefore(endDate))) {
+        //Tìm những budget đúng theo category, wallet
+        List<Budget> budgetsCheck = budgetRepository.findAllByWalletAndCategory(wallet, category);
+        List<Budget> validBudgets = new ArrayList<>();
+        for (Budget budget : budgetsCheck) {
+            LocalDate budgetStartDate = budget.getStartDate();
+            LocalDate budgetEndDate = budget.getEndDate();
 
-
-
-                return new ResponseEntity<>(budget, HttpStatus.OK);
+            // Tìm những budget thỏa mãn thời gian giao dịch
+            if (startDateToCheck.isEqual(budgetStartDate) || startDateToCheck.isEqual(budgetEndDate)
+                    || (startDateToCheck.isAfter(budgetStartDate) && startDateToCheck.isBefore(budgetEndDate))) {
+                validBudgets.add(budget);
             }
         }
-        return ResponseEntity.notFound().build();
+        //Với mỗi budget, tìm nhứng transaction có khoảng thời gian theo thời gian của budget
+        for (Budget budget : validBudgets) {
+            LocalDate budgetStartDate = budget.getStartDate();
+            LocalDate budgetEndDate = budget.getEndDate();
+            List<Transaction> transactions = transactionRepository.findAllByWalletAndCategoryAndTransactionDateBetween(wallet, category, budgetStartDate, budgetEndDate);
+            System.out.println("Budget " + budget.getId() + ": " + transactions);
+            System.out.println("--------");
+        }
+
+
+        //Tính tổng các giao dịch đó và so sánh với amount của budget
+
+        //Nếu nhỏ hơn 20%, tạo 1 thông báo tương ứng với budget đó và cho vào mảng
+        return new ResponseEntity<>(validBudgets, HttpStatus.OK);
+//        return ResponseEntity.notFound().build();
     }
 
 
