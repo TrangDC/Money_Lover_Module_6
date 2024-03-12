@@ -13,6 +13,7 @@
 }
 .card1 {
     margin-bottom: 10px;
+    height: 100px;
 }
 .card1:hover {
     background-color: #e7f5ec;
@@ -37,6 +38,17 @@
     margin-left: 40px;
 }
 .card2.selected {
+    margin-left: 20px;
+    margin-top: 70px;
+}
+ /*xử lý khi select share wallet*/
+.container-wallet.selectedShare {
+    display: flex !important;
+}
+.wallets.selectedShare {
+    margin-left: 40px;
+}
+.card2.selectedShare{
     margin-left: 20px;
     margin-top: 70px;
 }
