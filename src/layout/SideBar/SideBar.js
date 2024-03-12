@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import {IoReorderThree} from "react-icons/io5";
+import { IoCamera } from "react-icons/io5";
 import {MdAccountBalanceWallet} from "react-icons/md";
 import Image from 'react-bootstrap/Image';
-import {FaUserAstronaut} from "react-icons/fa";
+import {FaSwatchbook, FaUserAstronaut} from "react-icons/fa";
 import {PiIntersectThreeBold} from "react-icons/pi";
 import "./sideBar.css";
 import {MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem, MDBInput} from 'mdb-react-ui-kit';
@@ -188,10 +189,13 @@ function MydModalWithGrid(props) {
                 <Modal.Body className="grid-example">
                     <Container>
                         <div style={{textAlign: 'center'}}>
-                            <div>
+                            <div className= "image-container" >
                                 <Image
-                                    src={images}
+                                    src={images} onClick={handleShowImg}
                                     style={{width: '65px', height: '65px', margin: 'auto'}} roundedCircle/>
+                                <span className= "icon-image">
+                                    <IoCamera />
+                                </span>
                             </div>
                             <div className='mx-2'>
                                 <span style={{fontSize: '20px'}}>{editUser.username}</span>
@@ -594,6 +598,23 @@ const SideBar = () => {
                                 </Td>
                                 <Td>
                                     <Link to={"/auth/chart"}>
+                                        <FaGreaterThan style={{marginLeft: 'auto'}} className="icon-1"/>
+                                    </Link>
+                                </Td>
+                            </Tr>
+                            <Tr className="hover-div">
+                                <Td>
+                                    <Link to={"/auth/budget"}>
+                                        <FaSwatchbook className="icon"/>
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <Link to={"/auth/budget"} className="text-reset">
+                                        Budget
+                                    </Link>
+                                </Td>
+                                <Td>
+                                    <Link to={"/auth/budget"}>
                                         <FaGreaterThan style={{marginLeft: 'auto'}} className="icon-1"/>
                                     </Link>
                                 </Td>
