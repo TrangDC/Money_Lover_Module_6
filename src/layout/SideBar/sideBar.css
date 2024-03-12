@@ -14,7 +14,7 @@
 }
 
 .hover-div:hover {
-    background-color: #e3e3e3;
+    background-color: darkgrey;
 }
 .modal-title {
     display: flex;
@@ -45,6 +45,27 @@
     /*border-radius: 10px;*/
     margin: 20px auto;
 }
-.hover-div:hover {
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #8d2929;
+}
+.custom-dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.custom-dropdown-menu .dropdown-item {
+    white-space: normal;
+    font-size: 12px;
+}
+.remove-icon {
+    margin-left: 5px;
     cursor: pointer;
 }

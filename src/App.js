@@ -19,6 +19,7 @@ import {WalletProvider} from "./components/WalletContext";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import EditTransaction from "./components/TransactionPage/EditTransaction";
 import {ChangeNotificationProvider} from "./ChangeNotificationContext";
+import Budget from "./components/Budgets/Budget";
 
 
 
@@ -50,6 +51,9 @@ function App() {
                             /> : <Error/>}/>
                             <Route path='chart' element={(isAuth || user) ? <ChartPage
                             /> : <Error/>}/>
+                            <Route path='budget' element={(isAuth || user) ? <Budget
+                            /> : <Error/>}/>
+
                         </Route>
                         <Route path='/login'
                                element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
