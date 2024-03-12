@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {MDBBtn, MDBCheckbox, MDBCol, MDBInput, MDBRow} from "mdb-react-ui-kit";
 import "./CreateTransaction.css";
 import {MDBCardText} from "mdbreact";
-import {Input, Select, useToast} from "@chakra-ui/react";
+import {Image, Input, Select, useToast} from "@chakra-ui/react";
 import {FaRegCalendarAlt} from "react-icons/fa";
 import {BsWallet} from "react-icons/bs";
 import {MdOutlineAttachMoney} from "react-icons/md";
@@ -64,6 +64,16 @@ const EditTransaction = () => {
                 console.log(transactionData);
                 const res = await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/expense_income/${transaction_edit.id}`, transactionData);
                 console.log(res);
+                if (select_category === "EXPENSE") {
+                    await axios.post(`http://localhost:8080/api/budgets/user/${user.id}/check`, {
+                        wallet_id: parseInt(transaction.wallet_id),
+                        category_id: parseInt(transaction.category_id),
+                        startDate: transaction.transactionDate
+                    })
+                        .then((res) => {
+                            console.log(res.data)
+                        })
+                }
                 notifyTransactionChange();
                 toast({
                     title: 'Edit success!',
@@ -78,6 +88,16 @@ const EditTransaction = () => {
                 console.log(transactionData);
                 const res = await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/debt_loan/${transaction_edit.id}`, transactionData);
                 console.log(res);
+                if (select_category === "LOAN") {
+                    await axios.post(`http://localhost:8080/api/budgets/user/${user.id}/check`, {
+                        wallet_id: parseInt(transaction.wallet_id),
+                        category_id: parseInt(transaction.category_id),
+                        startDate: transaction.transactionDate
+                    })
+                        .then((res) => {
+                            console.log(res.data)
+                        })
+                }
 
                 toast({
                     title: 'Edit success!',
@@ -161,14 +181,13 @@ const EditTransaction = () => {
                                 select_category !== 'all' && (
                                     <>
                                         <MDBCardText className="text-muted">Sub Category</MDBCardText>
-                                        <Select name='category_id' className="form-select"
-                                                aria-label="Default select example" onChange={handleChange}>
+                                        <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
                                             <option>Select category</option>
-                                            {categories.filter(category => category.type === select_category) // Lọc danh sách chỉ giữ lại các danh mục có type là "INCOME"
+                                            {categories.filter(category => category.type === select_category) // Filter the list to include only categories with the selected type
                                                 .map((category) => (
                                                     <option key={category.id} value={category.id}>
-                                                        <img src={category.image} alt={"image"}/>
-                                                        <span>{category.name}</span>
+                                                        <img src={category.image} alt={category.name} /> {/* Display the image */}
+                                                        <span>{category.name}</span> {/* Display the name */}
                                                     </option>
                                                 ))}
                                         </Select>

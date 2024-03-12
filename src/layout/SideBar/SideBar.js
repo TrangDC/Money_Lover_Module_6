@@ -9,6 +9,8 @@ import {FaSwatchbook, FaUserAstronaut} from "react-icons/fa";
 import {PiIntersectThreeBold} from "react-icons/pi";
 import "./sideBar.css";
 import {MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem, MDBInput} from 'mdb-react-ui-kit';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Alert from 'react-bootstrap/Alert';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import {BsCalendar2Date} from "react-icons/bs";
@@ -45,6 +47,7 @@ import Upimage from "../../components/FireBase/Upimage";
 import {useWallet} from "../../components/WalletContext";
 import {show} from "react-modal/lib/helpers/ariaAppHider";
 import {useChangeNotification} from "../../ChangeNotificationContext";
+import {LuBellRing} from "react-icons/lu";
 
 function MydModalWithGrid(props) {
     const navigate = useNavigate();
@@ -457,11 +460,16 @@ const SideBar = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const [userLocal, setUserLocal] = useState([]);
     const [wallet_list, setWallet] = useState([])
+    const [notifications, setNotifications] = useState([])
     const [selected_Wallet, setSelected_Wallet] = useState([]);
     const [selectedWallet_id, setSelectedWallet_id] = useState("all");
-
     const [walletBalance, setWalletBalance] = useState(null);
     const { setSelectedWalletId} = useWallet();
+    const [showListAlert, setShowListAlert] = useState(false);
+
+    const toggleMenu = () => {
+        setShowListAlert(!showListAlert);
+    };
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
@@ -469,6 +477,7 @@ const SideBar = () => {
                 setUserLocal(res.data);
                 setImage(res.data.image);
                 setWallet(res.data.wallets)
+                setNotifications(res.data.notifications)
                 setShouldRerender(prev => !prev);
                 fetchWallets();
             })
@@ -689,7 +698,22 @@ const SideBar = () => {
                             <Navbar.Collapse className="justify-content-end">
                                 <Navbar.Text style={{display: "flex", alignItems: "center", marginRight: '-10%'}}>
                                     <BsCalendar2Date style={{marginRight: 30, fontSize: '20px'}}/>
-                                    <GiSheikahEye style={{marginRight: 30, fontSize: '20px'}}/>
+                                    <div>
+                                        <LuBellRing style={{marginRight: 30, fontSize: '20px'}} onClick={toggleMenu}/>
+                                        {showListAlert && (
+                                            <Dropdown.Menu show={showListAlert} style={{marginLeft: '80%'}}
+                                                           className="custom-dropdown-menu">
+                                                {notifications.map((notification) => (
+                                                    <Dropdown.Item>
+                                                        <Alert variant="success">
+                                                            {notification.message}
+                                                        </Alert>
+                                                    </Dropdown.Item>
+                                                ))}
+
+                                            </Dropdown.Menu>
+                                        )}
+                                    </div>
                                     <FaSearch style={{fontSize: '20px'}}/>
                                 </Navbar.Text>
                             </Navbar.Collapse>

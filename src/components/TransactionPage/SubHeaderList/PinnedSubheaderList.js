@@ -49,7 +49,6 @@ import {
     subYears
 } from "date-fns";
 import {FaPen} from "react-icons/fa";
-import {useChangeNotification} from "../../../ChangeNotificationContext";
 
 export default function PinnedSubheaderList() {
 
@@ -214,14 +213,14 @@ export default function PinnedSubheaderList() {
     };
 
     const handleApply = () => {
-        axios.post(`http://localhost:8080/api/transactions/user/${user.id}/income_transaction/${selectedWalletId}/time_range`, {
+        setNavigation('range');
+        axios.post(`http://localhost:8080/api/time_filter/user/${user.id}/transactions/${selectedWalletId}/time_range`, {
             startWeek: startDateRange,
             endWeek: endDateRange
         })
             .then((res) => {
                 console.log(res);
                 setTransactions(res.data);
-                setNavigation('range');
             })
             .catch((error) => {
                 console.error("Error fetching transaction data:", error);
@@ -231,17 +230,16 @@ export default function PinnedSubheaderList() {
 
     };
 
-
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await TransactionService.fetchTransactions(user, selectedWalletId);
-            setTransactions(data);
-            notifyTransactionChange();
-            localStorage.setItem("transactions", JSON.stringify(data));
-            setCurrentMonthIndex(new Date().getMonth());
-            setCurrentYear(new Date().getFullYear())
-        };
-        fetchData();
+            const fetchData = async () => {
+                const data = await TransactionService.fetchTransactions(user, selectedWalletId);
+                setTransactions(data);
+                notifyTransactionChange();
+                localStorage.setItem("transactions", JSON.stringify(data));
+                setCurrentMonthIndex(new Date().getMonth());
+                setCurrentYear(new Date().getFullYear())
+            };
+            fetchData();
     }, [selectedWalletId, startDateRange, endDateRange]);
 
     const fetchData = () => {
@@ -566,17 +564,18 @@ export default function PinnedSubheaderList() {
                     {navigation === "day" && (
                         <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {groupTransactionsByDay.length === 0 ? (
-                                <div style={{height: "300px"}}>
-                                    <ListItem style={{ margin: "auto"}}>
+                                <div style={{height: "430px", textAlign: 'center'}}>
+                                    <ListItem style={{margin: "auto"}}>
                                         <Image
-                                            style={{ margin: "auto"}}
+                                            style={{margin: "auto"}}
                                             borderRadius='full'
                                             boxSize='300px'
                                             src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
                                             alt=''
                                         />
                                     </ListItem>
-                                    <Button style={{ margin: "auto"}} variant="outlined" onClick={() => goToPresentDay()}>Back to Current Day</Button>
+                                    <Button style={{margin: "auto"}} variant="outlined"
+                                            onClick={() => goToPresentDay()}>Back to Current Day</Button>
                                 </div>
                             ) : (
                                 <List className="list" class="border-t border-gray-200">
@@ -610,17 +609,18 @@ export default function PinnedSubheaderList() {
                     {navigation === "week" && (
                         <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {Object.keys(groupedTransactionsArray).length === 0 ? (
-                                <div style={{height: "300px"}}>
-                                    <ListItem style={{ margin: "auto"}}>
+                                <div style={{height: "430px", textAlign: 'center'}}>
+                                    <ListItem style={{margin: "auto"}}>
                                         <Image
-                                            style={{ margin: "auto"}}
+                                            style={{margin: "auto"}}
                                             borderRadius='full'
                                             boxSize='300px'
                                             src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
                                             alt=''
                                         />
                                     </ListItem>
-                                    <Button style={{ margin: "auto"}} variant="outlined" onClick={() => goToPresentWeek()}>Back to Current Week</Button>
+                                    <Button style={{margin: "auto"}} variant="outlined"
+                                            onClick={() => goToPresentWeek()}>Back to Current Week</Button>
                                 </div>
                             ) : (
                                 <List className="list" class="border-t border-gray-200">
@@ -662,17 +662,18 @@ export default function PinnedSubheaderList() {
                     {navigation === "year" && (
                         <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {Object.keys(groupedTransactionsArrayYear).length === 0 ? (
-                                <div style={{height: "300px"}}>
-                                    <ListItem style={{ margin: "auto"}}>
+                                <div style={{height: "430px", textAlign: 'center'}}>
+                                    <ListItem style={{margin: "auto"}}>
                                         <Image
-                                            style={{ margin: "auto"}}
+                                            style={{margin: "auto"}}
                                             borderRadius='full'
                                             boxSize='300px'
                                             src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
                                             alt=''
                                         />
                                     </ListItem>
-                                    <Button style={{ margin: "auto"}} variant="outlined" onClick={() => goToPresentYear()}>Back to Current Year</Button>
+                                    <Button style={{margin: "auto"}} variant="outlined"
+                                            onClick={() => goToPresentYear()}>Back to Current Year</Button>
                                 </div>
                             ) : (
                                 <List className="list" class="border-t border-gray-200">
@@ -714,10 +715,10 @@ export default function PinnedSubheaderList() {
                     {navigation === "range" && (
                         <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "550px"}}>
                             {transactions.length === 0 ? (
-                                <div style={{height: "300px"}}>
+                                <div style={{height: "430px", textAlign: 'center'}}>
                                     <ListItem>
                                         <Image
-                                            style={{ margin: "auto"}}
+                                            style={{margin: "auto"}}
                                             borderRadius='full'
                                             boxSize='300px'
                                             src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'

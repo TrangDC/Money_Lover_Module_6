@@ -61,6 +61,16 @@ const CreateTransaction = () => {
             console.log(transactionData)
             axios.post(`http://localhost:8080/api/transactions/user/${user.id}/expense_income`, transactionData)
                 .then(res => {
+                    if (select_category === "EXPENSE") {
+                        axios.post(`http://localhost:8080/api/budgets/user/${user.id}/check`, {
+                            wallet_id: parseInt(transaction.wallet_id),
+                            category_id: parseInt(transaction.category_id),
+                            startDate: transaction.transactionDate
+                        })
+                            .then((res) => {
+                                console.log(res.data)
+                            })
+                    }
                     notifyTransactionChange();
                     console.log(res);
                     toast({
@@ -88,6 +98,16 @@ const CreateTransaction = () => {
             console.log(transactionData)
             axios.post(`http://localhost:8080/api/transactions/user/${user.id}/debt_loan`, transactionData)
                 .then(res => {
+                    if (select_category === "LOAN") {
+                        axios.post(`http://localhost:8080/api/budgets/user/${user.id}/check`, {
+                            wallet_id: parseInt(transaction.wallet_id),
+                            category_id: parseInt(transaction.category_id),
+                            startDate: transaction.transactionDate
+                        })
+                            .then((res) => {
+                                console.log(res.data)
+                            })
+                    }
                     console.log(res);
                     notifyTransactionChange();
                     toast({
