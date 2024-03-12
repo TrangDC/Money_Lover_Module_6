@@ -148,7 +148,7 @@ const ExpensePage = () => {
 
 
     const handleSearch = () => {
-        axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/expense_transaction/${selectedWalletId}/time_range`, {
+        axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/expense_transaction/${selectedWalletId}/time_range`, {
             startWeek: startDateRange,
             endWeek: endDateRange
         })
@@ -169,7 +169,7 @@ const ExpensePage = () => {
     const getTransactionIncome = (userdata, wallet_id, navigator) => {
         if (wallet_id) {
             if (navigator === 'month') {
-                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/expense_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
+                axios.get(`http://localhost:8080/api/time_filter/user/${userdata.id}/expense_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
                     .then((res) => {
                         console.log(res);
                         setListTransaction(res.data);
@@ -181,7 +181,7 @@ const ExpensePage = () => {
                     });
             }
             if (navigator === 'day') {
-                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/expense_transaction/${wallet_id}/day`, {
+                axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/expense_transaction/${wallet_id}/day`, {
                     transactionDate: transactionDate
                 })
                     .then((res) => {
@@ -196,7 +196,7 @@ const ExpensePage = () => {
             }
 
             if (navigator === 'week') {
-                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/expense_transaction/${wallet_id}/week`, {
+                axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/expense_transaction/${wallet_id}/week`, {
                     startWeek: startWeek,
                     endWeek: endWeek
                 })
@@ -211,7 +211,7 @@ const ExpensePage = () => {
                     });
             }
             if (navigator === 'year') {
-                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/expense_transaction/${wallet_id}/year/${formattedYear}`)
+                axios.get(`http://localhost:8080/api/time_filter/user/${userdata.id}/expense_transaction/${wallet_id}/year/${formattedYear}`)
                     .then((res) => {
                         console.log(res);
                         setListTransaction(res.data);

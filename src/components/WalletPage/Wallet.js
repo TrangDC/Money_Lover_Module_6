@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useChangeNotification} from "../../ChangeNotificationContext";
 import {
     MDBCard,
     MDBCardBody,
@@ -23,10 +24,12 @@ import {RiEmotionHappyLine} from "react-icons/ri";
 import {TbMoodCrazyHappy, TbMoodHappy} from "react-icons/tb";
 
 const Wallet = () => {
+    const { notifyWalletChange } = useChangeNotification();
     const [showCard2, setShowCard2] = useState(false)
     const [showCardShare, setShowCardShare] = useState(false)
     const [selectedWallet, setSelectedWallet] = useState(false);
     const [selectedShareWallet, setSelectedShareWallet] = useState(false);
+
     const navigate = useNavigate()
     const handleClickX = () => {
         setShowCard2(false)
@@ -50,6 +53,7 @@ const Wallet = () => {
         const userdata = JSON.parse(localStorage.getItem("user"));
         console.log(userdata);
         setUser(userdata)
+        notifyWalletChange();
         fetchWallets(userdata);
     }, []);
 
@@ -57,6 +61,7 @@ const Wallet = () => {
         axios.get('http://localhost:8080/api/wallets/user/' + userdata.id)
             .then((res) => {
                 console.log(res.data);
+                notifyWalletChange();
 
                 window.localStorage.setItem("wallets", JSON.stringify(res.data));
                 const wallets = JSON.parse(localStorage.getItem("wallets"));
@@ -87,6 +92,7 @@ const Wallet = () => {
         axios.post(`http://localhost:8080/api/wallets/user/${user.id}/create`, wallet)
             .then(res => {
                 console.log(res);
+                notifyWalletChange();
                 navigate("/auth/wallets")
                 handleCloseC();
                 fetchWallets(user);
@@ -121,6 +127,7 @@ const Wallet = () => {
         if (confirmDelete) {
             axios.put(`http://localhost:8080/api/wallets/user/${user.id}/deactivate/${id}`)
                 .then(res => {
+                    notifyWalletChange();
                     navigate("/auth/wallets");
                     fetchWallets(user);
                     toast({
@@ -158,6 +165,7 @@ const Wallet = () => {
             .put(`http://localhost:8080/api/wallets/user/${user.id}/edit/${selectedWalletId}`, editWallet)
             .then((res) => {
                 console.log(res.data);
+                notifyWalletChange();
                 navigate("/auth/wallets")
                 fetchWallets(user);
                 handleClose();
@@ -198,6 +206,7 @@ const Wallet = () => {
         axios.put(`http://localhost:8080/api/wallets/user/${user.id}/add_money/${selectedWalletId}/${money}`, {money: money})
             .then((res) => {
                 console.log(res.data);
+                notifyWalletChange();
                 handleCloseM();
                 fetchWallets(user);
                 toast({
@@ -250,7 +259,9 @@ const Wallet = () => {
                                         <MDBRow className="wallet">
                                             <MDBCol md='2' onClick={() => handleWalletClick(wallet)}>
                                                 <div className="wallet-icon">
-                                                    <FaWallet/>
+                                                    <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                         alt="Wallet Icon"
+                                                         style={{ width: '50px', height: '50px', marginRight: '10px' }} />
                                                 </div>
                                             </MDBCol>
                                             <MDBCol className="content-wallet" md='8'
@@ -258,8 +269,8 @@ const Wallet = () => {
                                                 <MDBCardText>
                                                     {wallet.name}
                                                 </MDBCardText>
-                                                <MDBCardText>
-                                                    {wallet.balance} vnđ
+                                                <MDBCardText style={{fontWeight: '600'}}>
+                                                    {wallet.balance.toLocaleString()} VNĐ
                                                 </MDBCardText>
                                             </MDBCol>
                                             <MDBCol style={{flex: 4}}>
@@ -286,7 +297,9 @@ const Wallet = () => {
                                         <MDBRow className="wallet">
                                             <MDBCol md='2' onClick={() => handleClickShareWallet()}>
                                                 <div className="wallet-icon">
-                                                    <FaWallet/>
+                                                    <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                         alt="Wallet Icon"
+                                                         style={{ width: '50px', height: '50px', marginRight: '10px' }} />
                                                 </div>
                                             </MDBCol>
                                             <MDBCol className="content-wallet" md='8'
@@ -294,8 +307,8 @@ const Wallet = () => {
                                                 <MDBCardText>
                                                     {wallet.name}
                                                 </MDBCardText>
-                                                <MDBCardText>
-                                                    {wallet.balance} vnđ
+                                                <MDBCardText style={{fontWeight: '600'}}>
+                                                    {wallet.balance.toLocaleString()} VNĐ
                                                 </MDBCardText>
                                             </MDBCol>
                                             <MDBCol style={{flex: 4}}>
@@ -323,11 +336,15 @@ const Wallet = () => {
 
                                         <MDBRow className="wallet-infomation">
                                             <MDBCol md='2'>
-                                                <div className="wallet-icon"><FaWallet/></div>
+                                                <div className="wallet-icon">
+                                                    <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                         alt="Wallet Icon"
+                                                         style={{ width: '50px', height: '50px', marginRight: '10px' }} />
+                                                </div>
                                             </MDBCol>
                                             <MDBCol className="content-wallet" md='10'>
                                                 <MDBCardText>{selectedWallet.name}</MDBCardText>
-                                                <MDBCardText>{selectedWallet.balance} vnđ</MDBCardText>
+                                                <MDBCardText style={{fontWeight:'600'}}>{selectedWallet.balance.toLocaleString()} vnđ</MDBCardText>
                                             </MDBCol>
                                             <hr/>
                                         </MDBRow>
@@ -399,11 +416,15 @@ const Wallet = () => {
 
                                         <MDBRow className="wallet-infomation">
                                             <MDBCol md='2'>
-                                                <div className="wallet-icon"><FaWallet/></div>
+                                                <div className="wallet-icon">
+                                                    <img src="https://static.moneylover.me/img/icon/icon.png"
+                                                         alt="Wallet Icon"
+                                                         style={{ width: '50px', height: '50px', marginRight: '10px' }} />
+                                                </div>
                                             </MDBCol>
                                             <MDBCol className="content-wallet" md='10'>
                                                 <MDBCardText>{selectedWallet.name}</MDBCardText>
-                                                <MDBCardText>{selectedWallet.balance} vnđ</MDBCardText>
+                                                <MDBCardText style={{fontWeight:'600'}}>{selectedWallet.balance.toLocaleString()} vnđ</MDBCardText>
                                             </MDBCol>
                                             <hr/>
                                         </MDBRow>

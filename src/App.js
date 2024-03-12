@@ -18,10 +18,7 @@ import ChartPage from "./components/ChartPage/ChartPage";
 import {WalletProvider} from "./components/WalletContext";
 import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import EditTransaction from "./components/TransactionPage/EditTransaction";
-import BudgetAdd from "./components/Budgets/BudgetAdd";
-import BudgetEdit from "./components/Budgets/BudgetEdit";
-
-
+import {ChangeNotificationProvider} from "./ChangeNotificationContext";
 
 
 
@@ -37,33 +34,30 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                <Routes>
-                    <Route path='/' element={<Error/>}></Route>
-                    <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
-                        >
-                        <Route path="wallets" element={(isAuth || user) ? <Wallet/> : <Error/>}/>
-                        <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
-                        <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
-                        <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
-                        <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/> : <Error/>}/>
-                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
-                        /> : <Error/>}/>
-                        <Route path='exchart' element={(isAuth || user) ? <ExpensePage
-                        /> : <Error/>}/>
-                        <Route path='chart' element={(isAuth || user) ? <ChartPage
-                        /> : <Error/>}/>
-                    </Route>
-                    <Route path='/login'
-                           element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
-                    <Route path='/register' element={<RegisterPage/>}/>
-                    <Route path='/upload' element={<UploadImage/>}/>
-                    <Route path='/active' element={<ActiveAccount/>}/>
-                    <Route path='/chart' element={<ChartPage/>}/>
-                    <Route path='/piechart' element={<IncomePiechart/>}/>
-                    <Route path='/exchart' element={<ExpensePage/>}/>
-                    <Route path='/budgetadd' element={<BudgetAdd/>}/>
-                    <Route path='/budgetedit' element={<BudgetEdit/>}/>
-                </Routes>
+                <ChangeNotificationProvider>
+                    <Routes>
+                        <Route path='/' element={<Error/>}></Route>
+                        <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
+                            >
+                            <Route path="wallets" element={(isAuth || user) ?<Wallet/> : <Error/>}/>
+                            <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
+                            <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
+                            <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
+                            <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/>: <Error/>}/>
+                            <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
+                            /> : <Error/>}/>
+                            <Route path='exchart' element={(isAuth || user) ? <ExpensePage
+                            /> : <Error/>}/>
+                            <Route path='chart' element={(isAuth || user) ? <ChartPage
+                            /> : <Error/>}/>
+                        </Route>
+                        <Route path='/login'
+                               element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
+                        <Route path='/register' element={<RegisterPage/>}/>
+                        <Route path='/upload' element={<UploadImage/>}/>
+                        <Route path='/active' element={<ActiveAccount/>}/>
+                    </Routes>
+                </ChangeNotificationProvider>
             </BrowserRouter>
         </div>
     );

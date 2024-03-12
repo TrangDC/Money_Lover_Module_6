@@ -147,7 +147,7 @@ const IncomePiechart = () => {
 
 
     const handleSearch = () => {
-        axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${selectedWalletId}/time_range`, {
+        axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/income_transaction/${selectedWalletId}/time_range`, {
             startWeek: startDateRange,
             endWeek: endDateRange
         })
@@ -168,7 +168,7 @@ const IncomePiechart = () => {
     const getTransactionIncome = (userdata, wallet_id, navigator) => {
         if (wallet_id) {
             if (navigator === 'month') {
-                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
+                axios.get(`http://localhost:8080/api/time_filter/user/${userdata.id}/income_transaction/${wallet_id}/date/${currentYear}/${currentMonthIndex}`)
                     .then((res) => {
                         console.log(res);
                         setListTransaction(res.data);
@@ -180,7 +180,7 @@ const IncomePiechart = () => {
                     });
             }
             if (navigator === 'day') {
-                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/day`, {
+                axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/income_transaction/${wallet_id}/day`, {
                     transactionDate: transactionDate
                 })
                     .then((res) => {
@@ -195,7 +195,7 @@ const IncomePiechart = () => {
             }
 
             if (navigator === 'week') {
-                axios.post(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/week`, {
+                axios.post(`http://localhost:8080/api/time_filter/user/${userdata.id}/income_transaction/${wallet_id}/week`, {
                     startWeek: startWeek,
                     endWeek: endWeek
                 })
@@ -210,7 +210,7 @@ const IncomePiechart = () => {
                     });
             }
             if (navigator === 'year') {
-                axios.get(`http://localhost:8080/api/transactions/user/${userdata.id}/income_transaction/${wallet_id}/year/${formattedYear}`)
+                axios.get(`http://localhost:8080/api/time_filter/user/${userdata.id}/income_transaction/${wallet_id}/year/${formattedYear}`)
                     .then((res) => {
                         console.log(res);
                         setListTransaction(res.data);

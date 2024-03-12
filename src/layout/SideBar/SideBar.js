@@ -43,6 +43,7 @@ import wallet from "../../components/WalletPage/Wallet";
 import Upimage from "../../components/FireBase/Upimage";
 import {useWallet} from "../../components/WalletContext";
 import {show} from "react-modal/lib/helpers/ariaAppHider";
+import {useChangeNotification} from "../../ChangeNotificationContext";
 
 function MydModalWithGrid(props) {
     const navigate = useNavigate();
@@ -438,8 +439,10 @@ function MydModalWithGrid(props) {
     );
 }
 
-const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
+const SideBar = () => {
 
+    const { transactionChanged, walletChanged } = useChangeNotification();
+    const [shouldRerender, setShouldRerender] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -452,21 +455,21 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
     const [wallet_list, setWallet] = useState([])
     const [selected_Wallet, setSelected_Wallet] = useState([]);
     const [selectedWallet_id, setSelectedWallet_id] = useState("all");
-    const [isUserFetched, setIsUserFetched] = useState(false);
 
-    const { setSelectedWalletId } = useWallet();
-    const { WalletList } = useWallet();
-
+    const [walletBalance, setWalletBalance] = useState(null);
+    const { setSelectedWalletId} = useWallet();
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/users/' + user.id)
             .then(res => {
-                           setUserLocal(res.data);
-                            setImage(res.data.image);
-                         fetchWallets();
-                 })
-                     .catch(err => console.error(err))
-    }, [modalShow]);
+                setUserLocal(res.data);
+                setImage(res.data.image);
+                setWallet(res.data.wallets)
+                setShouldRerender(prev => !prev);
+                fetchWallets();
+            })
+            .catch(err => console.error(err))
+    }, [modalShow, transactionChanged, walletChanged]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
@@ -475,11 +478,21 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
             })
     }
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/wallets/user/' + user.id + '/details/' + selected_Wallet.id)
+            .then(response => setWalletBalance(response.data.balance))
+            .catch(error => {
+                console.error('Error fetching wallet balance from API:', error);
+                setWalletBalance(null); // Handle error case
+            });
+    }, [selectedWallet_id, transactionChanged, walletChanged]);
+
 
     const handleWalletSelect = (wallet_id, wallet) => {
         setSelected_Wallet(wallet)
         setSelectedWalletId(wallet_id);
         setSelectedWallet_id(wallet_id);
+        fetchWallets();
     };
 
     const totalAmount = wallet_list.reduce((total, wallet) => total + Number(wallet.balance), 0);
@@ -505,14 +518,14 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
         <div>
             <MydModalWithGrid onUpdateSuccess={handleUpdateSuccess} show={modalShow}
                               onHide={() => setModalShow(false)}/>
-            <Offcanvas show={show} onHide={handleClose} style={{width: '22%'}}>
+            <Offcanvas show={show} onHide={handleClose} style={{width: '27.5%'}}>
                 <Offcanvas.Header style={{margin: 'auto'}}>
                     <Container>
                         <div style={{textAlign: 'center',marginTop: '15%'}}>
-                            <div style={{margin: 'auto', width: '75px', height: '75px', marginBottom:'30px'}}>
+                            <div>
                                 <Image
                                     src={userLocal.image}
-                                    style={{width: '75px', height: '75px'}} roundedCircle/>
+                                    style={{width: '65px', height: '65px', margin: 'auto'}} roundedCircle/>
                             </div>
                             <div className='mx-2'>
                                 <span style={{fontSize: '20px'}}>{userLocal.username}</span>
@@ -597,7 +610,7 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                             <Navbar.Brand>
                                 <Menu className="bg-white">
                                     <MenuHandler>
-                                        <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'200px' }}>
+                                        <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'250px', height:'70px' }}>
 
                                             {
                                                 selectedWallet_id !== 'all' ? (
@@ -607,7 +620,7 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                                                              style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                         <div>
                                                             <div className='text-black'>{selected_Wallet.name}</div>
-                                                            <div className='text-black'>{selected_Wallet.balance}</div>
+                                                            <div className='text-black' style={{fontSize: '15px', fontWeight: '500'}}>{walletBalance !== null ? walletBalance.toLocaleString() : 'Loading...'} VNĐ</div>
                                                         </div>
                                                     </>
                                                 ) : (
@@ -633,18 +646,18 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                                                      style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                 <div>Total</div>
                                             </div>
-                                            <div>{totalAmount}</div>
+                                            <div>{totalAmount.toLocaleString()}</div>
                                         </MenuItem>
                                         <hr className='my-3'/>
                                         {wallet_list.map((data) => (
                                             <MenuItem key={data.id} onClick={() => handleWalletSelect(data.id, data)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center' , marginRight: '10px'}}>
                                                     <img src="https://static.moneylover.me/img/icon/icon.png"
                                                          alt="Wallet Icon"
                                                          style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                     <div>{data.name}</div>
                                                 </div>
-                                                <div>{data.balance}</div>
+                                                <div>{data.balance.toLocaleString()}</div>
                                             </MenuItem>
                                         ))}
                                     </MenuList>
@@ -733,8 +746,6 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 

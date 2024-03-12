@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './PinnedSubheaderList.css';
 import {useEffect, useState} from "react";
+import {useChangeNotification} from "../../../ChangeNotificationContext";
 import OutlinedCard from "../OutlinedCard/OutlinedCard";
 import TransactionService from "../../../services/transactions.services";
 import {Button, Navbar, TabsHeader} from "@material-tailwind/react";
@@ -50,6 +51,7 @@ import {
 import {FaPen} from "react-icons/fa";
 
 export default function PinnedSubheaderList() {
+    const { notifyTransactionChange } = useChangeNotification();
 
     const { selectedWalletId } = useWallet();
     const [transactions, setTransactions] = useState([]);
@@ -225,8 +227,10 @@ export default function PinnedSubheaderList() {
     useEffect(() => {
         const fetchData = async () => {
 
+
             const data = await TransactionService.fetchTransactions(user, selectedWalletId);
             setTransactions(data);
+            notifyTransactionChange();
             localStorage.setItem("transactions", JSON.stringify(data));
             setCurrentMonthIndex(new Date().getMonth());
             setCurrentYear(new Date().getFullYear())
@@ -258,6 +262,7 @@ export default function PinnedSubheaderList() {
         if (confirm) {
             axios.delete(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${id}`)
                 .then(res => {
+                    notifyTransactionChange();
                     toast({
                         title: 'Delete success!',
                         description: 'You successfully deleted a transaction!',
