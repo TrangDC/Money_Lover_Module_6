@@ -28,5 +28,9 @@ public class SharedWallets {
     @Column(length = 60)
     private ERole role;
 
-    // Getters and setters
+    public SharedWallets(Long id, Wallet wallet, ERole role) {
+        this.id = id;
+        this.wallet = wallet;
+        this.role = role;
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +70,60 @@ public class SharedWalletController {
     }
 
     //API ngừng chia sẻ ví cho một user
-
+    @DeleteMapping("/user/{user_id}/unshared/{wallet_id}")
+    public ResponseEntity<?> unsharedWallet(@PathVariable Long user_id,
+                                            @PathVariable Long wallet_id) {
+        Optional<User>userOptional = userService.findById(user_id);
+        Optional<Wallet>walletOptional = walletService.getWalletById(wallet_id);
+        if (userOptional.isEmpty() || walletOptional.isEmpty()) {
+            return new ResponseEntity<String>("Invalid user", HttpStatus.NOT_FOUND);
+        }
+        Optional<SharedWallets> sharedWalletsOptional = sharedWalletsRepository.findByUserAndWallet(userOptional.get(), walletOptional.get());
+        if (sharedWalletsOptional.isEmpty()) {
+            return new ResponseEntity<String>("Invalid sharing", HttpStatus.NOT_FOUND);
+        }
+        sharedWalletsRepository.deleteById(sharedWalletsOptional.get().getId());
+        return new ResponseEntity<String>("Unshared successfully", HttpStatus.OK);
+    }
 
     //API xem danh sách member của 1 ví
+    @GetMapping("/members/{wallet_id}")
+    public ResponseEntity<?> getAllMemberByWallet(@PathVariable Long wallet_id) {
+        Optional<Wallet>walletOptional = walletService.getWalletById(wallet_id);
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<String>("Invalid wallet", HttpStatus.NOT_FOUND);
+        }
+        List<SharedWallets> sharedWalletsList = sharedWalletsRepository.findAllByWallet(walletOptional.get());
+        if (sharedWalletsList.isEmpty()) {
+            return new ResponseEntity<Iterable<User>>(new ArrayList<>(), HttpStatus.OK);
+        }
+        List<User> members = new ArrayList<>();
+        for (SharedWallets sharedWallet : sharedWalletsList) {
+            User user = sharedWallet.getUser();
+            members.add(user);
+        }
+        return new ResponseEntity<Iterable<User>>(members, HttpStatus.OK);
+    }
+
+    //API xem danh sách ví được share của 1 user
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> getWalletsByUser(@PathVariable Long user_id) {
+        Optional<User>userOptional = userService.findById(user_id);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<String>("Invalid user", HttpStatus.NOT_FOUND);
+        }
+        List<SharedWallets> sharedWalletsList = sharedWalletsRepository.findAllByUser(userOptional.get());
+        if (sharedWalletsList.isEmpty()) {
+            return new ResponseEntity<Iterable<Wallet>>(new ArrayList<>(), HttpStatus.OK);
+        }
+        List<SharedWallets> result = new ArrayList<>();
+        for (SharedWallets sharedWallet : sharedWalletsList) {
+            Long id = sharedWallet.getId();
+            Wallet wallet = sharedWallet.getWallet();
+            ERole role = sharedWallet.getRole();
+            SharedWallets data = new SharedWallets(id, wallet, role);
+            result.add(data);
+        }
+        return new ResponseEntity<Iterable<SharedWallets>>(result, HttpStatus.OK);
+    }
 }
