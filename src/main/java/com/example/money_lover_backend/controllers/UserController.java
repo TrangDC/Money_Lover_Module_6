@@ -59,8 +59,17 @@ public class UserController {
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }
 
+    // Endpoint to find user information based on wallet ID
+    @GetMapping("/wallet/{walletId}")
+    public ResponseEntity<User> getUserByWalletId(@PathVariable Long walletId) {
+        Optional<User> user = userRepository.findByWalletsId(walletId);
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody EditUser editUser) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
