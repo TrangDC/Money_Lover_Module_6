@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
