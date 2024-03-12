@@ -8,16 +8,19 @@ import {
 } from 'mdb-react-ui-kit';
 import "./Wallet.css"
 import {useNavigate} from "react-router-dom";
-import {FaUserTie, FaWallet} from "react-icons/fa";
+import {FaUserCheck, FaUserTie, FaWallet} from "react-icons/fa";
 import {MdOutlineClose} from "react-icons/md";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {Input, useToast} from "@chakra-ui/react";
+import {Input, useToast, WrapItem} from "@chakra-ui/react";
 import {GiPiggyBank} from "react-icons/gi";
 import {IoAddCircle, IoMail} from "react-icons/io5";
 import {BsChatLeftTextFill} from "react-icons/bs";
+import {BiSolidHappy, BiSolidHappyHeartEyes} from "react-icons/bi";
+import {RiEmotionHappyLine} from "react-icons/ri";
+import {TbMoodCrazyHappy, TbMoodHappy} from "react-icons/tb";
 
 const Wallet = () => {
     const [showCard2, setShowCard2] = useState(false)
@@ -270,8 +273,8 @@ const Wallet = () => {
                                 </div>
                                 <MDBCardBody>
                                     <MDBRow style={{textAlign: 'center'}}>
-                                        <MDBCardTitle style={{marginTop: '-20px'}}>WALLET DETAILS</MDBCardTitle>
-                                        <hr/>
+                                        <MDBCardTitle style={{margin: '-15px 0 30px 0'}}>WALLET DETAILS <hr/></MDBCardTitle>
+
                                         <MDBRow className="wallet-infomation">
                                             <MDBCol md='2'>
                                                 <div className="wallet-icon">
@@ -286,8 +289,9 @@ const Wallet = () => {
                                                     {selectedWallet.balance} vnđ
                                                 </MDBCardText>
                                             </MDBCol>
+                                            <hr/>
                                         </MDBRow>
-                                        <hr/>
+
                                         <MDBRow className="wallet-infomation">
                                             <MDBCol md='2'>
                                                 <div className="wallet-icon">
@@ -305,13 +309,34 @@ const Wallet = () => {
                                                     {user.email}
                                                 </MDBCardText>
                                             </MDBCol>
-                                            <MDBRow className="wallet-share" onClick={handleShare}>
+                                            <hr/>
+                                            <MDBRow className="wallet-infomation">
                                                 <MDBCol md='2'>
-                                                    <div className="btn-share-wallet">
-                                                        <IoAddCircle />
+                                                    <div className="wallet-icon">
+                                                        <FaUserCheck />
                                                     </div>
                                                 </MDBCol>
-                                                <MDBCol md='10' className="ct-share-wallet"><MDBCardText>Add Member</MDBCardText></MDBCol>
+                                                <MDBCol className="content-wallet" md='10'>
+                                                    <MDBCardText>
+                                                        Member
+                                                    </MDBCardText>
+                                                    <div className="face-member">
+                                                        <BiSolidHappy />
+                                                        <RiEmotionHappyLine />
+                                                        <BiSolidHappyHeartEyes />
+                                                        <TbMoodHappy />
+                                                        <TbMoodCrazyHappy />
+                                                    </div>
+
+                                                </MDBCol>
+                                            </MDBRow>
+                                            <MDBRow className="wallet-share" onClick={handleShare}>
+                                                <MDBCol md='12' style={{margin:'0 0 30px 80px'}}>
+                                                    <WrapItem>
+                                                        <Button colorScheme='messenger'>Invite</Button>
+                                                    </WrapItem>
+                                                </MDBCol>
+                                                <hr/>
                                             </MDBRow>
                                             <MDBRow>
                                                 <MDBCol>

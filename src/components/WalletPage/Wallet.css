@@ -98,10 +98,10 @@
     margin-bottom: 20px;
 }
 .btn-share-email {
-    font-size: 30px;
+    font-size: 35px;
 }
 .btn-share-message {
-    font-size: 25px;
+    font-size: 30px;
 }
 /*button add*/
 .button {
@@ -247,4 +247,8 @@
     opacity: 1;
     transform: translateY(30px);
     transition-duration: .3s;
+}
+.face-member {
+    display: flex;
+    font-size: 30px;
 }
