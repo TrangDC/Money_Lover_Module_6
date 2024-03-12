@@ -505,14 +505,14 @@ const SideBar = ({onWalletSelect, onMonthIndexSelect, onYearSelect}) => {
         <div>
             <MydModalWithGrid onUpdateSuccess={handleUpdateSuccess} show={modalShow}
                               onHide={() => setModalShow(false)}/>
-            <Offcanvas show={show} onHide={handleClose} style={{width: '27.5%'}}>
+            <Offcanvas show={show} onHide={handleClose} style={{width: '22%'}}>
                 <Offcanvas.Header style={{margin: 'auto'}}>
                     <Container>
                         <div style={{textAlign: 'center',marginTop: '15%'}}>
-                            <div>
+                            <div style={{margin: 'auto', width: '75px', height: '75px', marginBottom:'30px'}}>
                                 <Image
                                     src={userLocal.image}
-                                    style={{width: '65px', height: '65px', margin: 'auto'}} roundedCircle/>
+                                    style={{width: '75px', height: '75px'}} roundedCircle/>
                             </div>
                             <div className='mx-2'>
                                 <span style={{fontSize: '20px'}}>{userLocal.username}</span>
