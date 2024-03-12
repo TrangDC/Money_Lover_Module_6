@@ -67,8 +67,10 @@ export default function PinnedSubheaderList() {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [startDateRange, setStartDateRange] = useState(null);
-    const [endDateRange, setEndDateRange] = useState(null);
+    const [startDateRange, setStartDateRange] = useState('');
+    const [endDateRange, setEndDateRange] = useState('');
+    const [startWeek, setStartWeek] = useState('');
+    const [endWeek, setEndWeek] = useState('')
 
     // display detail
     const [showDetail, setShowDetail] = useState(false)
@@ -211,22 +213,26 @@ export default function PinnedSubheaderList() {
     };
 
     const handleApply = () => {
-        setNavigation('range');
-        // Filter transactions based on the selected time range
-        const filteredTransactions = transactions.filter((transaction) => {
-            const transactionDate = new Date(transaction.transactionDate);
-            return (
-                (!startDateRange || transactionDate >= startDateRange) && // Check if transaction date is after or equal to start date
-                (!endDateRange || transactionDate <= endDateRange) // Check if transaction date is before or equal to end date
-            );
-        });
-        setTransactions(filteredTransactions);
+        axios.post(`http://localhost:8080/api/transactions/user/${user.id}/income_transaction/${selectedWalletId}/time_range`, {
+            startWeek: startDateRange,
+            endWeek: endDateRange
+        })
+            .then((res) => {
+                console.log(res);
+                setTransactions(res.data);
+                setNavigation('range');
+            })
+            .catch((error) => {
+                console.error("Error fetching transaction data:", error);
+                // Handle error, such as setting appropriate state to indicate error
+            });
+
+
     };
 
 
     useEffect(() => {
         const fetchData = async () => {
-
             const data = await TransactionService.fetchTransactions(user, selectedWalletId);
             setTransactions(data);
             notifyTransactionChange();
@@ -235,7 +241,7 @@ export default function PinnedSubheaderList() {
             setCurrentYear(new Date().getFullYear())
         };
         fetchData();
-    }, [selectedWalletId]);
+    }, [selectedWalletId, startDateRange, endDateRange]);
 
     const fetchData = () => {
         const fetchData = async () => {
@@ -707,7 +713,6 @@ export default function PinnedSubheaderList() {
                                             alt=''
                                         />
                                     </ListItem>
-                                    <Button style={{ margin: "auto"}} variant="outlined" onClick={() => goToPresentDay()}>Back to Current Day</Button>
                                 </div>
                             ) : (
                                 <List className="list" class="border-t border-gray-200">
@@ -851,7 +856,7 @@ export default function PinnedSubheaderList() {
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} colorScheme='green' variant='outline'>Cancel</Button>
-                        <Button colorScheme='greengreen' variant='outline'>
+                        <Button colorScheme='greengreen' variant='outline' onClick={handleApply}>
                             Select Time
                         </Button>
                     </ModalFooter>

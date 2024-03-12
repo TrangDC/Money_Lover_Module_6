@@ -483,7 +483,7 @@ const SideBar = () => {
             .then(response => setWalletBalance(response.data.balance))
             .catch(error => {
                 console.error('Error fetching wallet balance from API:', error);
-                setWalletBalance(null); // Handle error case
+                setWalletBalance(null);
             });
     }, [selectedWallet_id, transactionChanged, walletChanged]);
 

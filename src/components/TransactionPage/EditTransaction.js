@@ -45,7 +45,7 @@ const EditTransaction = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const transactionData = {
             amount: parseInt(transaction.amount),
@@ -57,59 +57,47 @@ const EditTransaction = () => {
             wallet_id: parseInt(transaction.wallet_id),
             category_id: parseInt(transaction.category_id)
         };
-        if (select_category === "EXPENSE" || select_category === "INCOME") {
-            console.log(transactionData)
-            axios.put(`http://localhost:8080/api/transactions/user/${user.id}/expense_income/${transaction_edit.id}`, transactionData)
-                .then(res => {
-                    console.log(res);
-                    notifyTransactionChange();
-                    toast({
-                        title: 'Edit success!',
-                        description: 'You successfully created a transaction!',
-                        status: 'success',
-                        duration: 1500,
-                        isClosable: true,
-                    });
-                    navigate("/auth/transactions");
+        try {
+            await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/transaction/${transaction_edit.id}`);
 
-                })
-                .catch(err => {
-                    console.error(err);
-                    toast({
-                        title: 'Edit Failed',
-                        description: 'Failed to create a transaction!',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
+            if (select_category === "EXPENSE" || select_category === "INCOME") {
+                console.log(transactionData);
+                const res = await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/expense_income/${transaction_edit.id}`, transactionData);
+                console.log(res);
+
+                notifyTransactionChange();
+                toast({
+                    title: 'Edit success!',
+                    description: 'You successfully created a transaction!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
                 });
-        }
-        if (select_category === "DEBT" || select_category === "LOAN") {
-            console.log(transactionData)
-            axios.put(`http://localhost:8080/api/transactions/user/${user.id}/debt_loan/${transaction_edit.id}`, transactionData)
-                .then(res => {
-                    console.log(res);
+                navigate("/auth/transactions");
+            }
+            if (select_category === "DEBT" || select_category === "LOAN") {
+                console.log(transactionData);
+                const res = await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/debt_loan/${transaction_edit.id}`, transactionData);
+                console.log(res);
 
-                    toast({
-                        title: 'Edit success!',
-                        description: 'You successfully created a transaction!',
-                        status: 'success',
-                        duration: 1500,
-                        isClosable: true,
-                    });
-                    navigate("/auth/transactions");
-
-                })
-                .catch(err => {
-                    console.error(err);
-                    toast({
-                        title: 'Edit Failed',
-                        description: 'Failed to create a transaction!',
-                        status: 'error',
-                        duration: 3000,
-                        isClosable: true,
-                    });
+                toast({
+                    title: 'Edit success!',
+                    description: 'You successfully created a transaction!',
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
                 });
+                navigate("/auth/transactions");
+            }
+        } catch (err) {
+            console.error(err);
+            toast({
+                title: 'Edit Failed',
+                description: 'Failed to create a transaction!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
     };
 
