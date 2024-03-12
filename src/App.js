@@ -35,28 +35,28 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <ChangeNotificationProvider>
-                <Routes>
-                    <Route path='/' element={<Error/>}></Route>
-                    <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
-                        >
-                        <Route path="wallets" element={(isAuth || user) ?<Wallet/> : <Error/>}/>
-                        <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
-                        <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
-                        <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
-                        <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/>: <Error/>}/>
-                        <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
-                        /> : <Error/>}/>
-                        <Route path='exchart' element={(isAuth || user) ? <ExpensePage
-                        /> : <Error/>}/>
-                        <Route path='chart' element={(isAuth || user) ? <ChartPage
-                        /> : <Error/>}/>
-                    </Route>
-                    <Route path='/login'
-                           element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
-                    <Route path='/register' element={<RegisterPage/>}/>
-                    <Route path='/upload' element={<UploadImage/>}/>
-                    <Route path='/active' element={<ActiveAccount/>}/>
-                </Routes>
+                    <Routes>
+                        <Route path='/' element={<Error/>}></Route>
+                        <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
+                            >
+                            <Route path="wallets" element={(isAuth || user) ?<Wallet/> : <Error/>}/>
+                            <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
+                            <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
+                            <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
+                            <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/>: <Error/>}/>
+                            <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
+                            /> : <Error/>}/>
+                            <Route path='exchart' element={(isAuth || user) ? <ExpensePage
+                            /> : <Error/>}/>
+                            <Route path='chart' element={(isAuth || user) ? <ChartPage
+                            /> : <Error/>}/>
+                        </Route>
+                        <Route path='/login'
+                               element={<LoginPage handleLoginSuccess={handleLoginSuccess} isAuth={isAuth}/>}/>
+                        <Route path='/register' element={<RegisterPage/>}/>
+                        <Route path='/upload' element={<UploadImage/>}/>
+                        <Route path='/active' element={<ActiveAccount/>}/>
+                    </Routes>
                 </ChangeNotificationProvider>
             </BrowserRouter>
         </div>

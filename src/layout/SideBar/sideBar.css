@@ -14,7 +14,7 @@
 }
 
 .hover-div:hover {
-    background-color: darkgrey;
+    background-color: #e3e3e3;
 }
 .modal-title {
     display: flex;
@@ -44,4 +44,7 @@
     padding: 20px;
     /*border-radius: 10px;*/
     margin: 20px auto;
+}
+.hover-div:hover {
+    cursor: pointer;
 }

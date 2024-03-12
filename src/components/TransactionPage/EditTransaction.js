@@ -9,10 +9,11 @@ import {MdOutlineAttachMoney} from "react-icons/md";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
-import {useWallet} from "../WalletContext";
+
 import {useChangeNotification} from "../../ChangeNotificationContext";
 const EditTransaction = () => {
 
+    const { notifyTransactionChange } = useChangeNotification();
     const toast = useToast();
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user"))
@@ -31,7 +32,6 @@ const EditTransaction = () => {
     const [categories, setCategories] = useState([]);
     const [wallets, setWallets] = useState([])
     const [select_category, setCategory] = useState('');
-    const { notifyTransactionChange } = useChangeNotification();
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
@@ -64,7 +64,6 @@ const EditTransaction = () => {
                 console.log(transactionData);
                 const res = await axios.put(`http://localhost:8080/api/transactions/user/${user.id}/expense_income/${transaction_edit.id}`, transactionData);
                 console.log(res);
-
                 notifyTransactionChange();
                 toast({
                     title: 'Edit success!',

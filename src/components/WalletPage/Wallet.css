@@ -13,6 +13,7 @@
 }
 .card1 {
     margin-bottom: 10px;
+    height: 100px;
 }
 .card1:hover {
     background-color: #e7f5ec;
@@ -37,6 +38,17 @@
     margin-left: 40px;
 }
 .card2.selected {
+    margin-left: 20px;
+    margin-top: 70px;
+}
+ /*xử lý khi select share wallet*/
+.container-wallet.selectedShare {
+    display: flex !important;
+}
+.wallets.selectedShare {
+    margin-left: 40px;
+}
+.card2.selectedShare{
     margin-left: 20px;
     margin-top: 70px;
 }
@@ -79,7 +91,30 @@
     cursor: pointer;
 
 }
-
+/*share email*/
+.ct-share-wallet{
+    text-align: left;
+    line-height: 40px;
+}
+.btn-share-wallet {
+    font-size: 38px;
+}
+.btn-share-wallet:hover{
+    cursor: pointer;
+    color: #34974d;
+}
+.wallet-share {
+    margin-bottom: 20px;
+}
+.share-email {
+    margin-bottom: 20px;
+}
+.btn-share-email {
+    font-size: 35px;
+}
+.btn-share-message {
+    font-size: 30px;
+}
 /*button add*/
 .button {
     position: relative;
@@ -224,4 +259,8 @@
     opacity: 1;
     transform: translateY(30px);
     transition-duration: .3s;
+}
+.face-member {
+    display: flex;
+    font-size: 30px;
 }

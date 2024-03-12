@@ -6,7 +6,10 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 import axios from "axios";
+import {useToast} from "@chakra-ui/react";
+
 const ActiveAccount = () => {
+    const toast = useToast()
 
     const [authCode, setAuthCode] = useState('');
     const [activeSuccess, setActiveSuccess] = useState(false);
@@ -22,23 +25,37 @@ const ActiveAccount = () => {
             console.log(response.data);
 
             setActiveSuccess(true);
+            toast({
+                title: 'Active Successful',
+                description: 'You have successfully activated your account!',
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+            });
 
             setTimeout(() => {
                 window.location.replace('/login');
             }, 5000);
         } catch (error) {
             console.error('Error:', error);
+            toast({
+                title: 'Active Failed',
+                description: 'Activation failed',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
     };
 
     return (
-        <div style={{ position: "relative", backgroundColor: "#98FB98", height: "100vh" }}>
+        <div style={{ position: "relative", backgroundColor: "#dfffdf", height: "100vh" }}>
             <div style={{ position: "absolute", top: "45%", left: "50%", transform: "translate(-50%, -50%)" }}>
                 <img src="https://note.moneylover.me/content/images/2017/05/Money-Lover---Logo.png" style={{ margin: "auto" }} />
                 {activeSuccess ? (
                     <h5 style={{ textAlign: "center" }}>Active successful! Redirect to login...</h5>
                 ) : (
-                    <div style={{ width: "400px", height: "250px", backgroundColor: "#98FB98", margin: "auto" }}>
+                    <div style={{ width: "400px", height: "250px", backgroundColor: "#dfffdf", margin: "auto" }}>
                         <form style={{ position: "relative", textAlign: "center", margin: "auto" }} onSubmit={handleSubmit}>
                             <h2 className= "my-2 text-green-600"  style={{ margin: "auto" }}>Wait a minute!</h2>
                             <p className= "my-2"  style={{ margin: "auto" }}>An active code has been sent to your email !</p>

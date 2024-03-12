@@ -483,7 +483,8 @@ const SideBar = () => {
             .then(response => setWalletBalance(response.data.balance))
             .catch(error => {
                 console.error('Error fetching wallet balance from API:', error);
-                setWalletBalance(null);
+
+                setWalletBalance(null); // Handle error case
             });
     }, [selectedWallet_id, transactionChanged, walletChanged]);
 
@@ -610,7 +611,7 @@ const SideBar = () => {
                             <Navbar.Brand>
                                 <Menu className="bg-white">
                                     <MenuHandler>
-                                        <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'200px' }}>
+                                        <Button style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", width:'250px', height:'70px' }}>
 
                                             {
                                                 selectedWallet_id !== 'all' ? (
@@ -620,7 +621,7 @@ const SideBar = () => {
                                                              style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                         <div>
                                                             <div className='text-black'>{selected_Wallet.name}</div>
-                                                            <div className='text-black'>{walletBalance !== null ? walletBalance : 'Loading...'}</div>
+                                                            <div className='text-black' style={{fontSize: '15px', fontWeight: '500'}}>{walletBalance !== null ? walletBalance.toLocaleString() : 'Loading...'} VNĐ</div>
                                                         </div>
                                                     </>
                                                 ) : (
@@ -646,18 +647,18 @@ const SideBar = () => {
                                                      style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                 <div>Total</div>
                                             </div>
-                                            <div>{totalAmount}</div>
+                                            <div>{totalAmount.toLocaleString()}</div>
                                         </MenuItem>
                                         <hr className='my-3'/>
                                         {wallet_list.map((data) => (
                                             <MenuItem key={data.id} onClick={() => handleWalletSelect(data.id, data)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center' , marginRight: '10px'}}>
                                                     <img src="https://static.moneylover.me/img/icon/icon.png"
                                                          alt="Wallet Icon"
                                                          style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                     <div>{data.name}</div>
                                                 </div>
-                                                <div>{data.balance}</div>
+                                                <div>{data.balance.toLocaleString()}</div>
                                             </MenuItem>
                                         ))}
                                     </MenuList>
@@ -746,8 +747,6 @@ const SideBar = () => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 

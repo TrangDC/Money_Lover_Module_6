@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './PinnedSubheaderList.css';
 import {useEffect, useState} from "react";
+import {useChangeNotification} from "../../../ChangeNotificationContext";
 import OutlinedCard from "../OutlinedCard/OutlinedCard";
 import TransactionService from "../../../services/transactions.services";
 import {Button, Navbar, TabsHeader} from "@material-tailwind/react";
@@ -16,7 +17,7 @@ import "./PinnedSubheaderList.css"
 
 import {Link, useNavigate} from "react-router-dom";
 import {MDBCardFooter, MDBCardHeader, MDBCardText} from "mdbreact";
-import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle} from "mdb-react-ui-kit";
+import {MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCol, MDBRow} from "mdb-react-ui-kit";
 import {MdOutlineClose} from "react-icons/md";
 import axios from "axios";
 import {
@@ -293,10 +294,12 @@ export default function PinnedSubheaderList() {
             <div className={`bg-white rounded-lg shadow-lg container-left ${showDetail ? 'selected' : ''}`}>
                 <div>
                     <div className="header">
-                        <Link to={"/auth/create_transaction"}>
-                            <button type="button" className="button">
-                                <span className="button__text">Add Transaction</span>
-                                <span className="button__icon">
+                        <MDBRow>
+                            <MDBCol>
+                                <Link to={"/auth/create_transaction"}>
+                                    <button type="button" className="button">
+                                        <span className="button__text">Add Transaction</span>
+                                        <span className="button__icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                          viewBox="0 0 24 24" stroke-width="2"
                                          stroke-linejoin="round" stroke-linecap="round"
@@ -308,10 +311,15 @@ export default function PinnedSubheaderList() {
                                                                                     x1="5"></line>
                                     </svg>
                                 </span>
-                            </button>
-                        </Link>
-                        <CgCalendarDates style={{width: '40px', height: '40px', marginLeft: '100%'}}
-                                         onClick={handleShow}/>
+                                    </button>
+                                </Link>
+                            </MDBCol>
+                            <MDBCol>
+                                <CgCalendarDates className='btn-show-range' onClick={handleShow}/>
+                            </MDBCol>
+                        </MDBRow>
+
+
                         {navigation === 'month' && (
                             <div className="flex justify-content-center mt-0.5">
                                 <Button
@@ -465,17 +473,20 @@ export default function PinnedSubheaderList() {
                     {navigation === "month" && (
                         <List className="bg-white rounded-lg shadow-lg mt-4 overflow-auto" style={{maxHeight: "450px"}}>
                             {groupedTransactions.length === 0 ? (
-                                <div style={{height: "450px", margin: 'auto'}}>
-                                    <ListItem>
-                                        <Image
-                                            borderRadius='full'
-                                            boxSize='300px'
-                                            src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
-                                            alt=''
-                                        />
-                                    </ListItem>
-                                    <Button variant="outlined" onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back to Current Month</Button>
+
+                                <div style={{height: "430px",textAlign:'center'}}>
+                                    <Image
+                                        style={{margin: "auto"}}
+                                        borderRadius='full'
+                                        boxSize='300px'
+                                        src='https://t4.ftcdn.net/jpg/04/52/43/87/360_F_452438771_qBPO91hhFQK5tiJCfff93Y90C0NvT3Zi.jpg'
+                                        alt=''
+                                    />
+                                    <Button  variant="outlined"
+                                            onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back
+                                        to Current Month</Button>
                                 </div>
+
                             ) : (
                                 <List className="list" class="border-t border-gray-200">
                                     {groupedTransactions.map(({ date, transactions }) => {
