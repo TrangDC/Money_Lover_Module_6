@@ -1,0 +1,26 @@
+.content {
+    text-align: center;
+    margin-top: 100px;
+}
+.h1-content, .h2-content, .h3-content{
+    font-size: 60px;
+}
+.h1-content, .h3-content {
+    font-weight: 600;
+    color: rgba(45,184,76);
+}
+.h2-content {
+    font-weight: 300;
+}
+.h3-content {
+
+}
+.language {
+    display: flex;
+}
+.container-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px ;
+    }

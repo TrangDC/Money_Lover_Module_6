@@ -20,6 +20,7 @@ import IncomePiechart from "./components/IncomePiechart/IncomePiechart";
 import EditTransaction from "./components/TransactionPage/EditTransaction";
 import {ChangeNotificationProvider} from "./ChangeNotificationContext";
 import Budget from "./components/Budgets/Budget";
+import Introduce from "./components/Introduce/Introduce";
 
 
 
@@ -60,6 +61,7 @@ function App() {
                         <Route path='/register' element={<RegisterPage/>}/>
                         <Route path='/upload' element={<UploadImage/>}/>
                         <Route path='/active' element={<ActiveAccount/>}/>
+                        <Route path='/introduce' element={<Introduce/>}/>
                     </Routes>
                 </ChangeNotificationProvider>
             </BrowserRouter>
