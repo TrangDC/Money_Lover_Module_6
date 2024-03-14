@@ -180,7 +180,7 @@ const EditTransaction = () => {
                             {
                                 select_category !== 'all' && (
                                     <>
-                                        <MDBCardText className="text-muted">Sub Category</MDBCardText>
+                                        <MDBCardText className="text-muted">Sub Category: {transaction_edit.category.name}</MDBCardText>
                                         <Select name='category_id' className="form-select" aria-label="Default select example" onChange={handleChange}>
                                             <option>Select category</option>
                                             {categories.filter(category => category.type === select_category) // Filter the list to include only categories with the selected type
@@ -244,7 +244,7 @@ const EditTransaction = () => {
                         <MDBCol>
                             {select_category !== 'all' && (
                                 <>
-                                    <MDBCardText className="text-muted">Wallets</MDBCardText>
+                                    <MDBCardText className="text-muted">Wallets : {transaction_edit.wallet.name}</MDBCardText>
                                     <MDBRow>
                                         <MDBCol className="mb-4" sm="2" style={{fontSize: "30px"}}><BsWallet/></MDBCol>
                                         <MDBCol sm="10">

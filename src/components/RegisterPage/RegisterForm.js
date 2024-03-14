@@ -78,7 +78,6 @@ const RegisterForm = ({setIsLoading }) => {
             });
 
             console.log('Signup response:', response.data);
-
             await axios.get(`http://localhost:8080/api/auth/active_account/${email}`);
 
             setTimeout(async () => {

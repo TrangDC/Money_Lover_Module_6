@@ -172,7 +172,7 @@ const Budget = () => {
                     <TabPanels>
                         <TabPanel>
                             <div>
-                                <ProgressCircle value={8000000} maxValue={moneyBudget} handleTransClick={handleTransClick}
+                                <ProgressCircle value={800000} maxValue={moneyBudget} handleTransClick={handleTransClick}
                                                 handleCloseCard={handleCloseCard} newBudgetCreated={newBudgetCreated} onBudgetCreated={handleBudgetCreated}/>
                             </div>
                         </TabPanel>

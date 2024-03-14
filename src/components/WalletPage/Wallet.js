@@ -185,7 +185,7 @@ const Wallet = () => {
     };
     const handleShowShareM = (selectShareWallet) => {
         setSelectedWalletId(selectShareWallet.id);
-        setShow(true);
+        setShowM(true);
         // const selectShareWallet = wallets_shared.find(data.wallet => data.wallet.id === walletId);
         setEditWallet(selectShareWallet);
     };
@@ -239,9 +239,10 @@ const Wallet = () => {
         axios.put(`http://localhost:8080/api/wallets/user/${user.id}/add_money/${selectedWalletId}/${money}`, {money: money})
             .then((res) => {
                 console.log(res.data);
-                notifyWalletChange();
                 handleCloseM();
                 fetchWallets(user);
+                fetchWalletsShare(user)
+                notifyWalletChange();
                 toast({
                     title: 'Money added successfully',
                     status: 'success',

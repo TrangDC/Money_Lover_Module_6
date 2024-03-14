@@ -466,9 +466,22 @@ const SideBar = () => {
     const [walletBalance, setWalletBalance] = useState(null);
     const { setSelectedWalletId} = useWallet();
     const [showListAlert, setShowListAlert] = useState(false);
+    const { notifyTransactionChange } = useChangeNotification();
 
     const toggleMenu = () => {
         setShowListAlert(!showListAlert);
+        notifyTransactionChange();
+
+    };
+    const [backgroundColor, setBackgroundColor] = useState('springgreen');
+    const handleChangNote = (id) => {
+        axios.put(`http://localhost:8080/api/notifications/${id}/markAsRead`)
+            .then((response) => {
+                console.log(id);
+                const newBackgroundColor = { ...backgroundColor };
+                newBackgroundColor[id] = 'gray';
+                setBackgroundColor(newBackgroundColor);
+            })
     };
 
     useEffect(() => {
@@ -477,12 +490,17 @@ const SideBar = () => {
                 setUserLocal(res.data);
                 setImage(res.data.image);
                 setWallet(res.data.wallets)
-                setNotifications(res.data.notifications)
+                const filteredNotifications = res.data.notifications.filter(notification => !notification.isMarked);
+
+                // Sắp xếp mảng theo id
+                filteredNotifications.sort((a, b) => b.id - a.id);
+
+                setNotifications(filteredNotifications);
                 setShouldRerender(prev => !prev);
                 fetchWallets();
             })
             .catch(err => console.error(err))
-    }, [modalShow, transactionChanged, walletChanged]);
+    }, [modalShow, transactionChanged, walletChanged, notifications.length]);
 
     function fetchWallets() {
         axios.get('http://localhost:8080/api/wallets/user/' + user.id)
@@ -660,7 +678,7 @@ const SideBar = () => {
                                                              style={{ width: '40px', height: '40px', marginRight: '10px' }} />
                                                         <div>
                                                             <div className='text-black'>Total</div>
-                                                            <div className='text-black'>{totalAmount}</div>
+                                                            <div className='text-black'>{totalAmount.toLocaleString()}</div>
                                                         </div>
                                                     </>
                                                 )
@@ -699,13 +717,30 @@ const SideBar = () => {
                                 <Navbar.Text style={{display: "flex", alignItems: "center", marginRight: '-10%'}}>
                                     <BsCalendar2Date style={{marginRight: 30, fontSize: '20px'}}/>
                                     <div>
-                                        <LuBellRing style={{marginRight: 30, fontSize: '20px'}} onClick={toggleMenu}/>
+                                        <div>
+                                            <LuBellRing style={{marginRight: 30, fontSize: '20px'}} onClick={toggleMenu}/>
+                                            {notifications.length > 0 && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    backgroundColor: 'red',
+                                                    color: 'white',
+                                                    borderRadius: '100%',
+                                                    padding: '5px',
+                                                    fontSize: '8px',marginLeft: '15px',marginTop: '-10px',
+                                                    width: '20px', fontWeight: 500
+                                                }}>
+                                                    {notifications.length}
+                                                </span>
+                                            )}
+                                        </div>
+
                                         {showListAlert && (
                                             <Dropdown.Menu show={showListAlert} style={{marginLeft: '80%'}}
                                                            className="custom-dropdown-menu">
                                                 {notifications.map((notification) => (
                                                     <Dropdown.Item>
-                                                        <Alert variant="success">
+                                                        <Alert style={{ backgroundColor: backgroundColor[notification.id] || 'springgreen' }}
+                                                               onClick={() => handleChangNote(notification.id)}>
                                                             {notification.message}
                                                         </Alert>
                                                     </Dropdown.Item>

@@ -38,22 +38,22 @@ function App() {
             <BrowserRouter>
                 <ChangeNotificationProvider>
                     <Routes>
-                        <Route path='/' element={<Error/>}></Route>
+                        <Route path='/' element={<Introduce/>}></Route>
                         <Route path='/auth/*' element={(isAuth || user) ? <WalletProvider><SideBar/></WalletProvider> : <Error/>}>
                             >
-                            <Route path="wallets" element={(isAuth || user) ?<Wallet/> : <Error/>}/>
-                            <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Error/>}/>
-                            <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Error/>}/>
-                            <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Error/>}/>
-                            <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/>: <Error/>}/>
+                            <Route path="wallets" element={(isAuth || user) ?<Wallet/> : <Introduce/>}/>
+                            <Route path="categories" element={(isAuth || user) ? <CategoriesPage/> : <Introduce/>}/>
+                            <Route path="transactions" element={(isAuth || user) ? <PinnedSubheaderList/> : <Introduce/>}/>
+                            <Route path="create_transaction" element={(isAuth || user) ? <CreateTransaction/> : <Introduce/>}/>
+                            <Route path="edit_transaction" element={(isAuth || user) ? <EditTransaction/>: <Introduce/>}/>
                             <Route path='piechart' element={(isAuth || user) ? <IncomePiechart
-                            /> : <Error/>}/>
+                            /> : <Introduce/>}/>
                             <Route path='exchart' element={(isAuth || user) ? <ExpensePage
-                            /> : <Error/>}/>
+                            /> : <Introduce/>}/>
                             <Route path='chart' element={(isAuth || user) ? <ChartPage
-                            /> : <Error/>}/>
+                            /> : <Introduce/>}/>
                             <Route path='budget' element={(isAuth || user) ? <Budget
-                            /> : <Error/>}/>
+                            /> : <Introduce/>}/>
 
                         </Route>
                         <Route path='/login'

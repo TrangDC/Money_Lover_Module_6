@@ -221,6 +221,7 @@ export default function PinnedSubheaderList() {
             .then((res) => {
                 console.log(res);
                 setTransactions(res.data);
+                onClose();
             })
             .catch((error) => {
                 console.error("Error fetching transaction data:", error);
@@ -231,15 +232,15 @@ export default function PinnedSubheaderList() {
     };
 
     useEffect(() => {
-            const fetchData = async () => {
-                const data = await TransactionService.fetchTransactions(user, selectedWalletId);
-                setTransactions(data);
-                notifyTransactionChange();
-                localStorage.setItem("transactions", JSON.stringify(data));
-                setCurrentMonthIndex(new Date().getMonth());
-                setCurrentYear(new Date().getFullYear())
-            };
-            fetchData();
+        const fetchData = async () => {
+            const data = await TransactionService.fetchTransactions(user, selectedWalletId);
+            setTransactions(data);
+            notifyTransactionChange();
+            localStorage.setItem("transactions", JSON.stringify(data));
+            setCurrentMonthIndex(new Date().getMonth());
+            setCurrentYear(new Date().getFullYear())
+        };
+        fetchData();
     }, [selectedWalletId, startDateRange, endDateRange]);
 
     const fetchData = () => {
@@ -481,7 +482,7 @@ export default function PinnedSubheaderList() {
                                         alt=''
                                     />
                                     <Button  variant="outlined"
-                                            onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back
+                                             onClick={() => handleCurrentMonth(setCurrentMonthIndex, setCurrentYear)}>Back
                                         to Current Month</Button>
                                 </div>
 
@@ -867,10 +868,12 @@ export default function PinnedSubheaderList() {
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onClose} colorScheme='green' variant='outline'>Cancel</Button>
-                        <Button colorScheme='greengreen' variant='outline' onClick={handleApply}>
+                        <MDBBtn className='me-1' color='danger' onClick={onClose}>
+                            Cancel
+                        </MDBBtn>
+                        <MDBBtn className='me-1' color='success' onClick={handleApply}>
                             Select Time
-                        </Button>
+                        </MDBBtn>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
