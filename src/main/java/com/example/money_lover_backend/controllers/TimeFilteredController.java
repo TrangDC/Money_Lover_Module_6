@@ -763,4 +763,59 @@ public class TimeFilteredController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    //Lấy danh sách giao dịch theo khoảng thời gian
+    @PostMapping("/user/{user_id}/transactions/{wallet_id}/time_range")
+    public ResponseEntity<?> findTransactionsByRange(@PathVariable String user_id,
+                                                     @PathVariable String wallet_id,
+                                                     @RequestBody FindByWeek week){
+        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        // nếu wallet_id là all thì lấy tất cả giao dich
+        if (wallet_id.equals("all")) {
+            List<Transaction> userTransaction = userOptional.get().getTransactions();
+
+            LocalDate startDate = week.getStartWeek();
+            LocalDate endDate = week.getEndWeek();
+
+            List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+            List<Transaction> result = new ArrayList<>();
+
+            for (Transaction transaction : transactions) {
+                if (userTransaction.contains(transaction)) {
+                    result.add(transaction);
+                }
+            }
+            if (result.isEmpty()) {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        //tìm ví theo id
+        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        //tìm danh sach giao dịch theo ví
+        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+
+        LocalDate startDate = week.getStartWeek();
+        LocalDate endDate = week.getEndWeek();
+
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

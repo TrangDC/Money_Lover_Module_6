@@ -73,6 +73,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/budgets/**").permitAll()
                                 .requestMatchers("/api/shared_wallets/**").permitAll()
                                 .requestMatchers("/api/time_filter/**").permitAll()
+                                .requestMatchers("/api/notifications/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 

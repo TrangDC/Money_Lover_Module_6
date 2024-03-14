@@ -1,6 +1,7 @@
 package com.example.money_lover_backend.controllers;
 
 import com.example.money_lover_backend.enums.Type;
+import com.example.money_lover_backend.models.Budget;
 import com.example.money_lover_backend.models.Transaction;
 import com.example.money_lover_backend.models.User;
 import com.example.money_lover_backend.models.Wallet;
@@ -15,6 +16,7 @@ import com.example.money_lover_backend.repositories.WalletRepository;
 import com.example.money_lover_backend.services.ICategoryService;
 import com.example.money_lover_backend.services.ITransactionService;
 import com.example.money_lover_backend.services.IUserService;
+import com.example.money_lover_backend.services.impl.BudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,6 +47,9 @@ public class TransactionController {
 
     @Autowired
     private ICategoryService categoryService;
+
+    @Autowired
+    private BudgetService budgetService;
 
     @GetMapping
     public ResponseEntity<Iterable<Transaction>> findAll() {
@@ -471,5 +473,51 @@ public class TransactionController {
         return new ResponseEntity<>(savedTransaction, HttpStatus.OK);
     }
 
-}
+    //Lấy danh sách giao dịch expense cùng tên category theo khoảng thời gian
+    @GetMapping("/user/{user_id}/budget_transaction/{wallet_id}/time_range/{budget_id}")
+    public ResponseEntity<?> findExpenseTransactionsAndNameCategoryByRange(@PathVariable String user_id,
+                                                                           @PathVariable String wallet_id,
+                                                                           @PathVariable String budget_id){
+        Optional<User> userOptional = userService.findById(Long.valueOf(user_id));
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        //tìm ví theo id
+        Optional<Wallet> walletOptional = walletRepository.findById(Long.valueOf(wallet_id));
+        if (walletOptional.isEmpty()) {
+            return new ResponseEntity<>("Wallet not found", HttpStatus.NOT_FOUND);
+        }
+        //tìm danh sach giao dịch theo ví
+        List<Transaction> transactionList = transactionRepository.findByWallet(walletOptional.get());
+        List<Budget> budgets = userOptional.get().getBudgets();
+        List<Transaction> incomeTransactions = new ArrayList<>();
+        for (Transaction transaction: transactionList) {
+            for (Budget budget: budgets  ) {
+                if (Objects.equals(budget.getCategory().getId(), transaction.getCategory().getId())) {
+                    incomeTransactions.add(transaction);
+                }
+            }
+        }
+        Optional<Budget> budgetOptional = budgetService.findById(Long.valueOf(budget_id));
+        if (budgetOptional.isEmpty()) {
+            return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
+        }
+        LocalDate startDate = budgetOptional.get().getStartDate();
+        LocalDate endDate = budgetOptional.get().getEndDate();
 
+        List<Transaction> transactions = transactionRepository.findAllByTransactionDateBetween(startDate, endDate);
+        List<Transaction> userTransactions = userOptional.get().getTransactions();
+        List<Transaction> result = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            if (userTransactions.contains(transaction) && incomeTransactions.contains(transaction)) {
+                result.add(transaction);
+            }
+        }
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+}

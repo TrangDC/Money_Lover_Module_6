@@ -20,12 +20,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
     private Long amount;
 
     private String note;
 
-    @NotNull
     private LocalDate transactionDate;
 
     private LocalDate endDate;
