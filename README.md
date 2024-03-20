@@ -1,70 +1,19 @@
-# Getting Started with Create React App
+Nhánh code giao diện của dự án.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Tên dự án**: Web quản lý tài chính Money Lover (dự án 4 người)
 
-## Available Scripts
+**Thời gian**: 02/2024 - 03/2024
 
-In the project directory, you can run:
+**1. Mô tả:**
+Money Lover là trang web giúp tạo, quản lí và theo dõi chi tiêu bằng thống kê và biểu đồ, cùng với đó là kiểm soát nguồn tiền của mình bằng định mức.
+Trang web tập trung vào giao diện đơn giản, thân thiện; giúp người dùng thao tác nhanh chóng, tốn ít thời gian.
 
-### `npm start`
+**2. Một số chức năng của người dùng:**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User có thể tạo tài khoản trên trang web (có thể sử dụng tính năng đăng nhập bằng Google).
+- User có thể tạo ví, thêm tiền cho ví và chia sẻ ví của mình cho user khác.
+- User có thể tạo các giao dịch thu chi, nợ và cho vay bằng các ví của mình.
+- User có thể xem thống kê giao dịch theo khoảng thời gian hoặc biểu đồ thu chi.
+- User có thể tạo định mức với một khoản thu chi nhất định và sẽ nhận được thông báo khi định mức còn dưới 20%.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**3. Công nghệ sử dụng:** Javascript, React JS, Axios, HTML, CSS Charka, FireBase, Bootstrap... và một số thư viện khác. Chi tiết các thư viện có trong file package.json.
