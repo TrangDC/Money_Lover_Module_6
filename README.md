@@ -1,4 +1,6 @@
-Web quản lý tài chính Money Lover (dự án 4 người)
+Nhánh code hệ thống của dự án.
+Tên dự án: Web quản lý tài chính Money Lover (dự án 4 người)
+
 Thời gian: 02/2024 - 03/2024
 
 1. Mô tả:
