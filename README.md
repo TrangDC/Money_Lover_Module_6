@@ -12,19 +12,17 @@ Trang web tập trung vào giao diện đơn giản, thân thiện; giúp ngư�
 dùng thao tác nhanh chóng, tốn ít thời gian.
 
 **2. Một số chức năng của người dùng**:
-User có thể tạo tài khoản trên trang web (có thể sử dụng tính
+- User có thể tạo tài khoản trên trang web (có thể sử dụng tính
 năng đăng nhập bằng Google).
-User có thể tạo ví, thêm tiền cho ví và chia sẻ ví của mình cho
+- User có thể tạo ví, thêm tiền cho ví và chia sẻ ví của mình cho
 user khác.
-User có thể tạo các giao dịch thu chi, nợ và cho vay bằng các
+- User có thể tạo các giao dịch thu chi, nợ và cho vay bằng các
 ví của mình.
-User có thể xem thống kê giao dịch theo khoảng thời gian
+- User có thể xem thống kê giao dịch theo khoảng thời gian
 hoặc biểu đồ thu chi.
-User có thể tạo định mức với một khoản thu chi nhất định và sẽ
+- User có thể tạo định mức với một khoản thu chi nhất định và sẽ
 nhận được thông báo khi định mức còn dưới 20%.
 
 **3. Công nghệ sử dụng**:
-Front-end: Javascript, React JS, Axios, HTML, CSS Charka,
-FireBase, Bootstrap.
-Back-end: Java, Spring Boot, Spring Security JWT, Restful API,
+Java, Spring Boot, Spring Security JWT, Restful API,
 MySQL.
